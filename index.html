@@ -11,12 +11,15 @@
 <style>
   :root{
     --green-deep: #0e3d2b;
-    --green-darker: #0a2e20;
-    --cream: #f6efdf;
-    --cream-line: #efe4cb;
+    --green-darker: #082419;
+    --cream: #f7f1e3;
+    --cream-line: #eae0c4;
+    --paper: #fffdf8;
     --maroon: #7c1f2b;
-    --gold: #c79a3c;
-    --ink: #1c1a15;
+    --maroon-deep: #5f1620;
+    --gold: #c9a34b;
+    --gold-soft: #e3c274;
+    --ink: #201d17;
   }
 
   *{box-sizing:border-box;}
@@ -48,48 +51,63 @@
   }
 
   .curve-top, .curve-bottom{
-    background:var(--green-deep);
+    background:
+      radial-gradient(120% 140% at 50% 0%, rgba(255,255,255,0.05), transparent 60%),
+      linear-gradient(160deg, var(--green-deep) 0%, var(--green-darker) 100%);
     position:relative;
   }
 
   .curve-top{
-    padding:44px 24px 64px;
+    padding:52px 24px 72px;
     text-align:center;
     border-bottom-left-radius:50% 32px;
     border-bottom-right-radius:50% 32px;
+    box-shadow:0 1px 0 rgba(0,0,0,0.06);
+  }
+
+  .logo-badge{
+    width:104px;
+    height:104px;
+    border-radius:50%;
+    object-fit:cover;
+    box-shadow:0 10px 26px rgba(0,0,0,0.32), 0 0 0 1px rgba(201,163,75,0.35);
+    margin-bottom:18px;
   }
 
   .gold-rule{
-    height:2px;
-    width:120px;
-    margin:14px auto;
-    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    height:1px;
+    width:140px;
+    margin:18px auto;
+    background:linear-gradient(90deg, transparent, var(--gold-soft), transparent);
   }
 
   .brand-name{
     font-family:'Cormorant Garamond', serif;
-    font-weight:700;
+    font-weight:600;
     color:#fff;
-    font-size:clamp(2.4rem, 6vw, 3.6rem);
-    letter-spacing:0.06em;
+    font-size:clamp(2.6rem, 6.5vw, 4rem);
+    letter-spacing:0.08em;
     margin:0;
+    text-shadow:0 2px 18px rgba(0,0,0,0.25);
   }
 
   .brand-sub{
-    color:var(--gold);
-    letter-spacing:0.28em;
-    font-size:0.8rem;
-    margin-top:6px;
+    color:var(--gold-soft);
+    letter-spacing:0.32em;
+    font-size:0.76rem;
+    margin-top:8px;
     font-weight:500;
   }
 
   .brand-tagline{
     font-family:'Cormorant Garamond', serif;
     font-style:italic;
+    font-weight:500;
     color:var(--cream);
-    font-size:clamp(1rem, 2.4vw, 1.25rem);
-    margin-top:18px;
-    line-height:1.5;
+    font-size:clamp(1.05rem, 2.4vw, 1.3rem);
+    margin-top:20px;
+    line-height:1.55;
+    opacity:0.92;
   }
 
   main{
@@ -99,17 +117,18 @@
   }
 
   .video-wrap{
-    margin-top:48px;
+    margin-top:44px;
     display:flex;
     justify-content:center;
+    padding:0 8px;
   }
 
   .video-frame{
     width:100%;
     max-width:720px;
-    border:6px solid #fff;
-    border-radius:6px;
-    box-shadow:0 18px 34px rgba(14,61,43,0.22);
+    border:1px solid var(--gold-soft);
+    border-radius:4px;
+    box-shadow:0 24px 48px rgba(14,61,43,0.28), 0 0 0 7px var(--paper);
     overflow:hidden;
     background:#000;
   }
@@ -122,44 +141,55 @@
 
   .video-caption{
     text-align:center;
-    font-size:0.85rem;
-    color:#6b6353;
-    margin:14px 0 0;
+    font-size:0.82rem;
+    color:#8a8271;
+    margin:16px 0 0;
+    font-style:italic;
   }
 
   .section-title-wrap{
     text-align:center;
-    margin:52px 0 26px;
+    margin:64px 0 30px;
+  }
+
+  .section-title-wrap .gold-rule{
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    width:90px;
+    margin:16px auto 0;
   }
 
   .ribbon{
     display:inline-block;
-    background:var(--maroon);
+    background:linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%);
     color:var(--cream);
     font-family:'Cormorant Garamond', serif;
-    font-weight:700;
-    font-size:1.6rem;
-    letter-spacing:0.08em;
-    padding:10px 42px;
+    font-weight:600;
+    font-size:1.7rem;
+    letter-spacing:0.1em;
+    padding:11px 46px;
     border-radius:2px;
     position:relative;
+    box-shadow:0 10px 22px rgba(124,31,43,0.25);
   }
 
   .item-table{
     width:100%;
-    border-collapse:collapse;
-    background:#fff;
-    box-shadow:0 6px 18px rgba(14,61,43,0.08);
-    margin-bottom:12px;
+    border-collapse:separate;
+    border-spacing:0;
+    background:var(--paper);
+    box-shadow:0 14px 36px rgba(14,61,43,0.12);
+    margin-bottom:16px;
+    border-radius:6px;
+    overflow:hidden;
   }
 
   .item-table thead th{
-    background:var(--maroon);
+    background:linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%);
     color:var(--cream);
     font-weight:600;
-    font-size:0.82rem;
-    letter-spacing:0.04em;
-    padding:12px 14px;
+    font-size:0.8rem;
+    letter-spacing:0.06em;
+    padding:14px 16px;
     text-align:left;
   }
 
@@ -168,23 +198,54 @@
   .item-table thead th:nth-child(3), .item-table td:nth-child(3){ text-align:center; }
 
   .item-table tbody td{
-    padding:11px 14px;
+    padding:13px 16px;
     border-bottom:1px solid var(--cream-line);
-    font-size:0.95rem;
+    font-size:0.96rem;
   }
+
+  .item-table tbody tr:last-child td{ border-bottom:none; }
 
   .item-table tbody td:first-child{
     text-align:center;
-    color:#8a8272;
-    font-variant-numeric:tabular-nums;
+    color:#a89c80;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1rem;
   }
 
-  .item-table tbody tr:nth-child(even){ background:#fbf7ec; }
-  .item-table tbody tr:hover{ background:#f2e9d3; }
+  .item-table tbody tr:nth-child(even){ background:#faf5e8; }
+  .item-table tbody tr:hover{ background:#f2e6c8; }
 
   .item-table td:last-child{
     font-weight:600;
     color:var(--green-deep);
+    font-variant-numeric:tabular-nums;
+  }
+
+  .cta-wrap{
+    text-align:center;
+    margin:36px 0 8px;
+  }
+
+  .cta-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--green-deep);
+    color:var(--cream);
+    text-decoration:none;
+    font-weight:500;
+    font-size:0.95rem;
+    letter-spacing:0.02em;
+    padding:14px 32px;
+    border-radius:3px;
+    box-shadow:0 12px 26px rgba(14,61,43,0.22);
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .cta-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 16px 32px rgba(14,61,43,0.28);
   }
 
   .curve-bottom{
@@ -198,37 +259,48 @@
   .life-line{
     font-family:'Cormorant Garamond', serif;
     font-style:italic;
+    font-weight:500;
     color:var(--cream);
-    font-size:1.15rem;
-    margin-bottom:26px;
+    font-size:1.2rem;
+    letter-spacing:0.02em;
+    margin-bottom:30px;
   }
 
   .footer-grid{
     display:flex;
     flex-wrap:wrap;
     justify-content:space-between;
-    gap:20px;
+    gap:24px;
     max-width:780px;
     margin:0 auto;
     text-align:left;
-    border-top:1px solid rgba(255,255,255,0.15);
-    padding-top:22px;
+    border-top:1px solid rgba(255,255,255,0.14);
+    padding-top:26px;
   }
 
   .footer-contact p{
     color:#e9e3d2;
     font-size:0.88rem;
-    margin:6px 0;
-    line-height:1.5;
+    margin:7px 0;
+    line-height:1.6;
   }
 
-  .footer-contact strong{ color:#fff; }
+  .footer-contact strong{ color:var(--gold-soft); font-weight:500; }
+
+  .footer-contact a{
+    color:#e9e3d2;
+    text-decoration:none;
+    border-bottom:1px solid rgba(233,227,212,0.3);
+  }
+
+  .footer-contact a:hover{ border-bottom-color:rgba(233,227,212,0.8); }
 
   .footer-motto{
-    color:var(--gold);
+    color:var(--gold-soft);
     font-family:'Cormorant Garamond', serif;
     font-style:italic;
-    font-size:1.1rem;
+    font-weight:500;
+    font-size:1.15rem;
     align-self:center;
   }
 
@@ -242,6 +314,7 @@
 <body>
 
 <header class="curve-top">
+  <img src="logo.jpeg" alt="Vasista Food and Traders" class="logo-badge">
   <p class="brand-sub">Choose Natural · Live Better</p>
   <h1 class="brand-name">VASISTA</h1>
   <p class="brand-sub">Food and Traders</p>
@@ -264,6 +337,7 @@
 
   <div class="section-title-wrap">
     <span class="ribbon">Eatables</span>
+    <div class="gold-rule"></div>
   </div>
 
   <table class="item-table">
@@ -297,15 +371,22 @@
     </tbody>
   </table>
 
+  <div class="cta-wrap">
+    <a class="cta-btn" href="https://wa.me/918341383888?text=Hi%2C%20I%27d%20like%20to%20order%20from%20Vasista%20Food%20and%20Traders" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.29-.15-1.71-.85-1.98-.94-.27-.1-.46-.15-.65.15-.2.29-.75.94-.92 1.13-.17.2-.34.22-.63.08-.29-.15-1.23-.46-2.34-1.46-.87-.78-1.45-1.73-1.62-2.02-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.08-.15-.65-1.58-.9-2.16-.24-.57-.48-.5-.65-.5-.17-.01-.36-.01-.56-.01-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.42 0 1.43 1.04 2.82 1.19 3.01.15.2 2.05 3.13 4.96 4.39.69.3 1.23.48 1.65.61.69.22 1.32.19 1.82.11.55-.08 1.71-.7 1.95-1.37.24-.68.24-1.26.17-1.38-.07-.12-.26-.19-.55-.34z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.06-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18.15c-1.63 0-3.15-.45-4.45-1.24l-.32-.19-3.01.79.81-2.93-.21-.3A8.14 8.14 0 0 1 3.85 12c0-4.5 3.66-8.15 8.15-8.15S20.15 7.5 20.15 12 16.5 20.15 12 20.15z"/></svg>
+      Order on WhatsApp
+    </a>
+  </div>
+
 </main>
 
 <footer class="curve-bottom">
   <p class="life-line">Good Food &nbsp;|&nbsp; Good Health &nbsp;|&nbsp; Good Life</p>
   <div class="footer-grid">
     <div class="footer-contact">
-      <p><strong>Address:</strong> AS Rao Nagar, Sainikpuri, Secunderabad, Telangana – 500094</p>
-      <p><strong>Phone:</strong> 8341383888</p>
-      <p><strong>Email:</strong> vasistanaturals.vja@gmail.com</p>
+      <p><strong>Address</strong><br>AS Rao Nagar, Sainikpuri, Secunderabad, Telangana – 500094</p>
+      <p><strong>Phone</strong><br><a href="tel:+918341383888">8341383888</a></p>
+      <p><strong>Email</strong><br><a href="mailto:vasistanaturals.vja@gmail.com">vasistanaturals.vja@gmail.com</a></p>
     </div>
     <div class="footer-motto">Choose Natural.<br>Live Better.</div>
   </div>
