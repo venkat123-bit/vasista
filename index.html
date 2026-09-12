@@ -1,13 +1,16 @@
+
+
+Vasista food and traders · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vasista Food and Traders — Eatables</title>
+<title>Vasista Food and Traders — Naturally Made Snacks</title>
 <link rel="icon" type="image/jpeg" href="logo.jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --green-deep: #0e3d2b;
@@ -21,7 +24,7 @@
     --gold-soft: #e3c274;
     --ink: #201d17;
   }
-
+ 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   html{scroll-behavior:smooth;}
@@ -30,161 +33,534 @@
     color:var(--ink);
     font-family:'Work Sans', sans-serif;
     -webkit-font-smoothing:antialiased;
-    position:relative;
   }
-
-  body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background-image:url('logo.jpeg');
-    background-repeat:no-repeat;
-    background-position:center 55%;
-    background-size:min(640px, 70vw);
-    opacity:0.07;
-    pointer-events:none;
-    z-index:0;
-  }
-
-  header, main, footer{
-    position:relative;
-    z-index:1;
-  }
-
+ 
   a:focus-visible, button:focus-visible, input:focus-visible{
     outline:2px solid var(--gold);
     outline-offset:2px;
   }
-
-  .curve-top, .curve-bottom{
+ 
+  img{ max-width:100%; display:block; }
+ 
+  /* ---------- entry animation ---------- */
+  body.intro-active{ overflow:hidden; height:100vh; }
+ 
+  #site-intro{
+    position:fixed;
+    inset:0;
+    z-index:999;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
     background:
-      radial-gradient(120% 140% at 50% 0%, rgba(255,255,255,0.05), transparent 60%),
+      radial-gradient(120% 140% at 50% 20%, rgba(255,255,255,0.06), transparent 55%),
       linear-gradient(160deg, var(--green-deep) 0%, var(--green-darker) 100%);
-    position:relative;
+    transition:transform 0.9s cubic-bezier(.76,0,.24,1), opacity 0.6s ease 0.3s;
+    cursor:pointer;
   }
-
-  .curve-top{
-    padding:52px 24px 40px;
-    text-align:center;
-    border-bottom-left-radius:50% 32px;
-    border-bottom-right-radius:50% 32px;
-    box-shadow:0 1px 0 rgba(0,0,0,0.06);
+  #site-intro.exit{
+    transform:translateY(-100%);
+    opacity:0.001;
+    pointer-events:none;
   }
-
-  .logo-badge{
-    width:104px;
-    height:104px;
+  #site-intro.hidden{ display:none; }
+ 
+  .intro-logo{
+    width:96px; height:96px;
     border-radius:50%;
     object-fit:cover;
     box-shadow:0 10px 26px rgba(0,0,0,0.32), 0 0 0 1px rgba(201,163,75,0.35);
-    margin-bottom:18px;
     opacity:0;
-    animation:riseIn 0.7s ease forwards;
+    transform:scale(0.4) rotate(-10deg);
+    animation:introLogoIn 0.65s cubic-bezier(.3,1.4,.5,1) 0.1s forwards;
   }
-
-  .gold-rule{
-    height:1px;
-    width:140px;
-    margin:18px auto;
-    background:linear-gradient(90deg, transparent, var(--gold-soft), transparent);
-  }
-
-  .brand-name{
+ 
+  .intro-name{
+    display:flex;
+    margin-top:22px;
     font-family:'Cormorant Garamond', serif;
     font-weight:600;
     color:#fff;
-    font-size:clamp(2.6rem, 6.5vw, 4rem);
-    letter-spacing:0.08em;
-    margin:0;
-    text-shadow:0 2px 18px rgba(0,0,0,0.25);
-    opacity:0;
-    animation:riseIn 0.7s ease 0.12s forwards;
+    font-size:clamp(2.2rem, 6vw, 3.2rem);
+    letter-spacing:0.1em;
   }
-
-  .brand-sub{
-    color:var(--gold-soft);
-    letter-spacing:0.32em;
-    font-size:0.76rem;
-    margin-top:8px;
-    font-weight:500;
+  .intro-name .letter{
+    display:inline-block;
     opacity:0;
-    animation:riseIn 0.7s ease 0.05s forwards;
+    transform:translateY(14px);
+    animation:introLetterIn 0.45s ease forwards;
   }
-
-  h1 + .brand-sub{ animation-delay:0.22s; }
-
-  .brand-tagline{
+ 
+  .intro-rule{
+    height:1px;
+    width:0;
+    margin:18px auto 0;
+    background:linear-gradient(90deg, transparent, var(--gold-soft), transparent);
+    animation:introRuleIn 0.6s ease 1.15s forwards;
+  }
+ 
+  .intro-tagline{
     font-family:'Cormorant Garamond', serif;
     font-style:italic;
     font-weight:500;
-    color:var(--cream);
-    font-size:clamp(1.05rem, 2.4vw, 1.3rem);
-    margin-top:20px;
-    line-height:1.55;
+    color:var(--gold-soft);
+    font-size:1rem;
+    letter-spacing:0.04em;
+    margin-top:16px;
     opacity:0;
-    animation:riseIn 0.7s ease 0.32s forwards;
+    animation:introFadeUp 0.6s ease 1.35s forwards;
   }
-
-  @keyframes riseIn{
-    from{ opacity:0; transform:translateY(10px); }
+ 
+  .intro-hint{
+    position:absolute;
+    bottom:34px;
+    color:rgba(247,241,227,0.55);
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    opacity:0;
+    animation:introFadeUp 0.6s ease 1.7s forwards;
+  }
+ 
+  @keyframes introLogoIn{
+    0%{ opacity:0; transform:scale(0.4) rotate(-10deg); }
+    65%{ opacity:1; transform:scale(1.08) rotate(3deg); }
+    100%{ opacity:1; transform:scale(1) rotate(0); }
+  }
+  @keyframes introLetterIn{
+    from{ opacity:0; transform:translateY(14px); }
     to{ opacity:1; transform:translateY(0); }
   }
-
-  /* trust strip */
-  .trust-strip{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:0;
-    margin-top:30px;
-    padding-top:22px;
-    border-top:1px solid rgba(255,255,255,0.14);
-    opacity:0;
-    animation:riseIn 0.7s ease 0.42s forwards;
+  @keyframes introRuleIn{
+    from{ width:0; }
+    to{ width:120px; }
   }
-
-  .trust-item{
+  @keyframes introFadeUp{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+ 
+  @media (prefers-reduced-motion: reduce){
+    #site-intro{ display:none; }
+  }
+ 
+  /* ---------- top bar ---------- */
+  .topbar{
+    background:var(--green-darker);
+    color:var(--cream);
+    font-size:0.8rem;
+    padding:8px 24px;
+    display:flex;
+    justify-content:center;
+    gap:28px;
+    flex-wrap:wrap;
+  }
+  .topbar a{ color:var(--cream); text-decoration:none; }
+  .topbar span{ display:inline-flex; align-items:center; gap:6px; opacity:0.92; }
+  .topbar svg{ width:14px; height:14px; }
+ 
+  /* ---------- nav ---------- */
+  .navbar{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:var(--paper);
     display:flex;
     align-items:center;
-    gap:8px;
-    padding:6px 18px;
-    border-right:1px solid rgba(255,255,255,0.16);
-    color:var(--cream);
-    font-size:0.82rem;
-    letter-spacing:0.02em;
+    justify-content:space-between;
+    padding:12px 28px;
+    box-shadow:0 1px 0 var(--cream-line);
+    transition:box-shadow 0.2s ease;
   }
-  .trust-item:last-child{ border-right:none; }
-  .trust-item svg{ width:16px; height:16px; flex-shrink:0; color:var(--gold-soft); }
-
-  main{
-    max-width:880px;
-    margin:0 auto;
-    padding:0 20px;
-  }
-
-  .video-wrap{
-    margin-top:44px;
+  .navbar.scrolled{ box-shadow:0 8px 20px rgba(14,61,43,0.1); }
+ 
+  .nav-brand{
     display:flex;
-    justify-content:center;
-    padding:0 8px;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    color:var(--ink);
   }
-
+  .nav-brand img{
+    width:40px; height:40px; border-radius:50%; object-fit:cover;
+    box-shadow:0 0 0 1px var(--cream-line);
+  }
+  .nav-brand-text{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:1.25rem;
+    letter-spacing:0.04em;
+    color:var(--green-deep);
+    line-height:1.05;
+  }
+  .nav-brand-text small{
+    display:block;
+    font-family:'Work Sans', sans-serif;
+    font-weight:500;
+    font-size:0.6rem;
+    letter-spacing:0.16em;
+    color:var(--maroon);
+  }
+ 
+  .nav-links{
+    list-style:none;
+    display:flex;
+    gap:30px;
+    margin:0; padding:0;
+  }
+  .nav-links a{
+    text-decoration:none;
+    color:var(--ink);
+    font-size:0.92rem;
+    font-weight:500;
+    padding:6px 2px;
+    border-bottom:2px solid transparent;
+    transition:border-color 0.15s ease, color 0.15s ease;
+  }
+  .nav-links a:hover{ color:var(--green-deep); border-color:var(--gold); }
+ 
+  .nav-cta{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--green-deep);
+    color:var(--cream);
+    text-decoration:none;
+    font-size:0.85rem;
+    font-weight:500;
+    padding:10px 20px;
+    border-radius:22px;
+    white-space:nowrap;
+  }
+ 
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:none;
+    font-size:1.5rem;
+    color:var(--green-deep);
+    cursor:pointer;
+    padding:4px 8px;
+  }
+ 
+  .mobile-panel{
+    display:none;
+    background:var(--paper);
+    border-top:1px solid var(--cream-line);
+    padding:16px 28px 20px;
+  }
+  .mobile-panel.open{ display:block; }
+  .mobile-panel a{
+    display:block;
+    padding:10px 0;
+    text-decoration:none;
+    color:var(--ink);
+    border-bottom:1px solid var(--cream-line);
+    font-size:0.95rem;
+  }
+  .mobile-panel a:last-child{ border-bottom:none; }
+ 
+  @media (max-width:860px){
+    .nav-links, .nav-cta{ display:none; }
+    .nav-toggle{ display:block; }
+  }
+ 
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(120% 140% at 15% 0%, rgba(255,255,255,0.05), transparent 55%),
+      linear-gradient(160deg, var(--green-deep) 0%, var(--green-darker) 100%);
+    padding:64px 28px 60px;
+  }
+ 
+  .hero-inner{
+    max-width:1120px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:40px;
+    align-items:center;
+    position:relative;
+    z-index:2;
+  }
+ 
+  .hero-eyebrow{
+    color:var(--gold-soft);
+    letter-spacing:0.28em;
+    font-size:0.74rem;
+    font-weight:500;
+    margin:0 0 18px;
+    opacity:0;
+    animation:riseIn 0.7s ease 0.05s forwards;
+  }
+ 
+  .hero-copy h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    color:#fff;
+    font-size:clamp(2.1rem, 4vw, 3.1rem);
+    line-height:1.16;
+    margin:0 0 20px;
+    opacity:0;
+    animation:riseIn 0.7s ease 0.15s forwards;
+  }
+ 
+  .hero-sub{
+    color:var(--cream);
+    opacity:0;
+    font-size:1.02rem;
+    line-height:1.6;
+    max-width:46ch;
+    margin:0 0 30px;
+    animation:riseIn 0.7s ease 0.25s forwards;
+  }
+  .hero-sub{ opacity:0.92; }
+ 
+  .hero-cta-row{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    flex-wrap:wrap;
+    opacity:0;
+    animation:riseIn 0.7s ease 0.35s forwards;
+  }
+ 
+  .hero-cta{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--paper);
+    color:var(--green-deep);
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.88rem;
+    letter-spacing:0.04em;
+    padding:15px 30px;
+    border-radius:30px;
+    box-shadow:0 14px 30px rgba(0,0,0,0.22);
+    transition:transform 0.15s ease;
+  }
+  .hero-cta:hover{ transform:translateY(-2px); }
+ 
+  .hero-phone{
+    color:var(--gold-soft);
+    text-decoration:none;
+    font-size:0.88rem;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .hero-phone svg{ width:16px; height:16px; }
+ 
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(12px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+ 
+  /* hero art: illustrated pouches */
+  .hero-art{
+    position:relative;
+    height:340px;
+    opacity:0;
+    animation:riseIn 0.8s ease 0.2s forwards;
+  }
+ 
+  .pouch{
+    position:absolute;
+    width:150px;
+    height:230px;
+    border-radius:16px 16px 22px 22px;
+    box-shadow:0 26px 40px rgba(0,0,0,0.35);
+    color:var(--cream);
+    padding:20px 14px 16px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+ 
+  .pouch::before{
+    content:"";
+    position:absolute;
+    top:-9px; left:0; right:0; height:16px;
+    background:inherit;
+    filter:brightness(0.88);
+    clip-path:polygon(0% 100%, 6% 20%, 12% 100%, 18% 20%, 24% 100%, 30% 20%, 36% 100%, 42% 20%, 48% 100%, 54% 20%, 60% 100%, 66% 20%, 72% 100%, 78% 20%, 84% 100%, 90% 20%, 96% 100%, 100% 30%, 100% 100%);
+    border-radius:16px 16px 0 0;
+  }
+ 
+  .pouch-a{
+    background:linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+    left:14px;
+    top:46px;
+    transform:rotate(-7deg);
+    z-index:2;
+  }
+ 
+  .pouch-b{
+    background:linear-gradient(160deg, #2f6a49 0%, var(--green-deep) 100%);
+    right:6px;
+    top:0;
+    transform:rotate(6deg);
+    z-index:1;
+  }
+ 
+  .pouch-tag{
+    align-self:flex-start;
+    background:var(--gold-soft);
+    color:var(--green-darker);
+    font-size:0.58rem;
+    font-weight:700;
+    letter-spacing:0.05em;
+    padding:3px 9px;
+    border-radius:3px;
+  }
+ 
+  .pouch-name{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:700;
+    font-size:1.3rem;
+    line-height:1.15;
+  }
+ 
+  .pouch-sub{
+    font-size:0.66rem;
+    letter-spacing:0.04em;
+    opacity:0.85;
+    margin-top:4px;
+  }
+ 
+  .pouch-seal{
+    position:absolute;
+    top:14px; right:14px;
+    width:26px; height:26px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.16);
+    border:1px solid rgba(255,255,255,0.4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .pouch-seal svg{ width:14px; height:14px; color:var(--gold-soft); }
+ 
+  .crumb{
+    position:absolute;
+    background:var(--gold-soft);
+    opacity:0.5;
+    border-radius:40% 60% 55% 45% / 50% 40% 60% 50%;
+  }
+  .crumb1{ width:34px; height:22px; top:8%; left:2%; transform:rotate(-18deg); animation:floaty 6s ease-in-out infinite; }
+  .crumb2{ width:26px; height:18px; bottom:10%; left:20%; background:var(--maroon); opacity:0.35; transform:rotate(24deg); animation:floaty 7s ease-in-out infinite 0.5s; }
+  .crumb3{ width:20px; height:14px; top:4%; right:6%; transform:rotate(10deg); animation:floaty 5.5s ease-in-out infinite 1s; }
+  .crumb4{ width:28px; height:20px; bottom:2%; right:22%; background:var(--maroon); opacity:0.3; transform:rotate(-12deg); animation:floaty 6.5s ease-in-out infinite 0.3s; }
+ 
+  @keyframes floaty{
+    0%, 100%{ transform:translateY(0) rotate(var(--r, 0deg)); }
+    50%{ transform:translateY(-10px) rotate(var(--r, 0deg)); }
+  }
+ 
+  @media (prefers-reduced-motion: reduce){
+    .crumb{ animation:none; }
+  }
+ 
+  @media (max-width:900px){
+    .hero-inner{ grid-template-columns:1fr; text-align:center; }
+    .hero-sub{ margin-left:auto; margin-right:auto; }
+    .hero-cta-row{ justify-content:center; }
+    .hero-art{ height:260px; margin-top:10px; }
+    .pouch{ width:120px; height:190px; padding:16px 10px 12px; }
+    .pouch-a{ left:50%; transform:translateX(-96px) rotate(-7deg); }
+    .pouch-b{ right:auto; left:50%; transform:translateX(6px) rotate(6deg); }
+  }
+ 
+  /* ---------- section shell ---------- */
+  section{ scroll-margin-top:78px; }
+ 
+  .section-pad{
+    max-width:1120px;
+    margin:0 auto;
+    padding:74px 28px;
+  }
+ 
+  .section-head{
+    text-align:center;
+    margin-bottom:44px;
+  }
+  .section-eyebrow{
+    color:var(--maroon);
+    font-weight:600;
+    font-size:0.78rem;
+    letter-spacing:0.16em;
+    margin:0 0 10px;
+  }
+  .section-title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    color:var(--green-deep);
+    font-size:clamp(1.8rem, 3.4vw, 2.4rem);
+    margin:0;
+  }
+  .section-title-wrap .gold-rule{
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    width:90px;
+    margin:16px auto 0;
+    height:1px;
+  }
+ 
+  /* ---------- why natural cards ---------- */
+  .why-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:22px;
+  }
+  .why-card{
+    background:var(--paper);
+    border:1px solid var(--cream-line);
+    border-radius:8px;
+    padding:28px 22px;
+    text-align:left;
+  }
+  .why-card .icon-wrap{
+    width:44px; height:44px;
+    border-radius:50%;
+    background:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:16px;
+  }
+  .why-card svg{ width:22px; height:22px; color:var(--green-deep); }
+  .why-card h3{
+    font-size:1rem;
+    font-weight:600;
+    margin:0 0 8px;
+    color:var(--ink);
+  }
+  .why-card p{
+    font-size:0.88rem;
+    color:#665f4e;
+    line-height:1.55;
+    margin:0;
+  }
+ 
+  @media (max-width:860px){
+    .why-grid{ grid-template-columns:repeat(2, 1fr); }
+  }
+  @media (max-width:520px){
+    .why-grid{ grid-template-columns:1fr; }
+  }
+ 
+  /* ---------- video ---------- */
   .video-frame{
     width:100%;
     max-width:720px;
+    margin:0 auto;
     border:1px solid var(--gold-soft);
     border-radius:4px;
-    box-shadow:0 24px 48px rgba(14,61,43,0.28), 0 0 0 7px var(--paper);
+    box-shadow:0 24px 48px rgba(14,61,43,0.18), 0 0 0 7px var(--paper);
     overflow:hidden;
     background:#000;
   }
-
-  video{
-    display:block;
-    width:100%;
-    height:auto;
-  }
-
+  video{ display:block; width:100%; height:auto; }
   .video-caption{
     text-align:center;
     font-size:0.82rem;
@@ -192,33 +568,10 @@
     margin:16px 0 0;
     font-style:italic;
   }
-
-  .section-title-wrap{
-    text-align:center;
-    margin:64px 0 26px;
-  }
-
-  .section-title-wrap .gold-rule{
-    background:linear-gradient(90deg, transparent, var(--gold), transparent);
-    width:90px;
-    margin:16px auto 0;
-  }
-
-  .ribbon{
-    display:inline-block;
-    background:linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%);
-    color:var(--cream);
-    font-family:'Cormorant Garamond', serif;
-    font-weight:600;
-    font-size:1.7rem;
-    letter-spacing:0.1em;
-    padding:11px 46px;
-    border-radius:2px;
-    position:relative;
-    box-shadow:0 10px 22px rgba(124,31,43,0.25);
-  }
-
-  /* category tabs */
+ 
+  /* ---------- products ---------- */
+  .products-section{ background:var(--paper); }
+ 
   .tabs{
     display:flex;
     flex-wrap:wrap;
@@ -226,28 +579,25 @@
     gap:8px;
     margin:0 0 22px;
   }
-
   .tab-btn{
     font-family:'Work Sans', sans-serif;
     font-size:0.84rem;
     font-weight:500;
     color:var(--green-deep);
-    background:var(--paper);
+    background:var(--cream);
     border:1px solid var(--cream-line);
     padding:8px 18px;
     border-radius:20px;
     cursor:pointer;
     transition:background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   }
-
   .tab-btn:hover{ border-color:var(--gold); }
-
   .tab-btn.active{
     background:var(--green-deep);
     color:var(--cream);
     border-color:var(--green-deep);
   }
-
+ 
   .item-table{
     width:100%;
     border-collapse:separate;
@@ -258,7 +608,6 @@
     border-radius:6px;
     overflow:hidden;
   }
-
   .item-table thead th{
     background:linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%);
     color:var(--cream);
@@ -268,21 +617,17 @@
     padding:14px 16px;
     text-align:left;
   }
-
   .item-table thead th:first-child{ text-align:center; width:56px; }
   .item-table thead th:nth-child(3){ text-align:center; }
   .item-table thead th:nth-child(4){ text-align:center; width:118px; }
   .item-table thead th:last-child, .item-table td:last-child{ text-align:right; }
-
   .item-table tbody td{
     padding:13px 16px;
     border-bottom:1px solid var(--cream-line);
     font-size:0.96rem;
     vertical-align:middle;
   }
-
   .item-table tbody tr:last-child td{ border-bottom:none; }
-
   .item-table tbody td:first-child{
     text-align:center;
     color:#a89c80;
@@ -290,58 +635,43 @@
     font-style:italic;
     font-size:1rem;
   }
-
   .item-table tbody td:nth-child(3){ text-align:center; }
-
   .item-table tbody tr:nth-child(even){ background:#faf5e8; }
   .item-table tbody tr:hover{ background:#f2e6c8; }
-
   .item-table tr.hidden-row{ display:none; }
-
   .item-table td:last-child{
     font-weight:600;
     color:var(--green-deep);
     font-variant-numeric:tabular-nums;
   }
-
+ 
   .qty-stepper{
     display:inline-flex;
     align-items:center;
-    gap:0;
     border:1px solid var(--cream-line);
     border-radius:20px;
     overflow:hidden;
     background:var(--paper);
   }
-
   .qty-stepper button{
-    width:26px;
-    height:26px;
+    width:26px; height:26px;
     border:none;
     background:transparent;
     color:var(--green-deep);
     font-size:1rem;
     line-height:1;
     cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
   }
-
   .qty-stepper button:hover{ background:var(--cream-line); }
-
   .qty-stepper span{
     min-width:20px;
     text-align:center;
     font-size:0.88rem;
     font-variant-numeric:tabular-nums;
   }
-
-  .cta-wrap{
-    text-align:center;
-    margin:36px 0 8px;
-  }
-
+ 
+  .cta-wrap{ text-align:center; margin:36px 0 8px; }
   .cta-btn{
     display:inline-flex;
     align-items:center;
@@ -355,14 +685,9 @@
     padding:14px 32px;
     border-radius:3px;
     box-shadow:0 12px 26px rgba(14,61,43,0.22);
-    transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
   }
-
-  .cta-btn:hover{
-    transform:translateY(-1px);
-    box-shadow:0 16px 32px rgba(14,61,43,0.28);
-  }
-
+  .cta-btn:hover{ transform:translateY(-1px); box-shadow:0 16px 32px rgba(14,61,43,0.28); }
   .cta-note{
     text-align:center;
     font-size:0.82rem;
@@ -370,15 +695,23 @@
     margin-top:12px;
     min-height:1.2em;
   }
-
-  .curve-bottom{
-    margin-top:56px;
-    padding:40px 24px 34px;
-    text-align:center;
-    border-top-left-radius:50% 32px;
-    border-top-right-radius:50% 32px;
+ 
+  @media (max-width:560px){
+    .item-table thead th, .item-table tbody td{ padding:10px 8px; font-size:0.86rem; }
+    .item-table thead th:nth-child(4){ width:96px; }
   }
-
+ 
+  /* ---------- footer ---------- */
+  .curve-bottom{
+    background:
+      radial-gradient(120% 140% at 50% 0%, rgba(255,255,255,0.05), transparent 60%),
+      linear-gradient(160deg, var(--green-deep) 0%, var(--green-darker) 100%);
+    margin-top:0;
+    padding:50px 24px 34px;
+    text-align:center;
+    border-top-left-radius:50% 24px;
+    border-top-right-radius:50% 24px;
+  }
   .life-line{
     font-family:'Cormorant Garamond', serif;
     font-style:italic;
@@ -388,7 +721,6 @@
     letter-spacing:0.02em;
     margin-bottom:30px;
   }
-
   .footer-grid{
     display:flex;
     flex-wrap:wrap;
@@ -400,24 +732,19 @@
     border-top:1px solid rgba(255,255,255,0.14);
     padding-top:26px;
   }
-
   .footer-contact p{
     color:#e9e3d2;
     font-size:0.88rem;
     margin:7px 0;
     line-height:1.6;
   }
-
   .footer-contact strong{ color:var(--gold-soft); font-weight:500; }
-
   .footer-contact a{
     color:#e9e3d2;
     text-decoration:none;
     border-bottom:1px solid rgba(233,227,212,0.3);
   }
-
   .footer-contact a:hover{ border-bottom-color:rgba(233,227,212,0.8); }
-
   .footer-motto{
     color:var(--gold-soft);
     font-family:'Cormorant Garamond', serif;
@@ -426,14 +753,17 @@
     font-size:1.15rem;
     align-self:center;
   }
-
-  /* floating order pill */
+  @media (max-width:560px){
+    .footer-grid{ flex-direction:column; text-align:center; }
+  }
+ 
+  /* ---------- floating order pill ---------- */
   .order-pill{
     position:fixed;
     left:50%;
     bottom:22px;
     transform:translate(-50%, 120%);
-    z-index:20;
+    z-index:60;
     display:inline-flex;
     align-items:center;
     gap:12px;
@@ -447,72 +777,165 @@
     font-weight:500;
     transition:transform 0.35s cubic-bezier(.2,.9,.3,1.3);
   }
-
   .order-pill.show{ transform:translate(-50%, 0); }
-
   .order-pill .count{
     background:rgba(255,255,255,0.2);
     border-radius:50%;
-    width:22px;
-    height:22px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    width:22px; height:22px;
+    display:flex; align-items:center; justify-content:center;
     font-size:0.76rem;
     font-variant-numeric:tabular-nums;
   }
-
+ 
   @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
-    .logo-badge, .brand-name, .brand-sub, .brand-tagline, .trust-strip{
-      animation:none; opacity:1;
-    }
+    .hero-eyebrow, .hero-copy h1, .hero-sub, .hero-cta-row, .hero-art{ animation:none; opacity:1; }
     .order-pill{ transition:none; }
-  }
-
-  @media (max-width:560px){
-    .footer-grid{ flex-direction:column; text-align:center; }
-    .video-wrap{ margin-top:32px; }
-    .curve-top{ padding-bottom:36px; }
-    .trust-item{ border-right:none; padding:5px 12px; }
-    .item-table thead th, .item-table tbody td{ padding:10px 8px; font-size:0.86rem; }
-    .item-table thead th:nth-child(4){ width:96px; }
   }
 </style>
 </head>
-<body>
-
-<header class="curve-top">
-  <img src="logo.jpeg" alt="Vasista Food and Traders" class="logo-badge">
-  <p class="brand-sub">Choose Natural · Live Better</p>
-  <h1 class="brand-name">VASISTA</h1>
-  <p class="brand-sub">Food and Traders</p>
-  <div class="gold-rule"></div>
-  <p class="brand-tagline">Quality You Can Trust,<br>Purity You Can Taste!</p>
-
-  <div class="trust-strip">
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21c-4-3-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-3 8-7 11Z"/><path d="M12 10v6"/></svg>
-      No preservatives
+<body class="intro-active">
+ 
+<div id="site-intro">
+  <img class="intro-logo" src="logo.jpeg" alt="">
+  <div class="intro-name" id="intro-name"></div>
+  <div class="intro-rule"></div>
+  <p class="intro-tagline">Choose Natural. Live Better.</p>
+  <p class="intro-hint">TAP TO CONTINUE</p>
+</div>
+ 
+<script>
+(function(){
+  var overlay = document.getElementById("site-intro");
+  var nameEl = document.getElementById("intro-name");
+  var word = "VASISTA";
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ 
+  if(reduceMotion){
+    overlay.classList.add("hidden");
+    document.body.classList.remove("intro-active");
+    return;
+  }
+ 
+  word.split("").forEach(function(ch, i){
+    var span = document.createElement("span");
+    span.className = "letter";
+    span.style.animationDelay = (0.55 + i * 0.055) + "s";
+    span.textContent = ch;
+    nameEl.appendChild(span);
+  });
+ 
+  var exited = false;
+  function exitIntro(){
+    if(exited) return;
+    exited = true;
+    overlay.classList.add("exit");
+    document.body.classList.remove("intro-active");
+    setTimeout(function(){ overlay.classList.add("hidden"); }, 950);
+  }
+ 
+  overlay.addEventListener("click", exitIntro);
+  setTimeout(exitIntro, 2600);
+})();
+</script>
+ 
+<div class="topbar">
+  <a href="tel:+918341383888"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.99.36 1.96.68 2.9a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.18-1.18a2 2 0 0 1 2.11-.45c.94.32 1.91.55 2.9.68A2 2 0 0 1 22 16.92z"/></svg>8341383888</span></a>
+  <a href="mailto:vasistanaturals.vja@gmail.com"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6 12 13 2 6"/></svg>vasistanaturals.vja@gmail.com</span></a>
+</div>
+ 
+<nav class="navbar" id="navbar">
+  <a class="nav-brand" href="#home">
+    <img src="logo.jpeg" alt="Vasista Food and Traders">
+    <span class="nav-brand-text">Vasista<small>FOOD &amp; TRADERS</small></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">Why Natural</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#products">Order Now</a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+</nav>
+<div class="mobile-panel" id="mobile-panel">
+  <a href="#home">Home</a>
+  <a href="#about">Why Natural</a>
+  <a href="#products">Products</a>
+  <a href="#contact">Contact</a>
+</div>
+ 
+<section class="hero" id="home">
+  <div class="crumb crumb1"></div>
+  <div class="crumb crumb2"></div>
+  <div class="crumb crumb3"></div>
+  <div class="crumb crumb4"></div>
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="hero-eyebrow">CHOOSE NATURAL · LIVE BETTER</p>
+      <h1>Millets, quinoa and ragi, turned into snacks worth trusting</h1>
+      <p class="hero-sub">Small-batch snacks made in Secunderabad with no preservatives and no shortcuts — quality you can trust, purity you can taste.</p>
+      <div class="hero-cta-row">
+        <a class="hero-cta" href="#products">
+          Explore Products
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="hero-phone" href="tel:+918341383888">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.99.36 1.96.68 2.9a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.18-1.18a2 2 0 0 1 2.11-.45c.94.32 1.91.55 2.9.68A2 2 0 0 1 22 16.92z"/></svg>
+          8341 383 888
+        </a>
+      </div>
     </div>
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
-      Slow-roasted, small batches
-    </div>
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg>
-      Millets, ragi &amp; quinoa
-    </div>
-    <div class="trust-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6 9 17l-5-5"/></svg>
-      Made fresh to order
+    <div class="hero-art">
+      <div class="pouch pouch-b">
+        <span class="pouch-tag">NATURAL</span>
+        <div class="pouch-seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c-4-3-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-3 8-7 11Z"/></svg></div>
+        <div>
+          <div class="pouch-name">Ragi Chips</div>
+          <div class="pouch-sub">NATURALLY BAKED</div>
+        </div>
+      </div>
+      <div class="pouch pouch-a">
+        <span class="pouch-tag">BEST SELLER</span>
+        <div class="pouch-seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg></div>
+        <div>
+          <div class="pouch-name">12X Crunch</div>
+          <div class="pouch-sub">MULTIGRAIN SNACK</div>
+        </div>
+      </div>
     </div>
   </div>
-</header>
-
-<main>
-
-  <div class="video-wrap">
+</section>
+ 
+<section id="about" class="section-pad">
+  <div class="section-head">
+    <p class="section-eyebrow">WHY VASISTA</p>
+    <h2 class="section-title">Why Choose Natural</h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21c-4-3-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-3 8-7 11Z"/><path d="M12 10v6"/></svg></div>
+      <h3>No preservatives</h3>
+      <p>Nothing artificial goes into any Vasista pack — just real grains and real flavour.</p>
+    </div>
+    <div class="why-card">
+      <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div>
+      <h3>Slow-roasted, small batches</h3>
+      <p>We make in limited batches so every pack reaches you fresh, not off a warehouse shelf.</p>
+    </div>
+    <div class="why-card">
+      <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg></div>
+      <h3>Millets, ragi &amp; quinoa</h3>
+      <p>Traditional grains at the core of every recipe, for snacking that actually does you good.</p>
+    </div>
+    <div class="why-card">
+      <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h3>Made fresh to order</h3>
+      <p>Every order is packed close to your delivery date — not stockpiled months in advance.</p>
+    </div>
+  </div>
+ 
+  <div style="margin-top:56px;">
     <div class="video-frame">
       <video controls preload="metadata"
         poster="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.jpg">
@@ -520,66 +943,86 @@
         Your browser does not support the video tag.
       </video>
     </div>
+    <p class="video-caption">Placeholder video — swap the &lt;source&gt; link for your own product video.</p>
   </div>
-  <p class="video-caption">Placeholder video — swap the &lt;source&gt; link for your own product video.</p>
-
-  <div class="section-title-wrap">
-    <span class="ribbon">Eatables</span>
-    <div class="gold-rule"></div>
+</section>
+ 
+<section id="products" class="products-section">
+  <div class="section-pad" style="padding-top:64px;">
+    <div class="section-head">
+      <p class="section-eyebrow">OUR RANGE</p>
+      <h2 class="section-title">Eatables</h2>
+    </div>
+ 
+    <div class="tabs" id="tabs" role="tablist" aria-label="Filter by category">
+      <button class="tab-btn active" data-cat="all" role="tab" aria-selected="true">All</button>
+      <button class="tab-btn" data-cat="crunch" role="tab" aria-selected="false">Crunch</button>
+      <button class="tab-btn" data-cat="chips" role="tab" aria-selected="false">Chips</button>
+      <button class="tab-btn" data-cat="mixes" role="tab" aria-selected="false">Mixes</button>
+      <button class="tab-btn" data-cat="nuts" role="tab" aria-selected="false">Nuts &amp; Beans</button>
+    </div>
+ 
+    <table class="item-table">
+      <thead>
+        <tr>
+          <th>S.No.</th>
+          <th>Items</th>
+          <th>Grams</th>
+          <th>Qty</th>
+          <th>M.R.P.</th>
+        </tr>
+      </thead>
+      <tbody id="item-body"></tbody>
+    </table>
+ 
+    <div class="cta-wrap">
+      <a class="cta-btn" id="order-btn" href="https://wa.me/918341383888?text=Hi%2C%20I%27d%20like%20to%20order%20from%20Vasista%20Food%20and%20Traders" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.29-.15-1.71-.85-1.98-.94-.27-.1-.46-.15-.65.15-.2.29-.75.94-.92 1.13-.17.2-.34.22-.63.08-.29-.15-1.23-.46-2.34-1.46-.87-.78-1.45-1.73-1.62-2.02-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.08-.15-.65-1.58-.9-2.16-.24-.57-.48-.5-.65-.5-.17-.01-.36-.01-.56-.01-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.42 0 1.43 1.04 2.82 1.19 3.01.15.2 2.05 3.13 4.96 4.39.69.3 1.23.48 1.65.61.69.22 1.32.19 1.82.11.55-.08 1.71-.7 1.95-1.37.24-.68.24-1.26.17-1.38-.07-.12-.26-.19-.55-.34z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.06-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18.15c-1.63 0-3.15-.45-4.45-1.24l-.32-.19-3.01.79.81-2.93-.21-.3A8.14 8.14 0 0 1 3.85 12c0-4.5 3.66-8.15 8.15-8.15S20.15 7.5 20.15 12 16.5 20.15 12 20.15z"/></svg>
+        <span id="order-label">Order on WhatsApp</span>
+      </a>
+      <p class="cta-note" id="cta-note">Tip: pick quantities above and your order list is sent automatically.</p>
+    </div>
   </div>
-
-  <div class="tabs" id="tabs" role="tablist" aria-label="Filter by category">
-    <button class="tab-btn active" data-cat="all" role="tab" aria-selected="true">All</button>
-    <button class="tab-btn" data-cat="crunch" role="tab" aria-selected="false">Crunch</button>
-    <button class="tab-btn" data-cat="chips" role="tab" aria-selected="false">Chips</button>
-    <button class="tab-btn" data-cat="mixes" role="tab" aria-selected="false">Mixes</button>
-    <button class="tab-btn" data-cat="nuts" role="tab" aria-selected="false">Nuts &amp; Beans</button>
-  </div>
-
-  <table class="item-table">
-    <thead>
-      <tr>
-        <th>S.No.</th>
-        <th>Items</th>
-        <th>Grams</th>
-        <th>Qty</th>
-        <th>M.R.P.</th>
-      </tr>
-    </thead>
-    <tbody id="item-body">
-      <!-- rows injected by script -->
-    </tbody>
-  </table>
-
-  <div class="cta-wrap">
-    <a class="cta-btn" id="order-btn" href="https://wa.me/918341383888?text=Hi%2C%20I%27d%20like%20to%20order%20from%20Vasista%20Food%20and%20Traders" target="_blank" rel="noopener">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.29-.15-1.71-.85-1.98-.94-.27-.1-.46-.15-.65.15-.2.29-.75.94-.92 1.13-.17.2-.34.22-.63.08-.29-.15-1.23-.46-2.34-1.46-.87-.78-1.45-1.73-1.62-2.02-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.08-.15-.65-1.58-.9-2.16-.24-.57-.48-.5-.65-.5-.17-.01-.36-.01-.56-.01-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.42 0 1.43 1.04 2.82 1.19 3.01.15.2 2.05 3.13 4.96 4.39.69.3 1.23.48 1.65.61.69.22 1.32.19 1.82.11.55-.08 1.71-.7 1.95-1.37.24-.68.24-1.26.17-1.38-.07-.12-.26-.19-.55-.34z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.06-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18.15c-1.63 0-3.15-.45-4.45-1.24l-.32-.19-3.01.79.81-2.93-.21-.3A8.14 8.14 0 0 1 3.85 12c0-4.5 3.66-8.15 8.15-8.15S20.15 7.5 20.15 12 16.5 20.15 12 20.15z"/></svg>
-      <span id="order-label">Order on WhatsApp</span>
-    </a>
-    <p class="cta-note" id="cta-note">Tip: pick quantities above and your order list is sent automatically.</p>
-  </div>
-
-</main>
-
-<footer class="curve-bottom">
+</section>
+ 
+<footer class="curve-bottom" id="contact">
   <p class="life-line">Good Food &nbsp;|&nbsp; Good Health &nbsp;|&nbsp; Good Life</p>
   <div class="footer-grid">
     <div class="footer-contact">
       <p><strong>Address</strong><br>AS Rao Nagar, Sainikpuri, Secunderabad, Telangana – 500094</p>
       <p><strong>Phone</strong><br><a href="tel:+918341383888">8341383888</a></p>
-      <p><strong>Email</strong><br><a href="mailto:vasistanaturals@gmail.com">vasistanaturals@gmail.com</a></p>
+      <p><strong>Email</strong><br><a href="mailto:vasistanaturals.vja@gmail.com">vasistanaturals.vja@gmail.com</a></p>
     </div>
     <div class="footer-motto">Choose Natural.<br>Live Better.</div>
   </div>
 </footer>
-
+ 
 <a class="order-pill" id="order-pill" href="#" target="_blank" rel="noopener">
   <span class="count" id="pill-count">0</span>
   <span id="pill-text">View order · ₹0</span>
 </a>
-
+ 
 <script>
 (function(){
+  // sticky nav shadow
+  const navbar = document.getElementById("navbar");
+  window.addEventListener("scroll", function(){
+    navbar.classList.toggle("scrolled", window.scrollY > 8);
+  });
+ 
+  // mobile nav toggle
+  const toggle = document.getElementById("nav-toggle");
+  const panel = document.getElementById("mobile-panel");
+  toggle.addEventListener("click", function(){
+    const open = panel.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  panel.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+    panel.classList.remove("open");
+    toggle.setAttribute("aria-expanded", "false");
+  }));
+ 
+  // product data + order builder
   const products = [
     { name:"12X Crunch", grams:"100g", price:120, cat:"crunch" },
     { name:"12X Crunch", grams:"200g", price:210, cat:"crunch" },
@@ -600,12 +1043,12 @@
     { name:"Mexican Bites", grams:"250g", price:250, cat:"mixes" },
     { name:"Pro Beans", grams:"250g", price:250, cat:"nuts" }
   ];
-
+ 
   const tbody = document.getElementById("item-body");
   const qty = new Array(products.length).fill(0);
   const PHONE = "918341383888";
   const rupee = n => "\u20b9" + n.toLocaleString("en-IN");
-
+ 
   products.forEach((p, i) => {
     const tr = document.createElement("tr");
     tr.dataset.cat = p.cat;
@@ -623,7 +1066,7 @@
       '<td>' + rupee(p.price) + '</td>';
     tbody.appendChild(tr);
   });
-
+ 
   tbody.addEventListener("click", function(e){
     const btn = e.target.closest("button[data-action]");
     if(!btn) return;
@@ -633,8 +1076,7 @@
     document.getElementById("qty-" + i).textContent = qty[i];
     updateOrder();
   });
-
-  // category tabs
+ 
   const tabs = document.getElementById("tabs");
   tabs.addEventListener("click", function(e){
     const btn = e.target.closest(".tab-btn");
@@ -650,7 +1092,7 @@
       row.classList.toggle("hidden-row", cat !== "all" && row.dataset.cat !== cat);
     });
   });
-
+ 
   const orderBtn = document.getElementById("order-btn");
   const orderLabel = document.getElementById("order-label");
   const ctaNote = document.getElementById("cta-note");
@@ -658,7 +1100,7 @@
   const pillCount = document.getElementById("pill-count");
   const pillText = document.getElementById("pill-text");
   const baseText = "Hi, I'd like to order from Vasista Food and Traders";
-
+ 
   function updateOrder(){
     let total = 0, count = 0;
     const lines = [];
@@ -669,7 +1111,7 @@
         lines.push(p.name + " (" + p.grams + ") x" + qty[i]);
       }
     });
-
+ 
     let text = baseText;
     if(lines.length){
       text += ":%0A" + lines.map(l => "- " + encodeURIComponent(l)).join("%0A") +
@@ -681,7 +1123,7 @@
       orderLabel.textContent = "Order on WhatsApp";
       ctaNote.textContent = "Tip: pick quantities above and your order list is sent automatically.";
     }
-
+ 
     const href = "https://wa.me/" + PHONE + "?text=" + text;
     orderBtn.href = href;
     pill.href = href;
@@ -689,10 +1131,13 @@
     pillText.textContent = "View order · " + rupee(total);
     pill.classList.toggle("show", count > 0);
   }
-
+ 
   updateOrder();
 })();
 </script>
-
+ 
 </body>
 </html>
+ 
+
+
