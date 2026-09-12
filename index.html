@@ -598,6 +598,49 @@
     font-style:italic;
   }
 
+  .video-placeholder{
+    position:relative;
+    width:100%;
+    padding-top:52%;
+    background:
+      radial-gradient(120% 140% at 50% 20%, rgba(255,255,255,0.06), transparent 55%),
+      linear-gradient(160deg, var(--green-deep) 0%, var(--green-darker) 100%);
+  }
+  .video-placeholder-content{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    text-align:center;
+    padding:20px;
+  }
+  .play-circle{
+    width:60px; height:60px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .play-circle svg{ width:24px; height:24px; color:var(--gold-soft); margin-left:3px; }
+  .video-placeholder-content h3{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    color:#fff;
+    font-size:clamp(1.1rem, 2.6vw, 1.35rem);
+    margin:0;
+  }
+  .video-placeholder-content p{
+    font-size:0.84rem;
+    color:var(--gold-soft);
+    margin:0;
+    letter-spacing:0.02em;
+  }
+
   /* ---------- products ---------- */
   .products-section{ background:var(--paper); }
 
@@ -962,7 +1005,7 @@
 
 <div class="topbar">
   <a href="tel:+918341383888"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.99.36 1.96.68 2.9a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.18-1.18a2 2 0 0 1 2.11-.45c.94.32 1.91.55 2.9.68A2 2 0 0 1 22 16.92z"/></svg>8341383888</span></a>
-  <a href="mailto:vasistanaturals.vja@gmail.com"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6 12 13 2 6"/></svg>vasistanaturals.vja@gmail.com</span></a>
+  <a href="mailto:vasistanaturals@gmail.com"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6 12 13 2 6"/></svg>vasistanaturals@gmail.com</span></a>
 </div>
 
 <nav class="navbar" id="navbar">
@@ -1057,14 +1100,15 @@
   </div>
 
   <div class="reveal" style="margin-top:56px;">
-    <div class="video-frame">
-      <video controls preload="metadata"
-        poster="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.jpg">
-        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+    <div class="video-frame video-placeholder">
+      <div class="video-placeholder-content">
+        <div class="play-circle">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <h3>Our product video is coming soon</h3>
+        <p>Check back shortly to see how Vasista snacks are made</p>
+      </div>
     </div>
-    <p class="video-caption">Placeholder video — swap the &lt;source&gt; link for your own product video.</p>
   </div>
 </section>
 
@@ -1113,7 +1157,7 @@
     <div class="footer-contact">
       <p><strong>Address</strong><br>AS Rao Nagar, Sainikpuri, Secunderabad, Telangana – 500094</p>
       <p><strong>Phone</strong><br><a href="tel:+918341383888">8341383888</a></p>
-      <p><strong>Email</strong><br><a href="mailto:vasistanaturals.vja@gmail.com">vasistanaturals.vja@gmail.com</a></p>
+      <p><strong>Email</strong><br><a href="mailto:vasistanaturals@gmail.com">vasistanaturals@gmail.com</a></p>
     </div>
     <div class="footer-motto">Choose Natural.<br>Live Better.</div>
   </div>
