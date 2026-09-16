@@ -809,6 +809,21 @@
     font-variant-numeric:tabular-nums;
   }
 
+  .price-cell{ display:flex; flex-direction:column; align-items:flex-end; line-height:1.3; }
+  .price-cell .price-now{ color:var(--green-deep); font-weight:700; }
+  .price-cell .price-old{
+    text-decoration:line-through;
+    color:#a89c80;
+    font-weight:500;
+    font-size:0.78rem;
+  }
+  .price-cell .price-off{
+    color:var(--maroon);
+    font-size:0.72rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+  }
+
   .qty-stepper{
     display:inline-flex;
     align-items:center;
@@ -1252,6 +1267,20 @@
   const PHONE = "918341383888";
   const rupee = n => "\u20b9" + n.toLocaleString("en-IN");
 
+  // Quantity-based discount: 1 item = full price, each extra item adds 3% off,
+  // capped at 30% so the discount never runs away at very large quantities.
+  const DISCOUNT_STEP = 3;
+  const DISCOUNT_CAP = 30;
+  function discountPercent(q){
+    if(q <= 1) return 0;
+    return Math.min((q - 1) * DISCOUNT_STEP, DISCOUNT_CAP);
+  }
+  function unitPriceFor(basePrice, q){
+    const pct = discountPercent(q);
+    const unit = Math.round(basePrice * (1 - pct / 100));
+    return { unit, pct };
+  }
+
   products.forEach((p, i) => {
     const tr = document.createElement("tr");
     tr.dataset.cat = p.cat;
@@ -1270,9 +1299,23 @@
           '<button type="button" aria-label="Increase quantity" data-action="inc" data-i="' + i + '">+</button>' +
         '</div>' +
       '</td>' +
-      '<td>' + rupee(p.price) + '</td>';
+      '<td><div class="price-cell" id="price-' + i + '"><span class="price-now">' + rupee(p.price) + '</span></div></td>';
     tbody.appendChild(tr);
   });
+
+  function renderPriceCell(i){
+    const p = products[i];
+    const cell = document.getElementById("price-" + i);
+    const { unit, pct } = unitPriceFor(p.price, qty[i]);
+    if(pct > 0){
+      cell.innerHTML =
+        '<span class="price-old">' + rupee(p.price) + '</span>' +
+        '<span class="price-now">' + rupee(unit) + '</span>' +
+        '<span class="price-off">' + pct + '% off</span>';
+    } else {
+      cell.innerHTML = '<span class="price-now">' + rupee(p.price) + '</span>';
+    }
+  }
 
   tbody.addEventListener("click", function(e){
     const viewBtn = e.target.closest(".thumb-btn");
@@ -1286,6 +1329,7 @@
     if(btn.dataset.action === "inc") qty[i]++;
     if(btn.dataset.action === "dec") qty[i] = Math.max(0, qty[i] - 1);
     document.getElementById("qty-" + i).textContent = qty[i];
+    renderPriceCell(i);
     updateOrder();
   });
 
@@ -1344,8 +1388,11 @@
     products.forEach((p, i) => {
       if(qty[i] > 0){
         count += qty[i];
-        total += qty[i] * p.price;
-        lines.push(p.name + " (" + p.grams + ") x" + qty[i]);
+        const { unit, pct } = unitPriceFor(p.price, qty[i]);
+        total += qty[i] * unit;
+        let line = p.name + " (" + p.grams + ") x" + qty[i] + " @ " + rupee(unit);
+        if(pct > 0) line += " (" + pct + "% off)";
+        lines.push(line);
       }
     });
 
