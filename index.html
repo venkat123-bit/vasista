@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
   :root{
     --green-deep: #0e3d2b;
@@ -850,6 +851,313 @@
     font-variant-numeric:tabular-nums;
   }
 
+  /* ---------- delivery & payment ---------- */
+  .delivery-section{
+    margin-top:44px;
+    padding-top:40px;
+    border-top:1px solid var(--cream-line);
+  }
+  .delivery-section .section-title{ text-align:center; margin-bottom:6px; }
+  .delivery-sub{
+    text-align:center;
+    color:#8a8271;
+    font-size:0.88rem;
+    margin:0 0 28px;
+  }
+  .delivery-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px 20px;
+    max-width:720px;
+    margin:0 auto;
+  }
+  .d-field{ display:flex; flex-direction:column; gap:6px; }
+  .d-field.full{ grid-column:1 / -1; }
+  .d-field label{
+    font-size:0.8rem;
+    font-weight:600;
+    color:var(--green-deep);
+    letter-spacing:0.02em;
+  }
+  .d-field label .opt{ color:#a89c80; font-weight:400; }
+  .d-field input, .d-field textarea{
+    font-family:inherit;
+    font-size:0.92rem;
+    padding:11px 13px;
+    border:1px solid var(--cream-line);
+    border-radius:6px;
+    background:var(--paper);
+    color:var(--ink);
+    resize:vertical;
+  }
+  .d-field textarea{ min-height:64px; }
+  .d-field input:focus, .d-field textarea:focus{
+    outline:none;
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(201,163,75,0.18);
+  }
+  .d-field.invalid input, .d-field.invalid textarea{ border-color:var(--maroon); }
+  .d-field .d-error{
+    display:none;
+    font-size:0.74rem;
+    color:var(--maroon);
+  }
+  .d-field.invalid .d-error{ display:block; }
+
+  .map-pick-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    align-self:flex-start;
+    margin-top:2px;
+    background:none;
+    border:none;
+    color:var(--green-deep);
+    font-size:0.8rem;
+    font-weight:600;
+    text-decoration:underline;
+    text-underline-offset:2px;
+    cursor:pointer;
+    padding:2px 0;
+  }
+  .map-pick-btn:hover{ color:var(--maroon); }
+
+  .payment-block{
+    max-width:720px;
+    margin:30px auto 0;
+  }
+  .payment-block h3{
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.25rem;
+    font-weight:600;
+    color:var(--green-deep);
+    margin:0 0 14px;
+    text-align:center;
+  }
+  .pay-options{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+  }
+  .pay-option{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    border:1px solid var(--cream-line);
+    background:var(--paper);
+    padding:11px 20px;
+    border-radius:30px;
+    font-size:0.9rem;
+    cursor:pointer;
+    transition:border-color 0.15s ease, background 0.15s ease;
+  }
+  .pay-option:has(input:checked){
+    border-color:var(--green-deep);
+    background:#eef4ee;
+  }
+  .pay-option input{ accent-color:var(--green-deep); }
+
+  .upi-panel{
+    background:var(--paper);
+    border:1px solid var(--cream-line);
+    border-radius:10px;
+    padding:24px;
+    text-align:center;
+  }
+  .upi-panel.hidden{ display:none; }
+  .upi-panel img{
+    width:180px; height:180px;
+    margin:0 auto 14px;
+    border-radius:8px;
+    border:1px solid var(--cream-line);
+  }
+  .upi-panel .upi-id-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    font-size:0.92rem;
+    margin-bottom:10px;
+  }
+  .upi-panel .upi-id-row strong{ color:var(--green-deep); }
+  .upi-copy-btn{
+    border:1px solid var(--cream-line);
+    background:var(--cream);
+    color:var(--green-deep);
+    font-size:0.76rem;
+    font-weight:600;
+    padding:5px 12px;
+    border-radius:20px;
+    cursor:pointer;
+  }
+  .upi-copy-btn:hover{ background:var(--cream-line); }
+  .upi-note{
+    font-size:0.8rem;
+    color:#8a8271;
+    max-width:440px;
+    margin:0 auto 16px;
+    line-height:1.5;
+  }
+  .upi-panel .d-field{ max-width:320px; margin:0 auto; text-align:left; }
+
+  .delivery-error-banner{
+    display:none;
+    max-width:720px;
+    margin:20px auto 0;
+    background:#fbe9e9;
+    border:1px solid var(--maroon);
+    color:var(--maroon-deep);
+    font-size:0.86rem;
+    padding:12px 16px;
+    border-radius:6px;
+    text-align:center;
+  }
+  .delivery-error-banner.show{ display:block; }
+
+  @media (max-width:640px){
+    .delivery-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- map location picker (full-screen) ---------- */
+  .map-modal{
+    position:fixed;
+    inset:0;
+    z-index:200;
+    background:var(--cream);
+    display:none;
+    flex-direction:column;
+  }
+  .map-modal.open{ display:flex; }
+
+  .map-search-bar{
+    position:absolute;
+    top:16px; left:16px; right:16px;
+    z-index:220;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--paper);
+    border-radius:30px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.16);
+    padding:8px 8px 8px 6px;
+  }
+  .map-icon-btn{
+    flex:none;
+    width:38px; height:38px;
+    border-radius:50%;
+    border:none;
+    background:var(--cream);
+    color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .map-icon-btn:hover{ background:var(--cream-line); }
+  #map-search-input{
+    flex:1;
+    border:none;
+    outline:none;
+    background:transparent;
+    font-family:inherit;
+    font-size:0.94rem;
+    color:var(--ink);
+    min-width:0;
+  }
+
+  #map-canvas{
+    position:absolute;
+    inset:0;
+    z-index:0;
+  }
+
+  .map-center-pin{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%, -100%);
+    z-index:210;
+    pointer-events:none;
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,0.28));
+  }
+
+  .map-current-loc-btn{
+    position:absolute;
+    right:16px;
+    z-index:220;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--paper);
+    border:1px solid var(--cream-line);
+    color:var(--ink);
+    font-family:inherit;
+    font-size:0.86rem;
+    font-weight:600;
+    padding:11px 18px;
+    border-radius:30px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.15);
+    cursor:pointer;
+    bottom:230px;
+  }
+  .map-current-loc-btn:hover{ background:var(--cream); }
+
+  .map-confirm-card{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    z-index:220;
+    background:var(--paper);
+    border-top-left-radius:22px;
+    border-top-right-radius:22px;
+    box-shadow:0 -10px 30px rgba(0,0,0,0.18);
+    padding:18px 20px 22px;
+  }
+  .map-confirm-label{
+    font-size:0.78rem;
+    color:#8a8271;
+    margin:0 0 10px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--cream-line);
+  }
+  .map-confirm-address{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    margin-bottom:16px;
+  }
+  .map-address-title{
+    margin:0 0 4px;
+    font-weight:700;
+    font-size:1rem;
+    color:var(--ink);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient:vertical;
+  }
+  .map-address-sub{
+    margin:0;
+    font-size:0.84rem;
+    color:#8a8271;
+    line-height:1.45;
+  }
+  .map-confirm-btn{
+    width:100%;
+    justify-content:center;
+    background:#ff5a1f;
+    box-shadow:0 12px 24px rgba(255,90,31,0.28);
+  }
+  .map-confirm-btn:hover{ background:#e64f19; }
+  .map-confirm-btn[disabled]{
+    opacity:0.55;
+    cursor:not-allowed;
+    box-shadow:none;
+  }
+
+  @media (max-width:420px){
+    .map-current-loc-btn span{ display:none; }
+  }
+
   .cta-wrap{ text-align:center; margin:36px 0 8px; }
   .cta-btn{
     display:inline-flex;
@@ -1156,6 +1464,78 @@
       <tbody id="item-body"></tbody>
     </table>
 
+    <section class="delivery-section reveal" id="delivery-section">
+      <h2 class="section-title">Delivery Details</h2>
+      <p class="delivery-sub">Tell us where to deliver your order.</p>
+
+      <div class="delivery-grid">
+        <div class="d-field" id="field-name">
+          <label for="cust-name">Full Name*</label>
+          <input type="text" id="cust-name" placeholder="e.g. Priya Reddy" autocomplete="name">
+          <span class="d-error">Please enter your name.</span>
+        </div>
+        <div class="d-field" id="field-phone">
+          <label for="cust-phone">Phone Number*</label>
+          <input type="tel" id="cust-phone" placeholder="10-digit mobile number" inputmode="numeric" maxlength="10" autocomplete="tel">
+          <span class="d-error">Please enter a valid 10-digit number.</span>
+        </div>
+        <div class="d-field full" id="field-address">
+          <label for="cust-address">Delivery Address*</label>
+          <textarea id="cust-address" placeholder="House/flat no., street, area"></textarea>
+          <span class="d-error">Please enter your delivery address.</span>
+          <button type="button" class="map-pick-btn" id="map-pick-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 0C7 0 3 4 3 9c0 7 9 15 9 15s9-8 9-15c0-5-4-9-9-9z"/><circle cx="12" cy="9" r="3"/></svg>
+            Pick location on map
+          </button>
+        </div>
+        <div class="d-field" id="field-city">
+          <label for="cust-city">City*</label>
+          <input type="text" id="cust-city" placeholder="e.g. Secunderabad" autocomplete="address-level2">
+          <span class="d-error">Please enter your city.</span>
+        </div>
+        <div class="d-field" id="field-pincode">
+          <label for="cust-pincode">Pincode*</label>
+          <input type="text" id="cust-pincode" placeholder="6-digit pincode" inputmode="numeric" maxlength="6" autocomplete="postal-code">
+          <span class="d-error">Please enter a valid 6-digit pincode.</span>
+        </div>
+        <div class="d-field full" id="field-landmark">
+          <label for="cust-landmark">Landmark <span class="opt">(optional)</span></label>
+          <input type="text" id="cust-landmark" placeholder="Nearby landmark, if any">
+        </div>
+        <input type="hidden" id="cust-lat">
+        <input type="hidden" id="cust-lng">
+      </div>
+
+      <div class="payment-block">
+        <h3>Payment Method</h3>
+        <div class="pay-options">
+          <label class="pay-option">
+            <input type="radio" name="pay-method" value="cod" checked>
+            Cash on Delivery
+          </label>
+          <label class="pay-option">
+            <input type="radio" name="pay-method" value="upi">
+            Pay via UPI
+          </label>
+        </div>
+
+        <div class="upi-panel hidden" id="upi-panel">
+          <img id="upi-qr" alt="Scan to pay via UPI" src="">
+          <div class="upi-id-row">
+            UPI ID: <strong id="upi-id-text">8712573832@ybl</strong>
+            <button type="button" class="upi-copy-btn" id="copy-upi-btn">Copy</button>
+          </div>
+          <p class="upi-note">Scan the QR code (it's pre-filled with your order total) or pay manually to the UPI ID above, then share your transaction reference below so we can confirm your payment quickly.</p>
+          <div class="d-field">
+            <label for="upi-ref">UPI Transaction Ref <span class="opt">(optional)</span></label>
+            <input type="text" id="upi-ref" placeholder="e.g. 123456789012">
+          </div>
+        </div>
+      </div>
+
+      <p class="delivery-error-banner" id="delivery-error-banner">Please fill in all required delivery details before placing your order.</p>
+    </section>
+
     <div class="cta-wrap reveal">
       <a class="cta-btn" id="order-btn" href="https://wa.me/918341383888?text=Hi%2C%20I%27d%20like%20to%20order%20from%20Vasista%20Food%20and%20Traders" target="_blank" rel="noopener">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.29-.15-1.71-.85-1.98-.94-.27-.1-.46-.15-.65.15-.2.29-.75.94-.92 1.13-.17.2-.34.22-.63.08-.29-.15-1.23-.46-2.34-1.46-.87-.78-1.45-1.73-1.62-2.02-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.08-.15-.65-1.58-.9-2.16-.24-.57-.48-.5-.65-.5-.17-.01-.36-.01-.56-.01-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.42 0 1.43 1.04 2.82 1.19 3.01.15.2 2.05 3.13 4.96 4.39.69.3 1.23.48 1.65.61.69.22 1.32.19 1.82.11.55-.08 1.71-.7 1.95-1.37.24-.68.24-1.26.17-1.38-.07-.12-.26-.19-.55-.34z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.06-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18.15c-1.63 0-3.15-.45-4.45-1.24l-.32-.19-3.01.79.81-2.93-.21-.3A8.14 8.14 0 0 1 3.85 12c0-4.5 3.66-8.15 8.15-8.15S20.15 7.5 20.15 12 16.5 20.15 12 20.15z"/></svg>
@@ -1191,6 +1571,40 @@
   </div>
 </div>
 
+<div class="map-modal" id="map-modal" role="dialog" aria-modal="true" aria-label="Choose delivery location on map">
+  <div class="map-search-bar">
+    <button type="button" class="map-icon-btn" id="map-back-btn" aria-label="Close map">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <input type="text" id="map-search-input" placeholder="Search an area or address">
+    <button type="button" class="map-icon-btn" id="map-search-btn" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    </button>
+  </div>
+
+  <div id="map-canvas"></div>
+  <div class="map-center-pin" aria-hidden="true">
+    <svg width="40" height="52" viewBox="0 0 40 52"><path d="M20 0C9 0 0 9 0 20c0 14 20 32 20 32s20-18 20-32C40 9 31 0 20 0z" fill="#ff5a1f"/><circle cx="20" cy="19" r="8" fill="#fff"/></svg>
+  </div>
+
+  <button type="button" class="map-current-loc-btn" id="map-current-loc-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+    <span>Current location</span>
+  </button>
+
+  <div class="map-confirm-card">
+    <p class="map-confirm-label">Order will be delivered here</p>
+    <div class="map-confirm-address">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff5a1f"><path d="M12 0C7 0 3 4 3 9c0 7 9 15 9 15s9-8 9-15c0-5-4-9-9-9zm0 12a3 3 0 110-6 3 3 0 010 6z"/></svg>
+      <div>
+        <p class="map-address-title" id="map-address-title">Move the map to select location</p>
+        <p class="map-address-sub" id="map-address-sub"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (function(){
   // scroll reveal
@@ -1382,7 +1796,31 @@
   const pillText = document.getElementById("pill-text");
   const baseText = "Hi, I'd like to order from Vasista Food and Traders";
 
-  function updateOrder(){
+  // ---- Payment (UPI) config — replace UPI_ID with the real business UPI ID ----
+  const UPI_ID = "8712573832@ybl";
+  const UPI_PAYEE_NAME = "Vaddi Venkat Nishant Reddy";
+
+  const custFields = {
+    name: document.getElementById("cust-name"),
+    phone: document.getElementById("cust-phone"),
+    address: document.getElementById("cust-address"),
+    city: document.getElementById("cust-city"),
+    pincode: document.getElementById("cust-pincode"),
+    landmark: document.getElementById("cust-landmark")
+  };
+  const upiRefInput = document.getElementById("upi-ref");
+  const upiPanel = document.getElementById("upi-panel");
+  const upiQrImg = document.getElementById("upi-qr");
+  const upiIdText = document.getElementById("upi-id-text");
+  const copyUpiBtn = document.getElementById("copy-upi-btn");
+  const deliverySection = document.getElementById("delivery-section");
+  const deliveryErrorBanner = document.getElementById("delivery-error-banner");
+  const payRadios = document.querySelectorAll('input[name="pay-method"]');
+
+  upiIdText.textContent = UPI_ID;
+  let currentTotal = 0;
+
+  function getCartSummary(){
     let total = 0, count = 0;
     const lines = [];
     products.forEach((p, i) => {
@@ -1395,26 +1833,278 @@
         lines.push(line);
       }
     });
+    return { total, count, lines };
+  }
 
+  function currentPayMethod(){
+    const checked = document.querySelector('input[name="pay-method"]:checked');
+    return checked ? checked.value : "cod";
+  }
+
+  function updateUpiQr(total){
+    const upiUrl = "upi://pay?pa=" + encodeURIComponent(UPI_ID) +
+                   "&pn=" + encodeURIComponent(UPI_PAYEE_NAME) +
+                   (total > 0 ? "&am=" + total : "") +
+                   "&cu=INR&tn=" + encodeURIComponent("Vasista order");
+    upiQrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + encodeURIComponent(upiUrl);
+    upiQrImg.alt = total > 0 ? "Scan to pay " + rupee(total) + " via UPI" : "Scan to pay via UPI";
+  }
+
+  payRadios.forEach(r => r.addEventListener("change", function(){
+    const isUpi = currentPayMethod() === "upi";
+    upiPanel.classList.toggle("hidden", !isUpi);
+    if(isUpi) updateUpiQr(currentTotal);
+  }));
+
+  copyUpiBtn.addEventListener("click", function(){
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(UPI_ID).then(function(){
+        copyUpiBtn.textContent = "Copied!";
+        setTimeout(function(){ copyUpiBtn.textContent = "Copy"; }, 1500);
+      });
+    }
+  });
+
+  function setFieldInvalid(fieldId, invalid){
+    const el = document.getElementById(fieldId);
+    if(el) el.classList.toggle("invalid", invalid);
+  }
+
+  function validateDelivery(){
+    const vals = {
+      name: custFields.name.value.trim(),
+      phone: custFields.phone.value.trim(),
+      address: custFields.address.value.trim(),
+      city: custFields.city.value.trim(),
+      pincode: custFields.pincode.value.trim(),
+      landmark: custFields.landmark.value.trim()
+    };
+    const phoneOk = /^\d{10}$/.test(vals.phone);
+    const pinOk = /^\d{6}$/.test(vals.pincode);
+
+    setFieldInvalid("field-name", !vals.name);
+    setFieldInvalid("field-phone", !phoneOk);
+    setFieldInvalid("field-address", !vals.address);
+    setFieldInvalid("field-city", !vals.city);
+    setFieldInvalid("field-pincode", !pinOk);
+
+    const valid = !!(vals.name && phoneOk && vals.address && vals.city && pinOk);
+    return { valid, vals };
+  }
+
+  function buildOrderText(){
+    const summary = getCartSummary();
     let text = baseText;
-    if(lines.length){
-      text += ":%0A" + lines.map(l => "- " + encodeURIComponent(l)).join("%0A") +
-              "%0ATotal: " + encodeURIComponent(rupee(total));
-      orderLabel.textContent = "Order " + count + " item" + (count > 1 ? "s" : "") + " · " + rupee(total);
-      ctaNote.textContent = "Your selected items will be sent as a ready order.";
+    if(!summary.lines.length){
+      return encodeURIComponent(text);
+    }
+    text += ":%0A" + summary.lines.map(l => "- " + encodeURIComponent(l)).join("%0A") +
+            "%0ATotal: " + encodeURIComponent(rupee(summary.total));
+
+    const vals = {
+      name: custFields.name.value.trim(),
+      phone: custFields.phone.value.trim(),
+      address: custFields.address.value.trim(),
+      city: custFields.city.value.trim(),
+      pincode: custFields.pincode.value.trim(),
+      landmark: custFields.landmark.value.trim()
+    };
+    const payMethod = currentPayMethod();
+    const upiRef = upiRefInput.value.trim();
+
+    text += "%0A%0ADeliver to:%0A" + encodeURIComponent(vals.name + ", " + vals.phone) +
+            "%0A" + encodeURIComponent(vals.address + ", " + vals.city + " - " + vals.pincode);
+    if(vals.landmark) text += "%0ALandmark: " + encodeURIComponent(vals.landmark);
+
+    const lat = document.getElementById("cust-lat").value;
+    const lng = document.getElementById("cust-lng").value;
+    if(lat && lng){
+      text += "%0AMap pin: " + encodeURIComponent("https://maps.google.com/?q=" + lat + "," + lng);
+    }
+
+    text += "%0APayment: " + encodeURIComponent(
+      payMethod === "upi"
+        ? "UPI" + (upiRef ? " (Ref: " + upiRef + ")" : " - screenshot/reference to follow")
+        : "Cash on Delivery"
+    );
+    return text;
+  }
+
+  function updateOrder(){
+    const summary = getCartSummary();
+    currentTotal = summary.total;
+
+    if(summary.lines.length){
+      orderLabel.textContent = "Order " + summary.count + " item" + (summary.count > 1 ? "s" : "") + " · " + rupee(summary.total);
+      ctaNote.textContent = "Fill in your delivery details above, then send your order.";
     } else {
-      text = encodeURIComponent(baseText);
       orderLabel.textContent = "Order on WhatsApp";
       ctaNote.textContent = "Tip: pick quantities above and your order list is sent automatically.";
     }
 
-    const href = "https://wa.me/" + PHONE + "?text=" + text;
-    orderBtn.href = href;
-    pill.href = href;
-    pillCount.textContent = count;
-    pillText.textContent = "View order · " + rupee(total);
-    pill.classList.toggle("show", count > 0);
+    pillCount.textContent = summary.count;
+    pillText.textContent = "View order · " + rupee(summary.total);
+    pill.classList.toggle("show", summary.count > 0);
+
+    if(currentPayMethod() === "upi") updateUpiQr(currentTotal);
   }
+
+  function handleOrderClick(e){
+    const summary = getCartSummary();
+    if(summary.count > 0){
+      const { valid } = validateDelivery();
+      if(!valid){
+        e.preventDefault();
+        deliveryErrorBanner.classList.add("show");
+        deliverySection.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+    }
+    deliveryErrorBanner.classList.remove("show");
+    e.currentTarget.href = "https://wa.me/" + PHONE + "?text=" + buildOrderText();
+  }
+
+  orderBtn.addEventListener("click", handleOrderClick);
+  pill.addEventListener("click", handleOrderClick);
+
+  [custFields.name, custFields.phone, custFields.address, custFields.city, custFields.pincode].forEach(function(el){
+    el.addEventListener("input", function(){
+      const field = el.closest(".d-field");
+      if(field) field.classList.remove("invalid");
+      if(!document.querySelector(".d-field.invalid")){
+        deliveryErrorBanner.classList.remove("show");
+      }
+    });
+  });
+
+  // ---- Map location picker ----
+  // Uses OpenStreetMap (Leaflet) + the free Nominatim geocoding service — no API key
+  // needed. For higher-traffic production use, consider a paid geocoding provider
+  // (Google Geocoding, Mapbox, LocationIQ) for better rate limits and reliability.
+  const mapPickBtn = document.getElementById("map-pick-btn");
+  const mapModal = document.getElementById("map-modal");
+  const mapBackBtn = document.getElementById("map-back-btn");
+  const mapSearchInput = document.getElementById("map-search-input");
+  const mapSearchBtn = document.getElementById("map-search-btn");
+  const mapCurrentLocBtn = document.getElementById("map-current-loc-btn");
+  const mapConfirmBtn = document.getElementById("map-confirm-btn");
+  const mapAddressTitle = document.getElementById("map-address-title");
+  const mapAddressSub = document.getElementById("map-address-sub");
+  const custLat = document.getElementById("cust-lat");
+  const custLng = document.getElementById("cust-lng");
+
+  const DEFAULT_MAP_CENTER = [17.4646, 78.5344]; // approx. Sainikpuri, Secunderabad
+  let leafletMap = null;
+  let geocodeTimer = null;
+  let selectedLocation = null;
+
+  function ensureMap(){
+    if(leafletMap || typeof L === "undefined") return;
+    leafletMap = L.map("map-canvas", { zoomControl:false }).setView(DEFAULT_MAP_CENTER, 15);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom:19,
+      attribution:"&copy; OpenStreetMap contributors"
+    }).addTo(leafletMap);
+    L.control.zoom({ position:"bottomright" }).addTo(leafletMap);
+    leafletMap.on("moveend", scheduleReverseGeocode);
+  }
+
+  function scheduleReverseGeocode(){
+    clearTimeout(geocodeTimer);
+    mapConfirmBtn.disabled = true;
+    mapAddressTitle.textContent = "Locating\u2026";
+    mapAddressSub.textContent = "";
+    geocodeTimer = setTimeout(reverseGeocodeCenter, 700);
+  }
+
+  function reverseGeocodeCenter(){
+    if(!leafletMap) return;
+    const center = leafletMap.getCenter();
+    fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" + center.lat + "&lon=" + center.lng + "&zoom=18&addressdetails=1")
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        const addr = data.address || {};
+        const title = addr.amenity || addr.building || addr.road || addr.suburb || addr.neighbourhood || "Selected location";
+        const parts = [addr.road, addr.suburb || addr.neighbourhood, addr.village || addr.town || addr.city, addr.state, addr.postcode].filter(Boolean);
+        const sub = parts.join(", ") || data.display_name || "";
+        selectedLocation = {
+          full: data.display_name || (title + (sub ? ", " + sub : "")),
+          city: addr.city || addr.town || addr.village || addr.suburb || addr.neighbourhood || "",
+          pincode: addr.postcode || "",
+          lat: center.lat,
+          lng: center.lng
+        };
+        mapAddressTitle.textContent = title;
+        mapAddressSub.textContent = sub;
+        mapConfirmBtn.disabled = false;
+      })
+      .catch(function(){
+        selectedLocation = { full:"", city:"", pincode:"", lat:center.lat, lng:center.lng };
+        mapAddressTitle.textContent = "Couldn't fetch address";
+        mapAddressSub.textContent = "You can confirm and enter the address manually.";
+        mapConfirmBtn.disabled = false;
+      });
+  }
+
+  function openMapModal(){
+    mapModal.classList.add("open");
+    document.body.style.overflow = "hidden";
+    ensureMap();
+    setTimeout(function(){
+      if(leafletMap){
+        leafletMap.invalidateSize();
+        scheduleReverseGeocode();
+      }
+    }, 60);
+  }
+
+  function closeMapModal(){
+    mapModal.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function doMapSearch(){
+    const q = mapSearchInput.value.trim();
+    if(!q || !leafletMap) return;
+    fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&q=" + encodeURIComponent(q) + "&limit=1&countrycodes=in")
+      .then(function(r){ return r.json(); })
+      .then(function(results){
+        if(results && results[0]){
+          leafletMap.setView([parseFloat(results[0].lat), parseFloat(results[0].lon)], 16);
+        }
+      });
+  }
+
+  mapPickBtn.addEventListener("click", openMapModal);
+  mapBackBtn.addEventListener("click", closeMapModal);
+  mapSearchBtn.addEventListener("click", doMapSearch);
+  mapSearchInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){ e.preventDefault(); doMapSearch(); }
+  });
+
+  mapCurrentLocBtn.addEventListener("click", function(){
+    if(!navigator.geolocation || !leafletMap) return;
+    mapCurrentLocBtn.disabled = true;
+    navigator.geolocation.getCurrentPosition(function(pos){
+      leafletMap.setView([pos.coords.latitude, pos.coords.longitude], 17);
+      mapCurrentLocBtn.disabled = false;
+    }, function(){
+      mapCurrentLocBtn.disabled = false;
+      alert("Couldn't get your current location. Please allow location access or search above.");
+    }, { enableHighAccuracy:true, timeout:8000 });
+  });
+
+  mapConfirmBtn.addEventListener("click", function(){
+    if(!selectedLocation) return;
+    if(selectedLocation.full) custFields.address.value = selectedLocation.full;
+    if(selectedLocation.city) custFields.city.value = selectedLocation.city;
+    if(selectedLocation.pincode) custFields.pincode.value = selectedLocation.pincode;
+    custLat.value = selectedLocation.lat;
+    custLng.value = selectedLocation.lng;
+    ["field-address", "field-city", "field-pincode"].forEach(function(id){ setFieldInvalid(id, false); });
+    if(!document.querySelector(".d-field.invalid")) deliveryErrorBanner.classList.remove("show");
+    closeMapModal();
+  });
 
   updateOrder();
 })();
