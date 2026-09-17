@@ -1601,6 +1601,7 @@
         <p class="map-address-sub" id="map-address-sub"></p>
       </div>
     </div>
+    <button type="button" class="cta-btn map-confirm-btn" id="map-confirm-btn" disabled>Confirm &amp; proceed</button>
   </div>
 </div>
 
@@ -2017,11 +2018,28 @@
     geocodeTimer = setTimeout(reverseGeocodeCenter, 700);
   }
 
-  function reverseGeocodeCenter(){
+  // Small helper: fetch with a timeout so a stalled request doesn't leave
+  // the UI stuck on "Locating..." forever.
+  function fetchWithTimeout(url, ms){
+    const controller = new AbortController();
+    const timer = setTimeout(function(){ controller.abort(); }, ms || 7000);
+    return fetch(url, { signal: controller.signal }).finally(function(){ clearTimeout(timer); });
+  }
+
+  // Nominatim's usage policy asks apps to identify themselves (reduces the
+  // chance of being silently rate-limited) — https://operations.osmfoundation.org/policies/nominatim/
+  const GEOCODE_CONTACT = "vasistanaturals@gmail.com";
+
+  function reverseGeocodeCenter(attempt){
     if(!leafletMap) return;
     const center = leafletMap.getCenter();
-    fetch("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" + center.lat + "&lon=" + center.lng + "&zoom=18&addressdetails=1")
-      .then(function(r){ return r.json(); })
+    const url = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" + center.lat +
+                "&lon=" + center.lng + "&zoom=18&addressdetails=1&email=" + encodeURIComponent(GEOCODE_CONTACT);
+    fetchWithTimeout(url, 7000)
+      .then(function(r){
+        if(!r.ok) throw new Error("bad status " + r.status);
+        return r.json();
+      })
       .then(function(data){
         const addr = data.address || {};
         const title = addr.amenity || addr.building || addr.road || addr.suburb || addr.neighbourhood || "Selected location";
@@ -2039,9 +2057,15 @@
         mapConfirmBtn.disabled = false;
       })
       .catch(function(){
+        // The free geocoding service occasionally throttles/blocks requests —
+        // retry once after a short pause before giving up gracefully.
+        if(!attempt){
+          setTimeout(function(){ reverseGeocodeCenter(1); }, 900);
+          return;
+        }
         selectedLocation = { full:"", city:"", pincode:"", lat:center.lat, lng:center.lng };
-        mapAddressTitle.textContent = "Couldn't fetch address";
-        mapAddressSub.textContent = "You can confirm and enter the address manually.";
+        mapAddressTitle.textContent = "Couldn't auto-detect address";
+        mapAddressSub.textContent = "That's OK — confirm this pin and type your address below.";
         mapConfirmBtn.disabled = false;
       });
   }
@@ -2049,10 +2073,23 @@
   function openMapModal(){
     mapModal.classList.add("open");
     document.body.style.overflow = "hidden";
+    const firstOpen = !leafletMap;
     ensureMap();
     setTimeout(function(){
-      if(leafletMap){
-        leafletMap.invalidateSize();
+      if(!leafletMap) return;
+      leafletMap.invalidateSize();
+      if(firstOpen && navigator.geolocation){
+        // Try to auto-fetch the customer's real location & address on first open,
+        // so they don't have to tap "Current location" manually.
+        mapAddressTitle.textContent = "Finding your location\u2026";
+        navigator.geolocation.getCurrentPosition(function(pos){
+          leafletMap.setView([pos.coords.latitude, pos.coords.longitude], 17);
+        }, function(){
+          // Permission denied / unavailable — fall back to reverse-geocoding
+          // whatever the default map center is.
+          scheduleReverseGeocode();
+        }, { enableHighAccuracy:true, timeout:6000 });
+      } else {
         scheduleReverseGeocode();
       }
     }, 60);
