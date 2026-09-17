@@ -11,50 +11,7 @@
 <link rel="stylesheet" href="assets/styles.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 </head>
-<body class="intro-active">
-
-<div id="site-intro">
-  <img class="intro-logo" src="logo.jpeg" alt="">
-  <div class="intro-name" id="intro-name"></div>
-  <div class="intro-rule"></div>
-  <p class="intro-tagline">Choose Natural. Live Better.</p>
-  <p class="intro-hint">TAP TO CONTINUE</p>
-</div>
-
-<script>
-(function(){
-  var overlay = document.getElementById("site-intro");
-  var nameEl = document.getElementById("intro-name");
-  var word = "VASISTA";
-  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if(reduceMotion){
-    overlay.classList.add("hidden");
-    document.body.classList.remove("intro-active");
-    return;
-  }
-
-  word.split("").forEach(function(ch, i){
-    var span = document.createElement("span");
-    span.className = "letter";
-    span.style.animationDelay = (0.55 + i * 0.055) + "s";
-    span.textContent = ch;
-    nameEl.appendChild(span);
-  });
-
-  var exited = false;
-  function exitIntro(){
-    if(exited) return;
-    exited = true;
-    overlay.classList.add("exit");
-    document.body.classList.remove("intro-active");
-    setTimeout(function(){ overlay.classList.add("hidden"); }, 950);
-  }
-
-  overlay.addEventListener("click", exitIntro);
-  setTimeout(exitIntro, 2600);
-})();
-</script>
+<body>
 
 <div class="topbar">
   <a href="tel:+918341383888"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.99.36 1.96.68 2.9a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.18-1.18a2 2 0 0 1 2.11-.45c.94.32 1.91.55 2.9.68A2 2 0 0 1 22 16.92z"/></svg>8341383888</span></a>
