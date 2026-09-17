@@ -1141,6 +1141,17 @@
     color:#8a8271;
     line-height:1.45;
   }
+  .map-approx-note{
+    display:none;
+    font-size:0.76rem;
+    color:#b06a2e;
+    background:#fff3e6;
+    border:1px solid #ffd9ad;
+    border-radius:6px;
+    padding:7px 10px;
+    margin:0 0 14px;
+  }
+  .map-approx-note.show{ display:block; }
   .map-confirm-btn{
     width:100%;
     justify-content:center;
@@ -1601,6 +1612,7 @@
         <p class="map-address-sub" id="map-address-sub"></p>
       </div>
     </div>
+    <p class="map-approx-note" id="map-approx-note">Auto-detected — please double-check the city &amp; pincode after confirming.</p>
     <button type="button" class="cta-btn map-confirm-btn" id="map-confirm-btn" disabled>Confirm &amp; proceed</button>
   </div>
 </div>
@@ -1993,11 +2005,16 @@
   const mapAddressSub = document.getElementById("map-address-sub");
   const custLat = document.getElementById("cust-lat");
   const custLng = document.getElementById("cust-lng");
+  const mapApproxNote = document.getElementById("map-approx-note");
 
   const DEFAULT_MAP_CENTER = [17.4646, 78.5344]; // approx. Sainikpuri, Secunderabad
   let leafletMap = null;
   let geocodeTimer = null;
   let selectedLocation = null;
+
+  function markLocationApprox(isApprox){
+    mapApproxNote.classList.toggle("show", !!isApprox);
+  }
 
   function ensureMap(){
     if(leafletMap || typeof L === "undefined") return;
@@ -2015,6 +2032,7 @@
     mapConfirmBtn.disabled = true;
     mapAddressTitle.textContent = "Locating\u2026";
     mapAddressSub.textContent = "";
+    markLocationApprox(false);
     geocodeTimer = setTimeout(reverseGeocodeCenter, 700);
   }
 
@@ -2030,43 +2048,65 @@
   // chance of being silently rate-limited) — https://operations.osmfoundation.org/policies/nominatim/
   const GEOCODE_CONTACT = "vasistanaturals@gmail.com";
 
-  function reverseGeocodeCenter(attempt){
+  function reverseGeocodeCenter(){
     if(!leafletMap) return;
     const center = leafletMap.getCenter();
-    const url = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" + center.lat +
+
+    function applyResult(title, sub, city, pincode, full, approx){
+      selectedLocation = { full: full, city: city, pincode: pincode, lat: center.lat, lng: center.lng };
+      mapAddressTitle.textContent = title;
+      mapAddressSub.textContent = sub;
+      mapConfirmBtn.disabled = false;
+      // Free geocoding services don't have official India Post PIN-code
+      // boundaries, so city/pincode can be off — flag it so the customer checks.
+      markLocationApprox(!!approx);
+    }
+
+    // Primary: Nominatim (OpenStreetMap) — generally the more detailed of the
+    // two free options for Indian road/locality names.
+    const nomUrl = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" + center.lat +
                 "&lon=" + center.lng + "&zoom=18&addressdetails=1&email=" + encodeURIComponent(GEOCODE_CONTACT);
-    fetchWithTimeout(url, 7000)
-      .then(function(r){
-        if(!r.ok) throw new Error("bad status " + r.status);
-        return r.json();
-      })
+    fetchWithTimeout(nomUrl, 6000)
+      .then(function(r){ if(!r.ok) throw new Error("bad status " + r.status); return r.json(); })
       .then(function(data){
         const addr = data.address || {};
         const title = addr.amenity || addr.building || addr.road || addr.suburb || addr.neighbourhood || "Selected location";
         const parts = [addr.road, addr.suburb || addr.neighbourhood, addr.village || addr.town || addr.city, addr.state, addr.postcode].filter(Boolean);
         const sub = parts.join(", ") || data.display_name || "";
-        selectedLocation = {
-          full: data.display_name || (title + (sub ? ", " + sub : "")),
-          city: addr.city || addr.town || addr.village || addr.suburb || addr.neighbourhood || "",
-          pincode: addr.postcode || "",
-          lat: center.lat,
-          lng: center.lng
-        };
-        mapAddressTitle.textContent = title;
-        mapAddressSub.textContent = sub;
-        mapConfirmBtn.disabled = false;
+        applyResult(
+          title, sub,
+          addr.city || addr.town || addr.village || addr.suburb || addr.neighbourhood || "",
+          addr.postcode || "",
+          data.display_name || (title + (sub ? ", " + sub : "")),
+          true
+        );
+      })
+      // Fallback: BigDataCloud's client-side reverse-geocode endpoint, in case
+      // Nominatim is unreachable (no key needed, reliable CORS support).
+      .catch(function(){
+        const bdcUrl = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" + center.lat +
+                       "&longitude=" + center.lng + "&localityLanguage=en";
+        return fetchWithTimeout(bdcUrl, 6000)
+          .then(function(r){ if(!r.ok) throw new Error("bad status " + r.status); return r.json(); })
+          .then(function(data){
+            const title = data.locality || data.city || data.principalSubdivision || "Selected location";
+            const parts = [
+              data.locality && data.locality !== title ? data.locality : null,
+              data.city && data.city !== title ? data.city : null,
+              data.principalSubdivision,
+              data.postcode,
+              data.countryName
+            ].filter(Boolean);
+            const sub = parts.join(", ");
+            applyResult(title, sub, data.city || data.locality || "", data.postcode || "", [title, sub].filter(Boolean).join(", "), true);
+          });
       })
       .catch(function(){
-        // The free geocoding service occasionally throttles/blocks requests —
-        // retry once after a short pause before giving up gracefully.
-        if(!attempt){
-          setTimeout(function(){ reverseGeocodeCenter(1); }, 900);
-          return;
-        }
         selectedLocation = { full:"", city:"", pincode:"", lat:center.lat, lng:center.lng };
         mapAddressTitle.textContent = "Couldn't auto-detect address";
         mapAddressSub.textContent = "That's OK — confirm this pin and type your address below.";
         mapConfirmBtn.disabled = false;
+        markLocationApprox(false);
       });
   }
 
