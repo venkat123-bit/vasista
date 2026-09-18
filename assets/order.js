@@ -154,6 +154,12 @@
   const UPI_ID = "8712573832@ybl";
   const UPI_PAYEE_NAME = "Vaddi Venkat Nishant Reddy";
 
+  // ---- Order logging to Google Sheets ----
+  // Paste the "Web app URL" you get after deploying the Apps Script (see setup
+  // guide) here. Leave it as-is and logging is silently skipped — nothing else
+  // on the site depends on this.
+  const ORDER_LOG_URL = "https://script.google.com/macros/s/AKfycbziWEBVPUSk1RUIt2gwM_y3c0MWcHUYQ8CRifGpvQKz-ozawUD5NmpIJuL8B5qH5hAw/exec";
+
   const custFields = {
     name: document.getElementById("cust-name"),
     phone: document.getElementById("cust-phone"),
@@ -315,7 +321,39 @@
       }
     }
     deliveryErrorBanner.classList.remove("show");
+    if(summary.count > 0) logOrderToSheet(summary);
     e.currentTarget.href = "https://wa.me/" + PHONE + "?text=" + buildOrderText();
+  }
+
+  function logOrderToSheet(summary){
+    if(!ORDER_LOG_URL || ORDER_LOG_URL.indexOf("PASTE_YOUR") === 0) return;
+    const payMethod = currentPayMethod();
+    const upiRef = upiRefInput.value.trim();
+    const payload = {
+      timestamp: new Date().toISOString(),
+      name: custFields.name.value.trim(),
+      phone: custFields.phone.value.trim(),
+      address: custFields.address.value.trim(),
+      city: custFields.city.value.trim(),
+      pincode: custFields.pincode.value.trim(),
+      landmark: custFields.landmark.value.trim(),
+      items: summary.lines.join(" | "),
+      total: summary.total,
+      paymentMethod: payMethod === "upi" ? "UPI" : "Cash on Delivery",
+      upiRef: upiRef,
+      mapLink: (custLat.value && custLng.value) ? ("https://maps.google.com/?q=" + custLat.value + "," + custLng.value) : ""
+    };
+    // Fire-and-forget: Apps Script web apps don't return CORS headers, so we
+    // use no-cors mode. We can't read a response, but the row still gets
+    // written — this never blocks or delays sending the WhatsApp order.
+    try{
+      fetch(ORDER_LOG_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      }).catch(function(){ /* ignore — logging is best-effort */ });
+    }catch(err){ /* ignore */ }
   }
 
   orderBtn.addEventListener("click", handleOrderClick);
