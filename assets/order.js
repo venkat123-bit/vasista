@@ -49,26 +49,59 @@
     return { unit, pct };
   }
 
+  // Group same-name products (different pack sizes) into one card with a
+  // size selector, instead of a separate card per size.
+  const groups = [];
+  const groupMap = {};
   products.forEach((p, i) => {
+    if(!(p.name in groupMap)){
+      groupMap[p.name] = groups.length;
+      groups.push({ name: p.name, cat: p.cat, img: p.img, variants: [i] });
+    } else {
+      groups[groupMap[p.name]].variants.push(i);
+    }
+  });
+
+  function footerHTML(i){
+    return '<div class="price-cell" id="price-' + i + '"><span class="price-now">' + rupee(products[i].price) + '</span></div>' +
+      '<div class="qty-stepper">' +
+        '<button type="button" aria-label="Decrease quantity" data-action="dec" data-i="' + i + '">\u2212</button>' +
+        '<span id="qty-' + i + '">' + qty[i] + '</span>' +
+        '<button type="button" aria-label="Increase quantity" data-action="inc" data-i="' + i + '">+</button>' +
+      '</div>';
+  }
+
+  function updateSizePillLabel(i){
+    const pill = grid.querySelector('.size-pill[data-size-i="' + i + '"]');
+    if(!pill) return;
+    const base = products[i].grams;
+    pill.textContent = qty[i] > 0 ? base + " (" + qty[i] + ")" : base;
+    pill.classList.toggle("has-qty", qty[i] > 0);
+  }
+
+  groups.forEach((g, gi) => {
     const card = document.createElement("div");
     card.className = "product-card";
-    card.dataset.cat = p.cat;
-    const imgBlock = p.img
-      ? '<button type="button" class="card-img-wrap" data-img="' + p.img + '" data-name="' + p.name + '" aria-label="View image of ' + p.name + '"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy">' + zoomHint + '</button>'
+    card.dataset.cat = g.cat;
+    const activeIdx = g.variants[0];
+    card.dataset.active = activeIdx;
+
+    const imgBlock = g.img
+      ? '<button type="button" class="card-img-wrap" data-img="' + g.img + '" data-name="' + g.name + '" aria-label="View image of ' + g.name + '"><img src="' + g.img + '" alt="' + g.name + '" loading="lazy">' + zoomHint + '</button>'
       : placeholderIcon;
+
+    const sizeMarkup = g.variants.length > 1
+      ? '<div class="size-pills">' + g.variants.map((idx, vi) =>
+          '<button type="button" class="size-pill' + (vi === 0 ? " active" : "") + '" data-size-i="' + idx + '" data-gi="' + gi + '">' + products[idx].grams + '</button>'
+        ).join("") + '</div>'
+      : '<p class="card-grams">' + products[activeIdx].grams + '</p>';
+
     card.innerHTML =
       imgBlock +
       '<div class="card-body">' +
-        '<p class="card-name">' + p.name + '</p>' +
-        '<p class="card-grams">' + p.grams + '</p>' +
-        '<div class="card-footer">' +
-          '<div class="price-cell" id="price-' + i + '"><span class="price-now">' + rupee(p.price) + '</span></div>' +
-          '<div class="qty-stepper">' +
-            '<button type="button" aria-label="Decrease quantity" data-action="dec" data-i="' + i + '">\u2212</button>' +
-            '<span id="qty-' + i + '">0</span>' +
-            '<button type="button" aria-label="Increase quantity" data-action="inc" data-i="' + i + '">+</button>' +
-          '</div>' +
-        '</div>' +
+        '<p class="card-name">' + g.name + '</p>' +
+        sizeMarkup +
+        '<div class="card-footer" id="footer-g' + gi + '">' + footerHTML(activeIdx) + '</div>' +
       '</div>';
     grid.appendChild(card);
   });
@@ -93,6 +126,19 @@
       openLightbox(viewBtn.dataset.img, viewBtn.dataset.name);
       return;
     }
+
+    const sizeBtn = e.target.closest(".size-pill");
+    if(sizeBtn){
+      const gi = sizeBtn.dataset.gi;
+      const newIdx = Number(sizeBtn.dataset.sizeI);
+      const card = sizeBtn.closest(".product-card");
+      card.dataset.active = newIdx;
+      card.querySelectorAll(".size-pill").forEach(b => b.classList.toggle("active", b === sizeBtn));
+      document.getElementById("footer-g" + gi).innerHTML = footerHTML(newIdx);
+      renderPriceCell(newIdx);
+      return;
+    }
+
     const btn = e.target.closest("button[data-action]");
     if(!btn) return;
     const i = Number(btn.dataset.i);
@@ -100,6 +146,7 @@
     if(btn.dataset.action === "dec") qty[i] = Math.max(0, qty[i] - 1);
     document.getElementById("qty-" + i).textContent = qty[i];
     renderPriceCell(i);
+    updateSizePillLabel(i);
     updateOrder();
   });
 
