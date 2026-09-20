@@ -27,10 +27,10 @@
     { name:"Pro Beans", grams:"250g", price:250, cat:"nuts" }
   ];
 
-  const placeholderThumb = '<div class="prod-thumb placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg></div>';
-  const eyeIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const placeholderIcon = '<div class="card-img-wrap placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg></div>';
+  const zoomHint = '<span class="card-zoom-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/></svg></span>';
 
-  const tbody = document.getElementById("item-body");
+  const grid = document.getElementById("item-grid");
   const qty = new Array(products.length).fill(0);
   const PHONE = "918341383888";
   const rupee = n => "\u20b9" + n.toLocaleString("en-IN");
@@ -50,25 +50,27 @@
   }
 
   products.forEach((p, i) => {
-    const tr = document.createElement("tr");
-    tr.dataset.cat = p.cat;
-    const thumb = p.img
-      ? '<button type="button" class="thumb-btn" data-img="' + p.img + '" data-name="' + p.name + '" aria-label="View image of ' + p.name + '">' + eyeIcon + '</button>'
-      : placeholderThumb;
-    tr.innerHTML =
-      '<td>' + (i + 1) + '</td>' +
-      '<td>' + thumb + '</td>' +
-      '<td>' + p.name + '</td>' +
-      '<td>' + p.grams + '</td>' +
-      '<td>' +
-        '<div class="qty-stepper">' +
-          '<button type="button" aria-label="Decrease quantity" data-action="dec" data-i="' + i + '">\u2212</button>' +
-          '<span id="qty-' + i + '">0</span>' +
-          '<button type="button" aria-label="Increase quantity" data-action="inc" data-i="' + i + '">+</button>' +
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.dataset.cat = p.cat;
+    const imgBlock = p.img
+      ? '<button type="button" class="card-img-wrap" data-img="' + p.img + '" data-name="' + p.name + '" aria-label="View image of ' + p.name + '"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy">' + zoomHint + '</button>'
+      : placeholderIcon;
+    card.innerHTML =
+      imgBlock +
+      '<div class="card-body">' +
+        '<p class="card-name">' + p.name + '</p>' +
+        '<p class="card-grams">' + p.grams + '</p>' +
+        '<div class="card-footer">' +
+          '<div class="price-cell" id="price-' + i + '"><span class="price-now">' + rupee(p.price) + '</span></div>' +
+          '<div class="qty-stepper">' +
+            '<button type="button" aria-label="Decrease quantity" data-action="dec" data-i="' + i + '">\u2212</button>' +
+            '<span id="qty-' + i + '">0</span>' +
+            '<button type="button" aria-label="Increase quantity" data-action="inc" data-i="' + i + '">+</button>' +
+          '</div>' +
         '</div>' +
-      '</td>' +
-      '<td><div class="price-cell" id="price-' + i + '"><span class="price-now">' + rupee(p.price) + '</span></div></td>';
-    tbody.appendChild(tr);
+      '</div>';
+    grid.appendChild(card);
   });
 
   function renderPriceCell(i){
@@ -85,8 +87,8 @@
     }
   }
 
-  tbody.addEventListener("click", function(e){
-    const viewBtn = e.target.closest(".thumb-btn");
+  grid.addEventListener("click", function(e){
+    const viewBtn = e.target.closest(".card-img-wrap[data-img]");
     if(viewBtn){
       openLightbox(viewBtn.dataset.img, viewBtn.dataset.name);
       return;
@@ -137,8 +139,8 @@
     btn.classList.add("active");
     btn.setAttribute("aria-selected", "true");
     const cat = btn.dataset.cat;
-    tbody.querySelectorAll("tr").forEach(row => {
-      row.classList.toggle("hidden-row", cat !== "all" && row.dataset.cat !== cat);
+    grid.querySelectorAll(".product-card").forEach(card => {
+      card.classList.toggle("hidden-card", cat !== "all" && card.dataset.cat !== cat);
     });
   });
 
