@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Vasista Food and Traders</title>
+<link rel="icon" type="image/jpeg" href="logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a href="tel:+918341383888"><span>8341383888</span></a>
+  <a href="mailto:vasistanaturals@gmail.com"><span>vasistanaturals@gmail.com</span></a>
+</div>
+
+<nav class="navbar" id="navbar">
+  <a class="nav-brand" href="index.html">
+    <img src="logo.jpeg" alt="Vasista Food and Traders">
+    <span class="nav-brand-text">Vasista<small>FOOD &amp; TRADERS</small></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">Why Natural</a></li>
+    <li><a href="order.html">Products</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="order.html">Order Now</a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+</nav>
+<div class="mobile-panel" id="mobile-panel">
+  <a href="index.html">Home</a>
+  <a href="about.html">Why Natural</a>
+  <a href="order.html">Products</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<section class="hero" style="padding:52px 28px 20px;">
+  <div class="hero-inner" style="grid-template-columns:1fr; text-align:center;">
+    <div class="hero-copy">
+      <p class="hero-eyebrow">WELCOME BACK</p>
+      <h1>Log in to your account</h1>
+      <p class="hero-sub" style="margin-left:auto; margin-right:auto;">Faster checkout with your saved details.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad" style="max-width:480px; margin:0 auto 80px;">
+  <form id="login-form" novalidate>
+    <div class="delivery-grid" style="grid-template-columns:1fr;">
+      <div class="d-field" id="field-email">
+        <label for="li-email">Email*</label>
+        <input type="email" id="li-email" autocomplete="email" placeholder="you@example.com">
+        <span class="d-error">Please enter a valid email.</span>
+      </div>
+      <div class="d-field" id="field-password">
+        <label for="li-password">Password*</label>
+        <input type="password" id="li-password" autocomplete="current-password" placeholder="Your password">
+        <span class="d-error">Please enter your password.</span>
+      </div>
+    </div>
+
+    <p class="delivery-error-banner" id="login-error-banner" style="display:none;"></p>
+
+    <div class="cta-wrap" style="margin-top:24px;">
+      <button type="submit" class="cta-btn" id="login-btn" style="width:100%; justify-content:center; border:none; cursor:pointer;">
+        <span id="login-label">Log In</span>
+      </button>
+      <p class="cta-note">
+        <a href="#" id="forgot-link" style="color:var(--green-deep); font-weight:600;">Forgot password?</a>
+      </p>
+      <p class="cta-note">New here? <a href="signup.html" style="color:var(--green-deep); font-weight:600;">Create an account</a></p>
+    </div>
+  </form>
+</section>
+
+<footer class="curve-bottom" id="contact">
+  <p class="life-line reveal in">Good Food &nbsp;|&nbsp; Good Health &nbsp;|&nbsp; Good Life</p>
+  <div class="footer-grid reveal in">
+    <div class="footer-contact">
+      <p><strong>Address</strong><br>AS Rao Nagar, Sainikpuri, Secunderabad, Telangana – 500094</p>
+      <p><strong>Phone</strong><br><a href="tel:+918341383888">8341383888</a></p>
+      <p><strong>Email</strong><br><a href="mailto:vasistanaturals@gmail.com">vasistanaturals@gmail.com</a></p>
+    </div>
+    <div class="footer-motto">Choose Natural.<br>Live Better.</div>
+  </div>
+</footer>
+
+<script src="assets/common.js"></script>
+<script type="module" src="assets/auth-ui.js"></script>
+<script type="module">
+  import {
+    auth,
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail
+  } from "./assets/firebase-config.js";
+
+  const form = document.getElementById("login-form");
+  const errorBanner = document.getElementById("login-error-banner");
+  const btn = document.getElementById("login-btn");
+  const label = document.getElementById("login-label");
+
+  function showFieldError(id, show) {
+    document.getElementById(id).classList.toggle("invalid", show);
+  }
+  function showBanner(msg) {
+    errorBanner.textContent = msg;
+    errorBanner.style.display = msg ? "block" : "none";
+  }
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    showBanner("");
+
+    const email = document.getElementById("li-email").value.trim();
+    const password = document.getElementById("li-password").value;
+
+    let valid = true;
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    showFieldError("field-email", !emailOk); if (!emailOk) valid = false;
+    showFieldError("field-password", !password); if (!password) valid = false;
+    if (!valid) return;
+
+    label.textContent = "Logging in…";
+    btn.disabled = true;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      window.location.href = "order.html";
+    } catch (err) {
+      let msg = "Something went wrong. Please try again.";
+      if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password" || err.code === "auth/user-not-found") {
+        msg = "Incorrect email or password.";
+      } else if (err.code === "auth/invalid-email") {
+        msg = "Please enter a valid email address.";
+      } else if (err.code === "auth/too-many-requests") {
+        msg = "Too many attempts. Please wait a moment and try again.";
+      }
+      showBanner(msg);
+      label.textContent = "Log In";
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById("forgot-link").addEventListener("click", async function (e) {
+    e.preventDefault();
+    const email = document.getElementById("li-email").value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showFieldError("field-email", true);
+      showBanner("Enter your email above first, then click \"Forgot password?\" again.");
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showBanner("");
+      alert("Password reset email sent to " + email + ". Check your inbox.");
+    } catch (err) {
+      showBanner("Couldn't send reset email. Please check the address and try again.");
+    }
+  });
+</script>
+</body>
+</html>
