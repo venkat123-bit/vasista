@@ -56,17 +56,31 @@
 
 <section id="products" class="products-section">
   <div class="section-pad" style="padding-top:64px;">
-    <div class="section-head reveal">
-      <p class="section-eyebrow">OUR RANGE</p>
-      <h2 class="section-title">Eatables</h2>
+    <nav class="breadcrumb reveal" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span>/</span><span aria-current="page">Products</span>
+    </nav>
+
+    <div class="category-banner reveal">
+      <img src="assets/hero-collage.jpg" alt="Vasista Food and Traders snacks">
+      <div class="category-banner-copy">
+        <p class="hero-eyebrow">OUR RANGE</p>
+        <h2>Eatables</h2>
+        <p>Small-batch millet, ragi and quinoa snacks, roasted nuts and traditional mixtures — made fresh, delivered to your door.</p>
+      </div>
     </div>
 
-    <div class="tabs reveal" id="tabs" role="tablist" aria-label="Filter by category">
-      <button class="tab-btn active" data-cat="all" role="tab" aria-selected="true">All</button>
-      <button class="tab-btn" data-cat="crunch" role="tab" aria-selected="false">Crunch</button>
-      <button class="tab-btn" data-cat="chips" role="tab" aria-selected="false">Chips</button>
-      <button class="tab-btn" data-cat="mixes" role="tab" aria-selected="false">Mixes</button>
-      <button class="tab-btn" data-cat="nuts" role="tab" aria-selected="false">Nuts &amp; Beans</button>
+    <div class="products-toolbar reveal">
+      <div class="tabs" id="tabs" role="tablist" aria-label="Filter by category">
+        <button class="tab-btn active" data-cat="all" role="tab" aria-selected="true">All</button>
+        <button class="tab-btn" data-cat="crunch" role="tab" aria-selected="false">Crunch</button>
+        <button class="tab-btn" data-cat="chips" role="tab" aria-selected="false">Chips</button>
+        <button class="tab-btn" data-cat="mixes" role="tab" aria-selected="false">Mixes</button>
+        <button class="tab-btn" data-cat="nuts" role="tab" aria-selected="false">Nuts &amp; Beans</button>
+      </div>
+      <label class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="product-search" placeholder="Search products…" aria-label="Search products">
+      </label>
     </div>
 
     <div class="product-grid reveal" id="item-grid"></div>
