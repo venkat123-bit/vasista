@@ -284,7 +284,11 @@ html.auth-checking{ visibility:hidden; }
     overflow:hidden;
     background:
       radial-gradient(120% 140% at 15% 0%, rgba(255,255,255,0.05), transparent 55%),
-      linear-gradient(160deg, var(--green-deep) 0%, var(--green-darker) 100%);
+      linear-gradient(160deg, rgba(14,61,43,0.93) 0%, rgba(8,36,25,0.95) 100%),
+      url("hero-collage.jpg");
+    background-size: auto, auto, cover;
+    background-position: center, center, center;
+    background-repeat: no-repeat, no-repeat, no-repeat;
     padding:64px 28px 60px;
   }
 
