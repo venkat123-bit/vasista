@@ -32,6 +32,31 @@
 
   const grid = document.getElementById("item-grid");
   const qty = new Array(products.length).fill(0);
+
+  // Restore any quantities the customer picked earlier (persists across pages/visits).
+  function restoreCartFromStorage(){
+    if(!window.VasistaCart) return;
+    const saved = window.VasistaCart.read();
+    if(!saved.length) return;
+    products.forEach((p, i) => {
+      const match = saved.find(it => it.name === p.name && it.grams === p.grams);
+      if(match && match.qty > 0) qty[i] = match.qty;
+    });
+  }
+
+  // Push the current selection into the shared cart store so the nav Cart
+  // icon (on every page) can show it.
+  function syncCartToStorage(){
+    if(!window.VasistaCart) return;
+    const items = [];
+    products.forEach((p, i) => {
+      if(qty[i] > 0){
+        const { unit } = unitPriceFor(p.price, qty[i]);
+        items.push({ name: p.name, grams: p.grams, unit, qty: qty[i] });
+      }
+    });
+    window.VasistaCart.write(items);
+  }
   const PHONE = "918341383888";
   const rupee = n => "\u20b9" + n.toLocaleString("en-IN");
 
@@ -79,6 +104,8 @@
     pill.classList.toggle("has-qty", qty[i] > 0);
   }
 
+  restoreCartFromStorage();
+
   groups.forEach((g, gi) => {
     const card = document.createElement("div");
     card.className = "product-card";
@@ -120,6 +147,14 @@
       cell.innerHTML = '<span class="price-now">' + rupee(p.price) + '</span>';
     }
   }
+
+  // Reflect any restored quantities in the freshly-built cards (discount price, size-pill label).
+  products.forEach((p, i) => {
+    if(qty[i] > 0){
+      renderPriceCell(i);
+      updateSizePillLabel(i);
+    }
+  });
 
   grid.addEventListener("click", function(e){
     const viewBtn = e.target.closest(".card-img-wrap[data-img]");
@@ -357,6 +392,7 @@
   function updateOrder(){
     const summary = getCartSummary();
     currentTotal = summary.total;
+    syncCartToStorage();
 
     if(summary.lines.length){
       orderLabel.textContent = "Order " + summary.count + " item" + (summary.count > 1 ? "s" : "") + " · " + rupee(summary.total);
