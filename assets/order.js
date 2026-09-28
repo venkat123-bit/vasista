@@ -219,7 +219,10 @@
   function applyFilters(){
     grid.querySelectorAll(".product-card").forEach(card => {
       const matchesCat = currentCat === "all" || card.dataset.cat === currentCat;
-      const matchesSearch = !currentSearch || (card.dataset.name || "").includes(currentSearch);
+      const shownName = (card.querySelector(".card-name") || {}).textContent || "";
+      const matchesSearch = !currentSearch ||
+        (card.dataset.name || "").includes(currentSearch) ||
+        shownName.toLowerCase().includes(currentSearch);
       card.classList.toggle("hidden-card", !(matchesCat && matchesSearch));
     });
   }
@@ -641,7 +644,7 @@
       mapCurrentLocBtn.disabled = false;
     }, function(){
       mapCurrentLocBtn.disabled = false;
-      alert("Couldn't get your current location. Please allow location access or search above.");
+      alert(window.VasistaI18n ? window.VasistaI18n.t("Couldn't get your current location. Please allow location access or search above.") : "Couldn't get your current location. Please allow location access or search above.");
     }, { enableHighAccuracy:true, timeout:8000 });
   });
 
