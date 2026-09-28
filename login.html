@@ -9,8 +9,69 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Self-contained: this page's look lives here, so it works with any styles.css */
+  body{ min-height:100vh; background:#e6e9e2; }
+  .lg-bg{ position:fixed; inset:0; z-index:-1; overflow:hidden;
+    background:linear-gradient(135deg,#dde3da 0%,#f2f1ed 55%,#e3e8df 100%); }
+  .lg-bg svg{ position:absolute; inset:-30px; width:calc(100% + 60px); height:calc(100% + 60px); filter:blur(7px); }
+
+  .auth-brand-header{ position:relative; max-width:1000px; margin:0 auto; padding:22px 20px 0; justify-content:flex-start; }
+  .auth-brand-header .lang-toggle{ position:absolute; right:20px; top:50%; transform:translateY(-50%); margin:13px 0 0; background:rgba(255,255,255,.7); }
+
+  .lg-card{
+    display:grid; grid-template-columns:1fr 1.05fr;
+    max-width:1000px; min-height:540px; margin:22px auto 60px;
+    background:#fbfbf9; border-radius:30px; overflow:hidden;
+    box-shadow:0 30px 70px rgba(20,45,32,.22), 0 4px 10px rgba(20,45,32,.08);
+  }
+  .lg-form{ display:flex; flex-direction:column; justify-content:center; padding:52px 56px; }
+  .lg-form h1{ font-family:'Cormorant Garamond',serif; font-weight:600; font-size:2rem; line-height:1.15; color:#1d3327; margin:0 0 6px; }
+  .lg-lede{ margin:0 0 28px; font-size:.9rem; color:#6d7a71; }
+
+  .lg-card .delivery-grid{ grid-template-columns:1fr; max-width:none; margin:0; gap:16px; }
+  .lg-card .d-field label{ font-size:.78rem; color:#33473a; font-weight:600; padding-left:16px; }
+  .lg-card .d-field input{
+    border:1px solid #a3b0a7; border-radius:999px; background:#fff;
+    padding:12px 18px; font-size:.92rem; width:100%;
+  }
+  .lg-card .d-field input:focus{ border-color:#2f4a3b; box-shadow:0 0 0 4px rgba(47,74,59,.14); }
+  .lg-card .d-field .d-error{ padding-left:16px; }
+  .lg-pw{ position:relative; }
+  .lg-pw input{ padding-right:48px !important; }
+  .lg-eye{ position:absolute; right:8px; top:50%; transform:translateY(-50%); width:34px; height:34px; border:none; background:none;
+    border-radius:50%; color:#4d6355; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .lg-eye:hover{ background:rgba(47,74,59,.08); }
+  .lg-eye svg{ width:18px; height:18px; }
+
+  .lg-btn{
+    width:100%; margin-top:22px; padding:13px 20px; border:none; border-radius:999px; cursor:pointer;
+    background:#2f4a3b; color:#fff; font:600 .95rem 'Work Sans',sans-serif; letter-spacing:.02em;
+    box-shadow:0 10px 22px rgba(47,74,59,.28); transition:background .2s ease, transform .2s ease;
+  }
+  .lg-btn:hover{ background:#1f3a2c; transform:translateY(-1px); }
+  .lg-btn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
+  .lg-btn:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
+  .lg-links{ text-align:center; margin-top:18px; font-size:.84rem; color:#6d7a71; display:grid; gap:8px; }
+  .lg-links a{ color:#2f6a49; font-weight:600; text-underline-offset:3px; }
+  .lg-links a:hover{ color:var(--maroon); }
+  .lg-card .delivery-error-banner{ margin:16px 0 0; border-radius:14px; text-align:left; max-width:none; }
+
+  .lg-art{ position:relative; min-height:100%; }
+  .lg-art svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .lg-art .layer{ filter:drop-shadow(-5px 0 7px rgba(0,0,0,.28)); }
+
+  @media (max-width:780px){
+    .lg-card{ grid-template-columns:1fr; margin:16px 14px 44px; border-radius:24px; min-height:0; }
+    .lg-art{ order:-1; height:150px; min-height:0; }
+    .lg-form{ padding:30px 24px 36px; }
+  }
+</style>
 </head>
 <body>
+
+<div class="lg-bg" aria-hidden="true"><svg id="bg-leaves" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice"></svg></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><g id="frond"></g></defs></svg>
 
 <div class="auth-brand-header">
   <a href="index.html" class="nav-brand">
@@ -19,15 +80,10 @@
   </a>
 </div>
 
-<main class="auth-shell">
-  <aside class="auth-aside">
-    <img class="auth-aside-logo" src="logo.jpeg" alt="">
-    <p class="auth-aside-quote">Quality You Can Trust, Purity You Can Taste.</p>
-  </aside>
-
-  <section class="auth-main">
+<main class="lg-card">
+  <section class="lg-form">
     <h1>Log in to your account</h1>
-    <p class="auth-lede">Faster checkout with your saved details.</p>
+    <p class="lg-lede">Faster checkout with your saved details.</p>
 
     <form id="login-form" novalidate>
       <div class="delivery-grid">
@@ -38,25 +94,75 @@
         </div>
         <div class="d-field" id="field-password">
           <label for="li-password">Password*</label>
-          <input type="password" id="li-password" autocomplete="current-password" placeholder="Your password">
+          <div class="lg-pw">
+            <input type="password" id="li-password" autocomplete="current-password" placeholder="Your password">
+            <button type="button" class="lg-eye" id="pw-eye" aria-label="Show password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
           <span class="d-error">Please enter your password.</span>
         </div>
       </div>
 
       <p class="delivery-error-banner" id="login-error-banner" style="display:none;"></p>
 
-      <div class="cta-wrap">
-        <button type="submit" class="cta-btn auth-submit" id="login-btn">
-          <span id="login-label">Log In</span>
-        </button>
-        <p class="cta-note">
-          <a href="#" id="forgot-link" style="color:var(--green-deep); font-weight:600;">Forgot password?</a>
-        </p>
-        <p class="cta-note">New here? <a href="signup.html" style="color:var(--green-deep); font-weight:600;">Create an account</a></p>
+      <button type="submit" class="lg-btn" id="login-btn"><span id="login-label">Log In</span></button>
+
+      <div class="lg-links">
+        <a href="#" id="forgot-link">Forgot password?</a>
+        <span>New here? <a href="signup.html">Create an account</a></span>
       </div>
     </form>
   </section>
+
+  <aside class="lg-art" aria-hidden="true">
+    <svg viewBox="0 0 400 540" preserveAspectRatio="xMaxYMid slice">
+      <defs>
+        <clipPath id="lg-clip"><path d="M262 0C240 60 305 125 278 205C252 280 228 360 280 540L400 540L400 0Z"/></clipPath>
+        <linearGradient id="lg-green" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2c4a3a"/><stop offset="1" stop-color="#0b2217"/></linearGradient>
+        <filter id="lg-blur"><feGaussianBlur stdDeviation="5"/></filter>
+      </defs>
+      <path class="layer" fill="#f1f1ee" d="M118 0C88 90 192 150 142 240C102 320 40 385 112 540L400 540L400 0Z"/>
+      <path class="layer" fill="#cfd3ce" d="M168 0C138 82 232 142 192 232C156 312 112 372 170 540L400 540L400 0Z"/>
+      <path class="layer" fill="#95a398" d="M215 0C190 72 270 132 236 216C206 292 170 362 226 540L400 540L400 0Z"/>
+      <path class="layer" fill="url(#lg-green)" d="M262 0C240 60 305 125 278 205C252 280 228 360 280 540L400 540L400 0Z"/>
+      <g clip-path="url(#lg-clip)">
+        <use href="#frond" fill="#0f2b1e" stroke="#0f2b1e" transform="translate(380 560) rotate(-38) scale(1.25)"/>
+        <use href="#frond" fill="#1c4030" stroke="#1c4030" transform="translate(340 300) rotate(28) scale(.95)"/>
+        <use href="#frond" fill="#163627" stroke="#163627" transform="translate(400 120) rotate(-62) scale(1)"/>
+        <use href="#frond" fill="#274d3a" stroke="#274d3a" opacity=".85" transform="translate(300 540) rotate(-8) scale(.9)"/>
+        <use href="#frond" fill="#3b6b52" stroke="#3b6b52" opacity=".6" filter="url(#lg-blur)" transform="translate(330 560) rotate(-20) scale(1.4)"/>
+      </g>
+    </svg>
+  </aside>
 </main>
+
+<script>
+  // Draw palm fronds once, reuse everywhere (background + art panel)
+  (function(){
+    var p = '<path d="M0 0Q6 -140 0 -275" fill="none" stroke-width="3"/>';
+    var n = 15;
+    for (var i = 0; i < n; i++) {
+      var t = i / n, len = 95 * (1 - t * .75) + 14, y = -8 - t * 255;
+      [-1, 1].forEach(function(s){
+        p += '<path stroke="none" d="M0 ' + y + 'Q' + (s*len*.5) + ' ' + (y-len*.42) + ' ' + (s*len) + ' ' + (y-len*.3) +
+             'Q' + (s*len*.55) + ' ' + (y+len*.08) + ' 0 ' + y + 'Z"/>';
+      });
+    }
+    p += '<path stroke="none" d="M0 -262Q-9 -285 0 -305Q9 -285 0 -262Z"/>';
+    document.getElementById('frond').innerHTML = p;
+
+    var bg = document.getElementById('bg-leaves'), spots = [
+      [80,820,-18,1.6,'#2f6a49',.55],[300,840,12,1.3,'#4f8a5f',.4],[1120,800,22,1.7,'#245a3d',.6],
+      [1000,860,-14,1.3,'#3f7a55',.45],[560,-20,178,1.1,'#5b9468',.35],[1180,140,-105,1.2,'#2f6a49',.5],[20,120,98,1.1,'#3f7a55',.45]
+    ], h = '';
+    spots.forEach(function(s){
+      h += '<use href="#frond" fill="' + s[4] + '" stroke="' + s[4] + '" opacity="' + s[5] +
+           '" transform="translate(' + s[0] + ' ' + s[1] + ') rotate(' + s[2] + ') scale(' + s[3] + ')"/>';
+    });
+    bg.innerHTML = h;
+  })();
+</script>
 
 <script src="assets/i18n.js"></script>
 <script type="module">
@@ -76,6 +182,14 @@
   const errorBanner = document.getElementById("login-error-banner");
   const btn = document.getElementById("login-btn");
   const label = document.getElementById("login-label");
+
+  // Show / hide password
+  document.getElementById("pw-eye").addEventListener("click", function () {
+    const pw = document.getElementById("li-password");
+    const show = pw.type === "password";
+    pw.type = show ? "text" : "password";
+    this.setAttribute("aria-label", show ? "Hide password" : "Show password");
+  });
 
   function showFieldError(id, show) {
     document.getElementById(id).classList.toggle("invalid", show);
