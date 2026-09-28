@@ -19,44 +19,44 @@
   </a>
 </div>
 
-<section class="hero" style="padding:52px 28px 20px;">
-  <div class="hero-inner" style="grid-template-columns:1fr; text-align:center;">
-    <div class="hero-copy">
-      <p class="hero-eyebrow">WELCOME BACK</p>
-      <h1>Log in to your account</h1>
-      <p class="hero-sub" style="margin-left:auto; margin-right:auto;">Faster checkout with your saved details.</p>
-    </div>
-  </div>
-</section>
+<main class="auth-shell">
+  <aside class="auth-aside">
+    <img class="auth-aside-logo" src="logo.jpeg" alt="">
+    <p class="auth-aside-quote">Quality You Can Trust, Purity You Can Taste.</p>
+  </aside>
 
-<section class="section-pad" style="max-width:480px; margin:0 auto 80px;">
-  <form id="login-form" novalidate>
-    <div class="delivery-grid" style="grid-template-columns:1fr;">
-      <div class="d-field" id="field-email">
-        <label for="li-email">Email*</label>
-        <input type="email" id="li-email" autocomplete="email" placeholder="you@example.com">
-        <span class="d-error">Please enter a valid email.</span>
+  <section class="auth-main">
+    <h1>Log in to your account</h1>
+    <p class="auth-lede">Faster checkout with your saved details.</p>
+
+    <form id="login-form" novalidate>
+      <div class="delivery-grid">
+        <div class="d-field" id="field-email">
+          <label for="li-email">Email*</label>
+          <input type="email" id="li-email" autocomplete="email" placeholder="you@example.com">
+          <span class="d-error">Please enter a valid email.</span>
+        </div>
+        <div class="d-field" id="field-password">
+          <label for="li-password">Password*</label>
+          <input type="password" id="li-password" autocomplete="current-password" placeholder="Your password">
+          <span class="d-error">Please enter your password.</span>
+        </div>
       </div>
-      <div class="d-field" id="field-password">
-        <label for="li-password">Password*</label>
-        <input type="password" id="li-password" autocomplete="current-password" placeholder="Your password">
-        <span class="d-error">Please enter your password.</span>
+
+      <p class="delivery-error-banner" id="login-error-banner" style="display:none;"></p>
+
+      <div class="cta-wrap">
+        <button type="submit" class="cta-btn auth-submit" id="login-btn">
+          <span id="login-label">Log In</span>
+        </button>
+        <p class="cta-note">
+          <a href="#" id="forgot-link" style="color:var(--green-deep); font-weight:600;">Forgot password?</a>
+        </p>
+        <p class="cta-note">New here? <a href="signup.html" style="color:var(--green-deep); font-weight:600;">Create an account</a></p>
       </div>
-    </div>
-
-    <p class="delivery-error-banner" id="login-error-banner" style="display:none;"></p>
-
-    <div class="cta-wrap" style="margin-top:24px;">
-      <button type="submit" class="cta-btn" id="login-btn" style="width:100%; justify-content:center; border:none; cursor:pointer;">
-        <span id="login-label">Log In</span>
-      </button>
-      <p class="cta-note">
-        <a href="#" id="forgot-link" style="color:var(--green-deep); font-weight:600;">Forgot password?</a>
-      </p>
-      <p class="cta-note">New here? <a href="signup.html" style="color:var(--green-deep); font-weight:600;">Create an account</a></p>
-    </div>
-  </form>
-</section>
+    </form>
+  </section>
+</main>
 
 <script src="assets/i18n.js"></script>
 <script type="module">
