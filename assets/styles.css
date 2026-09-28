@@ -1592,3 +1592,53 @@ html.auth-checking{ visibility:hidden; }
     .hero-eyebrow, .hero-copy h1, .hero-sub, .hero-cta-row, .hero-art{ animation:none; opacity:1; }
     .order-pill{ transition:none; }
   }
+
+/* ---------- language switcher (English <-> Telugu) ---------- */
+.lang-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:inherit;
+  font-size:0.82rem;
+  font-weight:600;
+  color:var(--green-deep);
+  background:transparent;
+  border:1px solid var(--cream-line);
+  border-radius:20px;
+  padding:6px 12px;
+  margin-left:12px;
+  cursor:pointer;
+  transition:background 0.15s ease, border-color 0.15s ease;
+}
+.lang-toggle:hover{ background:rgba(14,61,43,0.06); border-color:var(--gold); }
+.lang-toggle svg{ width:16px; height:16px; flex-shrink:0; }
+@media (max-width:860px){
+  .lang-toggle{ margin-left:auto; margin-right:10px; }
+}
+/* login / signup pages have no navbar: pin the button to the top-right */
+.auth-brand-header{ position:relative; }
+.auth-brand-header .lang-toggle{ position:absolute; right:20px; top:24px; margin:0; }
+
+/* Telugu typography: proper fonts, more line height, no letter-spacing */
+html[lang="te"] body,
+html[lang="te"] button,
+html[lang="te"] input,
+html[lang="te"] textarea{
+  font-family:'Noto Sans Telugu','Work Sans',sans-serif;
+}
+html[lang="te"] h1,
+html[lang="te"] h2,
+html[lang="te"] h3,
+html[lang="te"] .card-name,
+html[lang="te"] .life-line,
+html[lang="te"] .footer-motto,
+html[lang="te"] .nav-brand-text{
+  font-family:'Noto Serif Telugu','Cormorant Garamond',serif;
+}
+html[lang="te"] h1,
+html[lang="te"] h2,
+html[lang="te"] h3{ line-height:1.35; }
+html[lang="te"] body{ line-height:1.7; }
+html[lang="te"] body *{ letter-spacing:normal !important; }
+html[lang="te"] .nav-links{ gap:20px; }
+html[lang="te"] .nav-links a{ font-size:0.9rem; }
