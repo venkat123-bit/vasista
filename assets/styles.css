@@ -1774,6 +1774,15 @@ body{
 
 /* floating pieces */
 .cart-panel{ border-radius:16px; box-shadow:var(--shadow-lg); }
+.cart-row{ position:relative; padding-right:26px; }
+.cart-row-remove{
+  position:absolute; right:0; top:50%; transform:translateY(-50%);
+  width:22px; height:22px; border:none; border-radius:50%;
+  background:transparent; color:#a89c80; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .15s ease, color .15s ease;
+}
+.cart-row-remove:hover{ background:rgba(124,31,43,.1); color:var(--maroon); }
 .order-pill{ background:linear-gradient(160deg, var(--maroon) 0%, var(--maroon-deep) 100%); }
 
 /* footer */
