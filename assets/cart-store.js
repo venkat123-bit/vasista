@@ -46,19 +46,28 @@
       return;
     }
     let total = 0;
-    const rows = items.map(function (it) {
+    const rows = items.map(function (it, idx) {
       const lineTotal = it.unit * it.qty;
       total += lineTotal;
-      return '<div class="cart-row">' +
+      return '<div class="cart-row" data-idx="' + idx + '">' +
         '<span class="cart-row-name">' + it.name + ' <small>(' + it.grams + ')</small></span>' +
         '<span class="cart-row-qty">\u00d7' + it.qty + '</span>' +
         '<span class="cart-row-total">' + rupee(lineTotal) + '</span>' +
+        '<button type="button" class="cart-row-remove" data-idx="' + idx + '" aria-label="Remove ' + it.name + '">' +
+          '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>' +
+        '</button>' +
       '</div>';
     }).join("");
     panel.innerHTML =
       '<div class="cart-rows">' + rows + '</div>' +
       '<div class="cart-total-row"><span>Total</span><span>' + rupee(total) + '</span></div>' +
       '<a class="cart-browse-btn" href="order.html">Go to checkout</a>';
+  }
+
+  function removeAt(idx) {
+    const items = read().filter(function (it) { return it.qty > 0; });
+    items.splice(idx, 1);
+    write(items);
   }
 
   function ensurePanel() {
@@ -84,6 +93,14 @@
   document.addEventListener("click", function (e) {
     const cartBtn = e.target.closest(".nav-cart-btn, #nav-cart-link-mobile");
     const panel = document.getElementById("cart-panel");
+    const removeBtn = e.target.closest(".cart-row-remove");
+    if (removeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      removeAt(Number(removeBtn.dataset.idx));
+      if (panel) renderPanel(panel);
+      return;
+    }
     if (cartBtn) {
       e.preventDefault();
       toggle();
