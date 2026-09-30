@@ -9,11 +9,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css">
+<style>
+  .lg-divider{ display:flex; align-items:center; gap:12px; margin:20px 0 0; color:#8a978e; font-size:.78rem; }
+  .lg-divider::before,.lg-divider::after{ content:""; flex:1; height:1px; background:#d5dbd6; }
+  .lg-google{ width:100%; margin-top:16px; padding:12px 20px; border:1px solid #a3b0a7; border-radius:999px; background:#fff; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:10px; color:#33473a; font:600 .92rem 'Work Sans',sans-serif;
+    transition:background .2s ease, box-shadow .2s ease; }
+  .lg-google:hover{ background:#f4f7f4; box-shadow:0 4px 12px rgba(47,74,59,.12); }
+  .lg-google:disabled{ opacity:.6; cursor:not-allowed; }
+  .lg-google svg{ width:18px; height:18px; flex:none; }
+</style>
 </head>
 <body>
 
 <div class="auth-brand-header">
-  <a href="index.html" class="nav-brand">
+  <a href="/" class="nav-brand">
     <img src="logo.jpeg" alt="Vasista Food and Traders">
     <span class="nav-brand-text">Vasista<small>FOOD &amp; TRADERS</small></span>
   </a>
@@ -65,12 +75,15 @@
       <button type="submit" class="cta-btn" id="signup-btn" style="width:100%; justify-content:center; border:none; cursor:pointer;">
         <span id="signup-label">Create Account</span>
       </button>
-      <p class="cta-note">Already have an account? <a href="login.html" style="color:var(--green-deep); font-weight:600;">Log in</a></p>
+      <div class="lg-divider"><span>or</span></div>
+      <button type="button" class="lg-google" id="google-btn" data-banner="signup-error-banner"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg><span>Continue with Google</span></button>
+      <p class="cta-note">Already have an account? <a href="/login" style="color:var(--green-deep); font-weight:600;">Log in</a></p>
     </div>
   </form>
 </section>
 
 <script src="assets/i18n.js"></script>
+<script type="module" src="assets/google-auth.js"></script>
 <script type="module">
   import {
     auth, db,
@@ -82,7 +95,7 @@
 
   // Already logged in? Skip straight to the site.
   onAuthStateChanged(auth, function (user) {
-    if (user) window.location.replace("index.html");
+    if (user) window.location.replace("/");
   });
 
   const form = document.getElementById("signup-form");
@@ -136,7 +149,7 @@
         // Firestore may not be enabled yet — account creation still succeeds.
         console.warn("Could not save profile to Firestore:", dbErr);
       }
-      window.location.href = "index.html";
+      window.location.href = "/";
     } catch (err) {
       let msg = "Something went wrong. Please try again.";
       if (err.code === "auth/email-already-in-use") msg = "An account with this email already exists.";
