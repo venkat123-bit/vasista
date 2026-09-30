@@ -42,7 +42,7 @@
     if (!items.length) {
       panel.innerHTML =
         '<p class="cart-empty-msg">You haven\u2019t added any items yet.</p>' +
-        '<a class="cart-browse-btn" href="order.html">Select items in Products</a>';
+        '<a class="cart-browse-btn" href="/order">Select items in Products</a>';
       return;
     }
     let total = 0;
@@ -61,7 +61,7 @@
     panel.innerHTML =
       '<div class="cart-rows">' + rows + '</div>' +
       '<div class="cart-total-row"><span>Total</span><span>' + rupee(total) + '</span></div>' +
-      '<a class="cart-browse-btn" href="order.html">Go to checkout</a>';
+      '<a class="cart-browse-btn" href="/order">Go to checkout</a>';
   }
 
   function removeAt(idx) {

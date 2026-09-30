@@ -11,14 +11,14 @@ function makeDesktopIcons() {
   wrap.id = "nav-icons";
 
   const cart = document.createElement("a");
-  cart.href = "order.html";
+  cart.href = "/order";
   cart.className = "nav-icon-btn nav-cart-btn";
   cart.setAttribute("aria-label", "Cart");
   cart.innerHTML = CART_SVG + '<span class="nav-cart-badge">0</span>';
 
   const profile = document.createElement("a");
   profile.id = "nav-profile-link";
-  profile.href = "profile.html";
+  profile.href = "/profile";
   profile.className = "nav-icon-btn";
   profile.setAttribute("aria-label", "Profile");
   profile.innerHTML = PROFILE_SVG;
@@ -33,13 +33,13 @@ function makeMobileLinks() {
 
   const cart = document.createElement("a");
   cart.id = "nav-cart-link-mobile";
-  cart.href = "order.html";
+  cart.href = "/order";
   cart.textContent = "Cart";
   frag.appendChild(cart);
 
   const profile = document.createElement("a");
   profile.id = "mobile-profile-link";
-  profile.href = "profile.html";
+  profile.href = "/profile";
   profile.textContent = "Profile";
   frag.appendChild(profile);
 
@@ -51,7 +51,7 @@ function render(user) {
   const mobileProfileLink = document.getElementById("mobile-profile-link");
   [profileLink, mobileProfileLink].forEach(function (el) {
     if (!el) return;
-    el.href = user ? "profile.html" : "login.html";
+    el.href = user ? "/profile" : "/login";
     el.setAttribute("aria-label", user ? "Profile" : "Login");
   });
 }

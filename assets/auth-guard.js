@@ -12,7 +12,7 @@ const fallback = setTimeout(function () {
 onAuthStateChanged(auth, function (user) {
   clearTimeout(fallback);
   if (!user) {
-    window.location.replace("login.html");
+    window.location.replace("/login");
   } else {
     document.documentElement.classList.remove("auth-checking");
   }

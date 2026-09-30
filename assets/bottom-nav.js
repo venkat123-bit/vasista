@@ -1,8 +1,8 @@
 /* Mobile bottom bar (Home · Cart · Profile) + full-screen profile menu.
    Loaded on every page after cart-store.js. Phones / small tablets only (<= 860px). */
 (function () {
-  var page = location.pathname.split("/").pop() || "index.html";
-  if (page === "login.html" || page === "signup.html") return;   // logged-out pages: no bar
+  var page = (location.pathname.split("/").pop() || "index").replace(/\.html$/, "");
+  if (page === "login" || page === "signup") return;   // logged-out pages: no bar
 
   var BASE = document.currentScript ? document.currentScript.src.replace(/[^\/]*$/, "") : "assets/";
 
@@ -77,12 +77,12 @@
     nav.className = "bn";
     nav.setAttribute("aria-label", "Main");
     nav.innerHTML =
-      '<a href="index.html" data-k="home">' + icons.home + "<span>Home</span></a>" +
-      '<a href="order.html" data-k="cart">' + icons.cart + '<span>Cart</span><i class="nav-cart-badge bn-badge">0</i></a>' +
-      '<a href="profile.html" data-k="profile" role="button" aria-haspopup="dialog">' + icons.profile + "<span>Profile</span></a>";
+      '<a href="/" data-k="home">' + icons.home + "<span>Home</span></a>" +
+      '<a href="/order" data-k="cart">' + icons.cart + '<span>Cart</span><i class="nav-cart-badge bn-badge">0</i></a>' +
+      '<a href="/profile" data-k="profile" role="button" aria-haspopup="dialog">' + icons.profile + "<span>Profile</span></a>";
     document.body.appendChild(nav);
 
-    var cur = { "index.html": "home", "order.html": "cart", "profile.html": "profile" }[page];
+    var cur = { "index": "home", "order": "cart", "profile": "profile" }[page];
     if (cur) nav.querySelector('[data-k="' + cur + '"]').classList.add("on");
     if (window.VasistaCart) window.VasistaCart.updateBadge();   // cart-store keeps the count in sync
 
@@ -96,10 +96,10 @@
       '<button type="button" class="bp-x" aria-label="Close menu">' + icons.close + "</button>" +
       '<p class="bp-who" id="bp-who" hidden></p>' +
       '<ul class="bp-list">' +
-        '<li><a href="profile.html">Profile &amp; Settings</a></li>' +
-        '<li><a href="order.html">Products</a></li>' +
-        '<li><a href="about.html">Why Vasista Food and Traders</a></li>' +
-        '<li><a href="contact.html">Contact</a></li>' +
+        '<li><a href="/profile">Profile &amp; Settings</a></li>' +
+        '<li><a href="/order">Products</a></li>' +
+        '<li><a href="/about">Why Vasista Food and Traders</a></li>' +
+        '<li><a href="/contact">Contact</a></li>' +
         '<li><a href="https://wa.me/' + CFG.whatsapp + "?text=" + encodeURIComponent(CFG.waText) + '" target="_blank" rel="noopener">Order on WhatsApp</a></li>' +
         '<li><button type="button" class="bp-out" id="bp-logout">Log Out</button></li>' +
       "</ul>" +
@@ -119,14 +119,14 @@
     import(BASE + "firebase-config.js").then(function (m) {
       m.onAuthStateChanged(m.auth, function (user) {
         var who = panel.querySelector("#bp-who");
-        who.textContent = user ? (user.displayName || user.email || "") : "";
+        who.textContent = user ? (user.displayName || user.email || user.phoneNumber || "") : "";
         who.hidden = !who.textContent;
       });
       panel.querySelector("#bp-logout").addEventListener("click", function () {
-        m.signOut(m.auth).then(function () { location.href = "login.html"; });
+        m.signOut(m.auth).then(function () { location.href = "/login"; });
       });
     }).catch(function () {
-      panel.querySelector("#bp-logout").addEventListener("click", function () { location.href = "profile.html"; });
+      panel.querySelector("#bp-logout").addEventListener("click", function () { location.href = "/profile"; });
     });
   }
 
