@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 </head>
 <body>
 
@@ -39,7 +38,7 @@
   <a href="/contact">Contact</a>
 </div>
 
-<section class="hero" id="home" style="padding:52px 28px 40px;">
+<section class="hero hero-compact" id="home" style="padding:52px 28px 40px;">
   <div class="crumb crumb1"></div>
   <div class="crumb crumb2"></div>
   <div class="crumb crumb3"></div>
@@ -48,7 +47,7 @@
     <div class="hero-copy">
       <p class="hero-eyebrow">ORDER ONLINE</p>
       <h1>Pick your snacks, we'll bring them home</h1>
-      <p class="hero-sub" style="margin-left:auto; margin-right:auto;">Choose quantities below, add your delivery details, and send your order straight to us on WhatsApp.</p>
+      <p class="hero-sub" style="margin-left:auto; margin-right:auto;">Add your favourites to the cart. You'll enter delivery details and send the order to us on WhatsApp from the cart.</p>
     </div>
   </div>
 </section>
@@ -84,84 +83,9 @@
 
     <div class="product-grid reveal" id="item-grid"></div>
 
-    <section class="delivery-section reveal" id="delivery-section">
-      <h2 class="section-title">Delivery Details</h2>
-      <p class="delivery-sub">Tell us where to deliver your order.</p>
-
-      <div class="delivery-grid">
-        <div class="d-field" id="field-name">
-          <label for="cust-name">Full Name*</label>
-          <input type="text" id="cust-name" placeholder="e.g. Priya Reddy" autocomplete="name">
-          <span class="d-error">Please enter your name.</span>
-        </div>
-        <div class="d-field" id="field-phone">
-          <label for="cust-phone">Phone Number*</label>
-          <input type="tel" id="cust-phone" placeholder="10-digit mobile number" inputmode="numeric" maxlength="10" autocomplete="tel">
-          <span class="d-error">Please enter a valid 10-digit number.</span>
-        </div>
-        <div class="d-field full" id="field-address">
-          <label for="cust-address">Delivery Address*</label>
-          <textarea id="cust-address" placeholder="House/flat no., street, area"></textarea>
-          <span class="d-error">Please enter your delivery address.</span>
-          <button type="button" class="map-pick-btn" id="map-pick-btn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 0C7 0 3 4 3 9c0 7 9 15 9 15s9-8 9-15c0-5-4-9-9-9z"/><circle cx="12" cy="9" r="3"/></svg>
-            Pick location on map
-          </button>
-        </div>
-        <div class="d-field" id="field-city">
-          <label for="cust-city">City*</label>
-          <input type="text" id="cust-city" placeholder="e.g. Secunderabad" autocomplete="address-level2">
-          <span class="d-error">Please enter your city.</span>
-        </div>
-        <div class="d-field" id="field-pincode">
-          <label for="cust-pincode">Pincode*</label>
-          <input type="text" id="cust-pincode" placeholder="6-digit pincode" inputmode="numeric" maxlength="6" autocomplete="postal-code">
-          <span class="d-error">Please enter a valid 6-digit pincode.</span>
-        </div>
-        <div class="d-field full" id="field-landmark">
-          <label for="cust-landmark">Landmark <span class="opt">(optional)</span></label>
-          <input type="text" id="cust-landmark" placeholder="Nearby landmark, if any">
-        </div>
-        <input type="hidden" id="cust-lat">
-        <input type="hidden" id="cust-lng">
-      </div>
-
-      <div class="payment-block">
-        <h3>Payment Method</h3>
-        <div class="pay-options">
-          <label class="pay-option">
-            <input type="radio" name="pay-method" value="cod" checked>
-            Cash on Delivery
-          </label>
-          <label class="pay-option">
-            <input type="radio" name="pay-method" value="upi">
-            Pay via UPI
-          </label>
-        </div>
-
-        <div class="upi-panel hidden" id="upi-panel">
-          <img id="upi-qr" alt="Scan to pay via UPI" src="">
-          <div class="upi-id-row">
-            UPI ID: <strong id="upi-id-text">8712573832@ybl</strong>
-            <button type="button" class="upi-copy-btn" id="copy-upi-btn">Copy</button>
-          </div>
-          <p class="upi-note">Scan the QR code (it's pre-filled with your order total) or pay manually to the UPI ID above, then share your transaction reference below so we can confirm your payment quickly.</p>
-          <div class="d-field">
-            <label for="upi-ref">UPI Transaction Ref <span class="opt">(optional)</span></label>
-            <input type="text" id="upi-ref" placeholder="e.g. 123456789012">
-          </div>
-        </div>
-      </div>
-
-      <p class="delivery-error-banner" id="delivery-error-banner">Please fill in all required delivery details before placing your order.</p>
-    </section>
-
-    <div class="cta-wrap reveal">
-      <a class="cta-btn" id="order-btn" href="https://wa.me/918341383888?text=Hi%2C%20I%27d%20like%20to%20order%20from%20Vasista%20Food%20and%20Traders" target="_blank" rel="noopener">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.29-.15-1.71-.85-1.98-.94-.27-.1-.46-.15-.65.15-.2.29-.75.94-.92 1.13-.17.2-.34.22-.63.08-.29-.15-1.23-.46-2.34-1.46-.87-.78-1.45-1.73-1.62-2.02-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.08-.15-.65-1.58-.9-2.16-.24-.57-.48-.5-.65-.5-.17-.01-.36-.01-.56-.01-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.42 0 1.43 1.04 2.82 1.19 3.01.15.2 2.05 3.13 4.96 4.39.69.3 1.23.48 1.65.61.69.22 1.32.19 1.82.11.55-.08 1.71-.7 1.95-1.37.24-.68.24-1.26.17-1.38-.07-.12-.26-.19-.55-.34z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.06-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18.15c-1.63 0-3.15-.45-4.45-1.24l-.32-.19-3.01.79.81-2.93-.21-.3A8.14 8.14 0 0 1 3.85 12c0-4.5 3.66-8.15 8.15-8.15S20.15 7.5 20.15 12 16.5 20.15 12 20.15z"/></svg>
-        <span id="order-label">Order on WhatsApp</span>
-      </a>
-      <p class="cta-note" id="cta-note">Tip: pick quantities above and your order list is sent automatically.</p>
+    <div class="no-results" id="no-results" hidden>
+      <p>No snacks match your search.</p>
+      <button type="button" class="hero-cta" id="clear-filters">Show all products</button>
     </div>
   </div>
 </section>
@@ -186,7 +110,7 @@
   </p>
 </footer>
 
-<div class="lightbox" id="lightbox">>
+<div class="lightbox" id="lightbox">
   <div class="lightbox-inner">
     <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close image">&times;</button>
     <img id="lightbox-img" src="" alt="">
@@ -194,48 +118,20 @@
   </div>
 </div>
 
-<div class="map-modal" id="map-modal"<div class="map-modal" id="map-modal" role="dialog" aria-modal="true" aria-label="Choose delivery location on map">
-  <div class="map-search-bar">
-    <button type="button" class="map-icon-btn" id="map-back-btn" aria-label="Close map">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    </button>
-    <input type="text" id="map-search-input" placeholder="Search an area or address">
-    <button type="button" class="map-icon-btn" id="map-search-btn" aria-label="Search">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-    </button>
-  </div>
-
-  <div id="map-canvas"></div>
-  <div class="map-center-pin" aria-hidden="true">
-    <svg width="40" height="52" viewBox="0 0 40 52"><path d="M20 0C9 0 0 9 0 20c0 14 20 32 20 32s20-18 20-32C40 9 31 0 20 0z" fill="#ff5a1f"/><circle cx="20" cy="19" r="8" fill="#fff"/></svg>
-  </div>
-
-  <button type="button" class="map-current-loc-btn" id="map-current-loc-btn">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-    <span>Current location</span>
-  </button>
-
-  <div class="map-confirm-card">
-    <p class="map-confirm-label">Order will be delivered here</p>
-    <div class="map-confirm-address">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff5a1f"><path d="M12 0C7 0 3 4 3 9c0 7 9 15 9 15s9-8 9-15c0-5-4-9-9-9zm0 12a3 3 0 110-6 3 3 0 010 6z"/></svg>
-      <div>
-        <p class="map-address-title" id="map-address-title">Move the map to select location</p>
-        <p class="map-address-sub" id="map-address-sub"></p>
-      </div>
-    </div>
-    <p class="map-approx-note" id="map-approx-note">Auto-detected — please double-check the city &amp; pincode after confirming.</p>
-    <button type="button" class="cta-btn map-confirm-btn" id="map-confirm-btn" disabled>Confirm &amp; proceed</button>
-  </div>
-</div>
+<!-- sticky "View cart" bar: appears once something is added -->
+<a class="cart-bar" id="cart-bar" href="/cart" aria-label="View cart">
+  <span class="cart-bar-info"><b id="cart-bar-count">0 items</b><small id="cart-bar-total">₹0</small></span>
+  <span class="cart-bar-go">View Cart
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </span>
+</a>
 
 <script src="assets/common.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="assets/catalog.js"></script>
+<script src="assets/cart-store.js"></script>
 <script src="assets/order.js"></script>
 <script src="assets/i18n.js"></script>
-<script src="assets/cart-store.js"></script>
 <script src="assets/bottom-nav.js"></script>
 <script type="module" src="assets/auth-ui.js"></script>
-<script type="module" src="assets/order-auth.js"></script>
 </body>
 </html>
