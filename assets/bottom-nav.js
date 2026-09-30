@@ -121,9 +121,17 @@
         var who = panel.querySelector("#bp-who");
         who.textContent = user ? (user.displayName || user.email || user.phoneNumber || "") : "";
         who.hidden = !who.textContent;
+        var pl = panel.querySelector('a[href="/profile"], a[href="/login"]');
+        var outLi = panel.querySelector("#bp-logout").parentNode;
+        var tr = function (x) { return window.VasistaI18n ? window.VasistaI18n.t(x) : x; };
+        if (pl) {
+          pl.href = user ? "/profile" : "/login";
+          pl.textContent = user ? tr("Profile & Settings") : tr("Log in / Sign up");
+        }
+        outLi.style.display = user ? "" : "none";
       });
       panel.querySelector("#bp-logout").addEventListener("click", function () {
-        m.signOut(m.auth).then(function () { location.href = "/login"; });
+        m.signOut(m.auth).then(function () { location.href = "/"; });
       });
     }).catch(function () {
       panel.querySelector("#bp-logout").addEventListener("click", function () { location.href = "/profile"; });

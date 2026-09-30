@@ -104,6 +104,7 @@
     "Password*": "పాస్\u200cవర్డ్*",
     "Please enter your password.": "దయచేసి మీ పాస్\u200cవర్డ్ నమోదు చేయండి.",
     "Log In": "లాగిన్",
+    "Log in / Sign up": "లాగిన్ / సైన్ అప్",
     "Login with OTP": "OTP తో లాగిన్",
     "Email me a link": "ఈమెయిల్ లింక్ పంపండి",
     "Log in with OTP": "OTP తో లాగిన్ అవ్వండి",
