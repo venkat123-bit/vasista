@@ -23,6 +23,7 @@
     updateBadge();
     const panel = document.getElementById("cart-panel");
     if (panel && panel.classList.contains("open")) renderPanel(panel);
+    try { document.dispatchEvent(new CustomEvent("vasista-cart-change")); } catch (e) {}
   }
 
   function rupee(n) {
@@ -61,7 +62,7 @@
     panel.innerHTML =
       '<div class="cart-rows">' + rows + '</div>' +
       '<div class="cart-total-row"><span>Total</span><span>' + rupee(total) + '</span></div>' +
-      '<a class="cart-browse-btn" href="/order">Go to checkout</a>';
+      '<a class="cart-browse-btn" href="/cart">View cart &amp; checkout</a>';
   }
 
   function removeAt(idx) {
@@ -91,7 +92,7 @@
   }
 
   document.addEventListener("click", function (e) {
-    const cartBtn = e.target.closest(".nav-cart-btn, #nav-cart-link-mobile");
+    const cartBtn = window.innerWidth > 860 ? e.target.closest(".nav-cart-btn") : null;
     const panel = document.getElementById("cart-panel");
     const removeBtn = e.target.closest(".cart-row-remove");
     if (removeBtn) {

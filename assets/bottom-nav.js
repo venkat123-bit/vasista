@@ -1,4 +1,5 @@
-/* Mobile bottom bar (Home · Cart · Profile) + full-screen profile menu.
+/* Mobile bottom bar (Home · Products · Cart · Profile), cart/profile icons in the
+   mobile header, and the full-screen profile menu.
    Loaded on every page after cart-store.js. Phones / small tablets only (<= 860px). */
 (function () {
   var page = (location.pathname.split("/").pop() || "index").replace(/\.html$/, "");
@@ -15,22 +16,33 @@
   };
 
   var css =
-    ".bn,.bp{display:none}" +
+    ".bn,.bp,.hdr-icons{display:none}" +
     "@media (max-width:860px){" +
-    ".bn{position:fixed;left:0;right:0;bottom:0;z-index:90;display:flex;background:rgba(255,253,248,.96);" +
-    "-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid #eae0c4;" +
-    "box-shadow:0 -8px 24px rgba(14,61,43,.10);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}" +
-    ".bn a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;border-radius:12px;" +
-    "text-decoration:none;color:#7b7462;font:500 .72rem 'Work Sans',sans-serif;position:relative;-webkit-tap-highlight-color:transparent}" +
-    ".bn svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}" +
-    ".bn a.on{color:#0e3d2b;font-weight:600}" +
-    ".bn a.on::before{content:'';position:absolute;top:-7px;left:50%;width:28px;height:3px;margin-left:-14px;border-radius:0 0 3px 3px;background:#c9a34b}" +
-    ".bn a:active{background:rgba(14,61,43,.07)}" +
-    ".bn a:focus-visible{outline:2px solid #c9a34b;outline-offset:-2px}" +
-    ".bn .bn-badge{position:absolute;top:1px;left:calc(50% + 6px);right:auto;min-width:17px;height:17px;padding:0 4px;border-radius:9px;" +
-    "background:#7c1f2b;color:#fff;font:700 .62rem/17px 'Work Sans',sans-serif;text-align:center}" +
-    "body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}" +
+    ".bn{position:fixed;left:0;right:0;bottom:0;z-index:90;display:flex;background:rgba(255,253,248,.98);" +
+    "-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid #e3d8b8;" +
+    "box-shadow:0 -10px 28px rgba(14,61,43,.14);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}" +
+    ".bn a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 2px 2px;" +
+    "text-decoration:none;color:#5c5546;font:600 .72rem 'Work Sans',sans-serif;position:relative;-webkit-tap-highlight-color:transparent}" +
+    ".bn .bn-ic{position:relative;display:flex;align-items:center;justify-content:center;width:52px;height:32px;border-radius:16px;transition:background .2s ease,color .2s ease}" +
+    ".bn svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}" +
+    ".bn a.on{color:#0e3d2b;font-weight:700}" +
+    ".bn a.on .bn-ic{background:#0e3d2b;color:#fff8e6}" +
+    ".bn a:active .bn-ic{background:rgba(14,61,43,.12)}" +
+    ".bn a.on:active .bn-ic{background:#0e3d2b}" +
+    ".bn a:focus-visible{outline:2px solid #c9a34b;outline-offset:-2px;border-radius:12px}" +
+    ".bn .bn-badge{position:absolute;top:-4px;left:calc(50% + 4px);right:auto;min-width:18px;height:18px;padding:0 5px;border-radius:9px;" +
+    "background:#c0392b;color:#fff;font:700 .66rem/18px 'Work Sans',sans-serif;text-align:center;font-style:normal;box-shadow:0 0 0 2px #fffdf8}" +
+    "body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}" +
     ".order-pill{bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}" +
+
+    /* header icons (cart + profile) — always visible at the top on phones */
+    ".navbar .hdr-icons{display:flex;align-items:center;gap:6px;margin-left:8px}" +
+    ".hdr-ic{position:relative;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;" +
+    "color:#0e3d2b;background:rgba(14,61,43,.07);text-decoration:none;-webkit-tap-highlight-color:transparent}" +
+    ".hdr-ic:active{background:rgba(14,61,43,.16)}" +
+    ".hdr-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}" +
+    ".hdr-ic .nav-cart-badge{top:-3px;right:-3px;background:#c0392b;font-style:normal;box-shadow:0 0 0 2px #fffdf8}" +
+    "body.has-bn .nav-toggle,body.has-bn .mobile-panel{display:none!important}" +
 
     ".bp{position:fixed;inset:0;z-index:1100;background:#fffdf8;flex-direction:column;overflow-y:auto;" +
     "padding:calc(20px + env(safe-area-inset-top,0px)) 28px calc(28px + env(safe-area-inset-bottom,0px));" +
@@ -60,6 +72,7 @@
 
   var icons = {
     home:    '<svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg>',
+    products:'<svg viewBox="0 0 24 24"><path d="M5.5 8h13l-1 11.5h-11z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>',
     cart:    '<svg viewBox="0 0 24 24"><path d="M2.5 3.5h2.6l2.3 11.2h10.2l2-8H6"/><circle cx="9.3" cy="19" r="1.4"/><circle cx="16.8" cy="19" r="1.4"/></svg>',
     profile: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c.9-3.6 3.8-5.5 7.5-5.5s6.6 1.9 7.5 5.5"/></svg>',
     close:   '<svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>',
@@ -76,13 +89,35 @@
     var nav = document.createElement("nav");
     nav.className = "bn";
     nav.setAttribute("aria-label", "Main");
+    function item(k, href, icon, label, extra) {
+      return '<a href="' + href + '" data-k="' + k + '"' + (extra || "") + '><span class="bn-ic">' + icon +
+        (k === "cart" ? '<i class="nav-cart-badge bn-badge">0</i>' : "") + "</span><span>" + label + "</span></a>";
+    }
     nav.innerHTML =
-      '<a href="/" data-k="home">' + icons.home + "<span>Home</span></a>" +
-      '<a href="/order" data-k="cart">' + icons.cart + '<span>Cart</span><i class="nav-cart-badge bn-badge">0</i></a>' +
-      '<a href="/profile" data-k="profile" role="button" aria-haspopup="dialog">' + icons.profile + "<span>Profile</span></a>";
+      item("home", "/", icons.home, "Home") +
+      item("products", "/order", icons.products, "Products") +
+      item("cart", "/cart", icons.cart, "Cart") +
+      item("profile", "/profile", icons.profile, "Profile", ' role="button" aria-haspopup="dialog"');
     document.body.appendChild(nav);
 
-    var cur = { "index": "home", "order": "cart", "profile": "profile" }[page];
+    var cur = { "index": "home", "order": "products", "cart": "cart", "profile": "profile" }[page];
+    if (cur) nav.querySelector('[data-k="' + cur + '"]').setAttribute("aria-current", "page");
+    document.body.classList.add("has-bn");
+
+    /* ---------- cart + profile icons in the phone header ---------- */
+    var navbar = document.querySelector(".navbar");
+    if (navbar && !navbar.querySelector(".hdr-icons")) {
+      var hdr = document.createElement("div");
+      hdr.className = "hdr-icons";
+      hdr.innerHTML =
+        '<a class="hdr-ic" href="/cart" aria-label="Cart">' + icons.cart + '<i class="nav-cart-badge">0</i></a>' +
+        '<a class="hdr-ic" href="/profile" data-k="profile" role="button" aria-haspopup="dialog" aria-label="Profile">' + icons.profile + "</a>";
+      var toggleBtn = navbar.querySelector(".nav-toggle");
+      navbar.insertBefore(hdr, toggleBtn || null);
+      hdr.querySelector('[data-k="profile"]').addEventListener("click", function (e) {
+        e.preventDefault(); nav.querySelector('[data-k="profile"]').click();
+      });
+    }
     if (cur) nav.querySelector('[data-k="' + cur + '"]').classList.add("on");
     if (window.VasistaCart) window.VasistaCart.updateBadge();   // cart-store keeps the count in sync
 

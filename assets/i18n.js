@@ -229,6 +229,27 @@
     "Total": "మొత్తం",
     "Go to checkout": "చెక్\u200cఅవుట్\u200cకు వెళ్ళండి",
 
+    // Mobile bottom bar + Products / Cart pages
+    "Add": "జోడించు",
+    "View Cart": "కార్ట్ చూడండి",
+    "View cart & checkout": "కార్ట్ చూడండి & చెక్\u200cఅవుట్",
+    "YOUR CART": "మీ కార్ట్",
+    "Review your order": "మీ ఆర్డర్\u200cను సరిచూడండి",
+    "Your Cart — Vasista Food and Traders": "మీ కార్ట్ — వసిష్ఠ ఫుడ్ అండ్ ట్రేడర్స్",
+    "Your cart is empty": "మీ కార్ట్ ఖాళీగా ఉంది",
+    "You haven't added any items yet. Explore our millet, ragi and quinoa snacks and add your favourites.": "మీరు ఇంకా ఏ వస్తువులనూ జోడించలేదు. మా మిల్లెట్, రాగి, క్వినోవా స్నాక్స్\u200cను చూసి మీకు నచ్చినవి జోడించండి.",
+    "Browse Products": "ఉత్పత్తులను చూడండి",
+    "Items in your cart": "మీ కార్ట్\u200cలోని వస్తువులు",
+    "+ Add more": "+ మరిన్ని జోడించండి",
+    "Subtotal": "ఉప మొత్తం",
+    "You save": "మీరు ఆదా చేసారు",
+    "Delivery": "డెలివరీ",
+    "Confirmed on WhatsApp": "వాట్సాప్\u200cలో నిర్ధారించబడుతుంది",
+    "Add your favourites to the cart. You'll enter delivery details and send the order to us on WhatsApp from the cart.": "మీకు నచ్చినవి కార్ట్\u200cలో జోడించండి. డెలివరీ వివరాలు నమోదు చేసి, కార్ట్ నుండే వాట్సాప్\u200cలో ఆర్డర్ పంపవచ్చు.",
+    "No snacks match your search.": "మీ శోధనకు సరిపడే స్నాక్స్ లేవు.",
+    "Show all products": "అన్ని ఉత్పత్తులను చూపించు",
+    "Main": "ప్రధాన",
+
     // Product names
     "Mexican Bites": "మెక్సికన్ బైట్స్",
     "Millet Mixture (Puff)": "మిల్లెట్ మిక్చర్ (పఫ్)",
@@ -274,6 +295,10 @@
     [/^Order (\d+) items?(?: \u00b7 (.+))?$/, function (m) {
       return m[1] + (m[1] === "1" ? " వస్తువును" : " వస్తువులను") + " ఆర్డర్ చేయండి" + (m[2] ? " \u00b7 " + m[2] : "");
     }],
+    // "3 items" (cart count) / "1 item"
+    [/^(\d+) items?$/, function (m) { return m[1] + (m[1] === "1" ? " వస్తువు" : " వస్తువులు"); }],
+    // "Remove Ragi Chips"
+    [/^Remove (.+)$/, function (m) { return tr(m[1]) + " తొలగించండి"; }],
     // "3% off"
     [/^(\d+)% off$/, function (m) { return m[1] + "% తగ్గింపు"; }],
     // "100g" or "100g (2)"  (size buttons)

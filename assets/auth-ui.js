@@ -11,7 +11,7 @@ function makeDesktopIcons() {
   wrap.id = "nav-icons";
 
   const cart = document.createElement("a");
-  cart.href = "/order";
+  cart.href = "/cart";
   cart.className = "nav-icon-btn nav-cart-btn";
   cart.setAttribute("aria-label", "Cart");
   cart.innerHTML = CART_SVG + '<span class="nav-cart-badge">0</span>';
@@ -33,7 +33,7 @@ function makeMobileLinks() {
 
   const cart = document.createElement("a");
   cart.id = "nav-cart-link-mobile";
-  cart.href = "/order";
+  cart.href = "/cart";
   cart.textContent = "Cart";
   frag.appendChild(cart);
 
