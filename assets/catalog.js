@@ -9,7 +9,7 @@
   var QUINOA = P + "quinoa-chips.png";
 
   var products = [
-    { name: "12X Crunch", grams: "100g", price: 120,  cat: "crunch", img: CRUNCH },
+    { name: "12X Crunch", grams: "150g", price: 180,  cat: "crunch", img: CRUNCH },
     { name: "12X Crunch", grams: "200g", price: 210,  cat: "crunch", img: CRUNCH },
     { name: "12X Crunch", grams: "300g", price: 299,  cat: "crunch", img: CRUNCH },
     { name: "12X Crunch", grams: "500g", price: 550,  cat: "crunch", img: CRUNCH },
