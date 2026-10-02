@@ -14,7 +14,7 @@
     { name: "12X Crunch", grams: "300g", price: 299,  cat: "crunch", img: CRUNCH },
     { name: "12X Crunch", grams: "500g", price: 550,  cat: "crunch", img: CRUNCH },
     { name: "12X Crunch", grams: "1kg",  price: 1000, cat: "crunch", img: CRUNCH },
-    { name: "Multi Millet Chips", grams: "80g", price: 120, cat: "chips", img: MILLET },
+    { name: "Multi Millet Chips", grams: "80g", price: 120, cat: "chips", img: MILLET, imgs: [MILLET, P + "multi-millet-chips-label.jpg"] },
     { name: "Oats Chips",   grams: "80g", price: 120, cat: "chips", img: OATS },
     { name: "Quinoa Chips", grams: "80g", price: 120, cat: "chips", img: QUINOA },
     { name: "Ragi Chips",   grams: "80g", price: 120, cat: "chips", img: RAGI },

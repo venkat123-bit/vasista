@@ -48,7 +48,7 @@
   products.forEach(function (p, i) {
     if (!(p.name in groupMap)) {
       groupMap[p.name] = groups.length;
-      groups.push({ name: p.name, cat: p.cat, img: p.img, variants: [i] });
+      groups.push({ name: p.name, cat: p.cat, img: p.img, imgs: p.imgs || (p.img ? [p.img] : []), variants: [i] });
     } else {
       groups[groupMap[p.name]].variants.push(i);
     }
@@ -101,7 +101,7 @@
     card.dataset.active = g.variants[0];
 
     var imgBlock = g.img
-      ? '<button type="button" class="card-img-wrap" data-img="' + g.img + '" data-name="' + g.name + '" aria-label="View image of ' + g.name + '"><img src="' + g.img + '" alt="' + g.name + '" loading="lazy">' + zoomHint + '</button>'
+      ? '<button type="button" class="card-img-wrap" data-img="' + g.img + '" data-imgs="' + g.imgs.join("|") + '" data-name="' + g.name + '" aria-label="View image of ' + g.name + '"><img src="' + g.img + '" alt="' + g.name + '" loading="lazy">' + (g.imgs.length > 1 ? '<span class="card-multi">' + g.imgs.length + ' photos</span>' : '') + zoomHint + '</button>'
       : placeholderIcon;
 
     var sizeMarkup = g.variants.length > 1
@@ -119,7 +119,7 @@
 
   grid.addEventListener("click", function (e) {
     var viewBtn = e.target.closest(".card-img-wrap[data-img]");
-    if (viewBtn) { openLightbox(viewBtn.dataset.img, viewBtn.dataset.name); return; }
+    if (viewBtn) { openLightbox((viewBtn.dataset.imgs || viewBtn.dataset.img).split("|"), viewBtn.dataset.name); return; }
 
     var sizeBtn = e.target.closest(".size-pill");
     if (sizeBtn) {
@@ -167,18 +167,34 @@
 
   /* ---------- image lightbox ---------- */
   var lightbox = document.getElementById("lightbox");
-  var lightboxImg = document.getElementById("lightbox-img");
   var lightboxCaption = document.getElementById("lightbox-caption");
+  var lbTrack = document.getElementById("lb-track"), lbDots = document.getElementById("lb-dots");
 
-  function openLightbox(src, name) {
-    lightboxImg.src = src; lightboxImg.alt = name || "";
+  function openLightbox(srcs, name) {
+    srcs = [].concat(srcs);
+    lbTrack.innerHTML = srcs.map(function (s, i) {
+      return '<div class="lb-slide"><img src="' + s + '" alt="' + (name || "") + ' photo ' + (i + 1) + '"></div>';
+    }).join("");
+    lbDots.innerHTML = srcs.length > 1 ? srcs.map(function (_, i) { return "<i" + (i ? "" : ' class="on"') + "></i>"; }).join("") : "";
+    lightbox.classList.toggle("multi", srcs.length > 1);
+    lbTrack.scrollLeft = 0;
     lightboxCaption.textContent = name || "";
     lightbox.classList.add("open"); document.body.style.overflow = "hidden";
   }
+  function lbMove(dir) { lbTrack.scrollBy({ left: dir * lbTrack.clientWidth, behavior: "smooth" }); }
+  lbTrack.addEventListener("scroll", function () {
+    var n = Math.round(lbTrack.scrollLeft / (lbTrack.clientWidth || 1));
+    [].forEach.call(lbDots.children, function (d, i) { d.classList.toggle("on", i === n); });
+  });
+  document.getElementById("lb-prev").addEventListener("click", function () { lbMove(-1); });
+  document.getElementById("lb-next").addEventListener("click", function () { lbMove(1); });
   function closeLightbox() { lightbox.classList.remove("open"); document.body.style.overflow = ""; }
   document.getElementById("lightbox-close").addEventListener("click", closeLightbox);
   lightbox.addEventListener("click", function (e) { if (e.target === lightbox) closeLightbox(); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLightbox(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeLightbox();
+    if (lightbox.classList.contains("open")) { if (e.key === "ArrowRight") lbMove(1); if (e.key === "ArrowLeft") lbMove(-1); }
+  });
 
   /* ---------- category tabs + search ---------- */
   var tabs = document.getElementById("tabs");

@@ -1,0 +1,10 @@
+/* Shared top navigation (Home, Shop, Categories, About, Contact + search) used on every page. */
+.navbar{background:#fff;padding:10px clamp(16px,3vw,40px);gap:18px}
+.navbar .nav-links{margin:0 auto;gap:30px}
+.navbar .nav-links a{font-weight:500;font-size:1rem}
+.navbar .nav-icons{order:5}
+.nh-search{order:4;display:flex;width:min(300px,26vw);border:1px solid var(--cream-line);border-radius:12px;overflow:hidden;background:#fff}
+.nh-search input{flex:1;min-width:0;border:0;outline:0;padding:10px 14px;font:inherit;font-size:.92rem;background:transparent}
+.nh-search button{border:0;background:var(--green-deep);color:#fff;width:46px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.nh-search svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+@media (max-width:860px){.nh-search{display:none}}

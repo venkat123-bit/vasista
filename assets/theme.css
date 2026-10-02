@@ -1,0 +1,52 @@
+/* Theme switch button + dark-mode colours. Load last so it wins. */
+.theme-btn{order:7;flex:none;width:42px;height:42px;border-radius:50%;border:0;background:var(--cream);color:var(--green-deep);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.theme-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+html[data-theme="dark"]{color-scheme:dark;
+  --cream:#0e1612;--cream-line:#27382f;--paper:#15211b;--ink:#ece6d3;
+  --green-deep:#2f8a63;--green-darker:#07120d;--maroon:#c4485a;--maroon-deep:#a33445}
+html[data-theme="dark"] body{background:radial-gradient(900px 500px at 100% 0%,rgba(201,163,75,.07),transparent 60%),var(--cream)}
+html[data-theme="dark"] .navbar,
+html[data-theme="dark"] .nh-search,
+html[data-theme="dark"] .d-field input,
+html[data-theme="dark"] .d-field textarea{background:var(--paper);color:var(--ink)}
+html[data-theme="dark"] .nh-search input{color:var(--ink)}
+html[data-theme="dark"] .nh-hero{background:linear-gradient(100deg,#101c16 0%,var(--paper) 60%)}
+html[data-theme="dark"] .nh-badge,
+html[data-theme="dark"] .nh-feat i{background:#1f3a2e;color:#8fd1b0}
+html[data-theme="dark"] .nh-sub{color:#cfc9b5}
+html[data-theme="dark"] .nh-feat{color:#b9b3a0}
+html[data-theme="dark"] .nav-brand-text,
+html[data-theme="dark"] .navbar .nav-links a{color:var(--ink)}
+html[data-theme="dark"] .nh-feat b,
+html[data-theme="dark"] .navbar .nav-links a[aria-current]{color:#8fd1b0 !important}
+html[data-theme="dark"] .rv-card,
+html[data-theme="dark"] .rv-form select,
+html[data-theme="dark"] .rv-form textarea{background:var(--paper);color:var(--ink)}
+html[data-theme="dark"] .rv-meta,
+html[data-theme="dark"] .rv-note,
+html[data-theme="dark"] .rv-empty{color:#b9b3a0}
+/* chatbot */
+html[data-theme="dark"] .vc-box{background:#15211b;border-color:#27382f}
+html[data-theme="dark"] .vc-m.bot{background:#1f2e26;color:#ece6d3}
+html[data-theme="dark"] .vc-m a{color:#e3c274}
+html[data-theme="dark"] .vc-in{border-color:#27382f}
+html[data-theme="dark"] .vc-in input{background:#0e1612;color:#ece6d3;border-color:#27382f}
+html[data-theme="dark"] .vc-chips button{background:#15211b;color:#ece6d3}
+
+/* text that is light-on-dark in light mode must stay light */
+html[data-theme="dark"] .topbar{color:#f7f1e3}
+html[data-theme="dark"] .topbar a{color:#f7f1e3}
+html[data-theme="dark"] .nav-cta{color:#f7f1e3}
+html[data-theme="dark"] .hero-sub{color:#f7f1e3}
+html[data-theme="dark"] .pouch{color:#f7f1e3}
+html[data-theme="dark"] .category-banner-copy{color:#f7f1e3}
+html[data-theme="dark"] .tab-btn.active{color:#f7f1e3}
+html[data-theme="dark"] .item-table thead th{color:#f7f1e3}
+html[data-theme="dark"] .size-pill.active{color:#f7f1e3}
+html[data-theme="dark"] .cta-btn{color:#f7f1e3}
+html[data-theme="dark"] .life-line{color:#f7f1e3}
+html[data-theme="dark"] .order-pill{color:#f7f1e3}
+html[data-theme="dark"] .auth-aside{color:#f7f1e3}
+html[data-theme="dark"] .curve-bottom .footer-legal{color:#f7f1e3}
+html[data-theme="dark"] .nh-copy h1{color:#eaf3ec}
