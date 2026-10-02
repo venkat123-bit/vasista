@@ -252,6 +252,11 @@
 
     // Product names
     "Mexican Bites": "మెక్సికన్ బైట్స్",
+    "Shop": "షాప్",
+    "Categories": "విభాగాలు",
+    "About": "మా గురించి",
+    "Shop Now": "ఇప్పుడే కొనండి",
+    "Shop by Category": "విభాగాల వారీగా కొనండి",
     "Nutri Grain Mix": "న్యూట్రి గ్రెయిన్ మిక్స్",
     "Millet Mixture (Puff)": "మిల్లెట్ మిక్చర్ (పఫ్)",
     "Multi Millet Chips": "మల్టీ మిల్లెట్ చిప్స్",

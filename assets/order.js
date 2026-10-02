@@ -217,6 +217,13 @@
     });
   }
 
+  var qParam = new URLSearchParams(location.search).get("q");
+  if (searchInput && qParam) {
+    searchInput.value = qParam;
+    currentSearch = qParam.trim().toLowerCase();
+    applyFilters();
+  }
+
   updateBar(false);
 })();
 
