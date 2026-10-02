@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/home-hero.css">
 </head>
 <body class="intro-active">
 
@@ -55,9 +56,11 @@
 })();
 </script>
 
-<div class="topbar">
-  <a href="tel:+918341383888"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.99.36 1.96.68 2.9a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.18-1.18a2 2 0 0 1 2.11-.45c.94.32 1.91.55 2.9.68A2 2 0 0 1 22 16.92z"/></svg>8341383888</span></a>
-  <a href="mailto:vasistanaturals@gmail.com"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6 12 13 2 6"/></svg>vasistanaturals@gmail.com</span></a>
+<div class="nh-strip">
+  <span><svg viewBox="0 0 24 24" ><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14"/><path d="M5 19c3-5 6-8 10-10"/></svg> 100% Natural &amp; No Preservatives</span>
+  <span><svg viewBox="0 0 24 24" ><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg> Hygienically Packed</span>
+  <span><svg viewBox="0 0 24 24" ><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg> Fast &amp; Safe Delivery</span>
+  <span><svg viewBox="0 0 24 24" ><path d="M8 3h8v3H8zM6 6h12v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V6Z"/><path d="M9 11h6"/></svg> Made Fresh in Small Batches</span>
 </div>
 
 <nav class="navbar" id="navbar">
@@ -67,59 +70,43 @@
   </a>
   <ul class="nav-links">
     <li><a href="/" aria-current="page" style="color:var(--green-deep);border-color:var(--gold);">Home</a></li>
-    <li><a href="/about">Why Vasista Food and Traders</a></li>
-    <li><a href="/order">Products</a></li>
+    <li><a href="/order">Shop</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="/about">About</a></li>
     <li><a href="/contact">Contact</a></li>
   </ul>
-  <a class="nav-cta" href="/order">Order Now</a>
+  <form class="nh-search" action="/order" method="get" role="search">
+    <input type="search" name="q" placeholder="Search products…" aria-label="Search products">
+    <button type="submit" aria-label="Search"><svg viewBox="0 0 24 24" ><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+  </form>
   <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
 </nav>
 <div class="mobile-panel" id="mobile-panel">
   <a href="/" aria-current="page">Home</a>
-  <a href="/about">Why Vasista Food and Traders</a>
-  <a href="/order">Products</a>
+  <a href="/order">Shop</a>
+  <a href="#categories">Categories</a>
+  <a href="/about">About</a>
   <a href="/contact">Contact</a>
 </div>
 
-<section class="hero" id="home">
-  <div class="crumb crumb1"></div>
-  <div class="crumb crumb2"></div>
-  <div class="crumb crumb3"></div>
-  <div class="crumb crumb4"></div>
-  <div class="hero-inner">
-    <div class="hero-copy">
-      <p class="hero-eyebrow">CHOOSE NATURAL · LIVE BETTER</p>
-      <h1>Millets, quinoa and ragi, turned into snacks worth trusting</h1>
-      <p class="hero-sub">Small-batch snacks made in Secunderabad with no preservatives and no shortcuts — quality you can trust, purity you can taste.</p>
-      <div class="hero-cta-row">
-        <a class="hero-cta" href="/order">
-          Explore Products
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a class="hero-phone" href="tel:+918341383888">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.99.36 1.96.68 2.9a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.18-1.18a2 2 0 0 1 2.11-.45c.94.32 1.91.55 2.9.68A2 2 0 0 1 22 16.92z"/></svg>
-          8341 383 888
-        </a>
-      </div>
+<section class="nh-hero" id="home">
+  <div class="nh-copy">
+    <span class="nh-badge"><svg viewBox="0 0 24 24" ><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14"/><path d="M5 19c3-5 6-8 10-10"/></svg> 100% NATURAL · NO PRESERVATIVES</span>
+    <h1>Healthy Millet Snacks<br><em>Made Fresh</em><br>Delivered to Your Door</h1>
+    <p class="nh-sub">Small-batch millet, ragi and quinoa snacks made in Secunderabad — carefully packed and delivered with love. Taste the purity in every bite.</p>
+    <div class="nh-btns">
+      <a class="nh-btn fill" href="/order">Shop Now <svg viewBox="0 0 24 24" ><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="nh-btn line" href="#categories">Explore Products</a>
     </div>
-    <div class="hero-art">
-      <div class="pouch pouch-b">
-        <span class="pouch-tag">NATURAL</span>
-        <div class="pouch-seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c-4-3-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-3 8-7 11Z"/></svg></div>
-        <div>
-          <div class="pouch-name">Ragi Chips</div>
-          <div class="pouch-sub">NATURALLY BAKED</div>
-        </div>
-      </div>
-      <div class="pouch pouch-a">
-        <span class="pouch-tag">BEST SELLER</span>
-        <div class="pouch-seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg></div>
-        <div>
-          <div class="pouch-name">12X Crunch</div>
-          <div class="pouch-sub">MULTIGRAIN SNACK</div>
-        </div>
-      </div>
+    <div class="nh-feats">
+      <div class="nh-feat"><i><svg viewBox="0 0 24 24" ><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14"/><path d="M5 19c3-5 6-8 10-10"/></svg></i><span><b>100% Natural</b>No Preservatives</span></div>
+      <div class="nh-feat"><i><svg viewBox="0 0 24 24" ><path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></i><span><b>Premium Quality</b>Carefully Made</span></div>
+      <div class="nh-feat"><i><svg viewBox="0 0 24 24" ><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg></i><span><b>Secure Packaging</b>Hygienic &amp; Safe</span></div>
+      <div class="nh-feat"><i><svg viewBox="0 0 24 24" ><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg></i><span><b>Fast Delivery</b>To Your Door</span></div>
     </div>
+  </div>
+  <div class="nh-art">
+    <img class="nh-hero-img" src="assets/hero-products.jpg" alt="Vasista snacks: Mexican Bites, Quinoa Flakes Mix, Millet Mixture (Puff), Nutri Grain Mix and Pro Beans" loading="eager">
   </div>
 </section>
 
@@ -156,9 +143,9 @@
 </section>
 
 <section id="categories" class="section-pad" style="background:var(--paper);">
-  <div class="section-head reveal">
-    <p class="section-eyebrow">OUR RANGE</p>
-    <h2 class="section-title">Snack Categories</h2>
+  <div class="section-head reveal nh-catwrap">
+    <h2 class="section-title">Shop by Category</h2>
+    <div class="nh-rule"><svg viewBox="0 0 24 24" ><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14"/><path d="M5 19c3-5 6-8 10-10"/></svg></div>
   </div>
   <div class="why-grid">
     <div class="why-card reveal">
