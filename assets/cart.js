@@ -39,13 +39,17 @@
     syncing = false;
   }
 
+  /* delivery: free from FREE_DELIVERY_MIN (after discounts), otherwise a flat charge */
+  var FREE_DELIVERY_MIN = 299, DELIVERY_FEE = 40;
+
   function summary(rows) {
     var total = 0, count = 0, mrp = 0, out = [];
     rows.forEach(function (r) {
       count += r.qty; total += r.qty * r.unit; mrp += r.qty * r.base;
       out.push(r.name + " (" + r.grams + ") x" + r.qty + " @ " + rupee(r.unit) + (r.pct > 0 ? " (" + r.pct + "% off)" : ""));
     });
-    return { total: total, count: count, mrp: mrp, save: mrp - total, lines: out };
+    var delivery = (count > 0 && total < FREE_DELIVERY_MIN) ? DELIVERY_FEE : 0;
+    return { total: total, delivery: delivery, grand: total + delivery, count: count, mrp: mrp, save: mrp - total, lines: out };
   }
 
   /* ---------- render ---------- */
@@ -53,7 +57,7 @@
 
   function render() {
     var rows = lines(), s = summary(rows);
-    currentTotal = s.total;
+    currentTotal = s.grand;
     emptyBox.hidden = rows.length > 0;
     filledBox.hidden = rows.length === 0;
     if (!rows.length) return;
@@ -89,8 +93,9 @@
     summaryEl.innerHTML =
       '<div class="cs-row"><span>Subtotal</span><span>' + rupee(s.mrp) + '</span></div>' +
       (s.save > 0 ? '<div class="cs-row cs-save"><span>You save</span><span>\u2212 ' + rupee(s.save) + '</span></div>' : '') +
-      '<div class="cs-row"><span>Delivery</span><span>Confirmed on WhatsApp</span></div>' +
-      '<div class="cs-row cs-total"><span>Total</span><span>' + rupee(s.total) + '</span></div>';
+      '<div class="cs-row"><span>Delivery</span><span>' + (s.delivery ? rupee(s.delivery) : '<b style="color:#1d6b3f">Free</b>') + '</span></div>' +
+      (s.delivery ? '<div class="cs-row" style="font-size:.82rem;color:#7c1f2b"><span>Add ' + rupee(FREE_DELIVERY_MIN - s.total) + ' more for free delivery</span><span></span></div>' : '') +
+      '<div class="cs-row cs-total"><span>Total</span><span>' + rupee(s.grand) + '</span></div>';
 
     updateOrderButton(s);
     if (currentPayMethod() === "upi") updateUpiQr(currentTotal);
@@ -127,7 +132,7 @@
   upiIdText.textContent = UPI_ID;
 
   function updateOrderButton(s) {
-    orderLabel.textContent = "Order " + s.count + " item" + (s.count > 1 ? "s" : "") + " \u00b7 " + rupee(s.total);
+    orderLabel.textContent = "Order " + s.count + " item" + (s.count > 1 ? "s" : "") + " \u00b7 " + rupee(s.grand);
     ctaNote.textContent = "Fill in your delivery details above, then send your order.";
   }
 
@@ -190,7 +195,8 @@
     var text = baseText;
     if (!s.lines.length) return encodeURIComponent(text);
     text += ":%0A" + s.lines.map(function (l) { return "- " + encodeURIComponent(l); }).join("%0A") +
-            "%0ATotal: " + encodeURIComponent(rupee(s.total));
+            "%0ADelivery: " + encodeURIComponent(s.delivery ? rupee(s.delivery) : "Free") +
+            "%0ATotal: " + encodeURIComponent(rupee(s.grand));
     var vals = readVals(), payMethod = currentPayMethod(), upiRef = upiRefInput.value.trim();
     text += "%0A%0ADeliver to:%0A" + encodeURIComponent(vals.name + ", " + vals.phone) +
             "%0A" + encodeURIComponent(vals.address + ", " + vals.city + " - " + vals.pincode);
@@ -211,7 +217,7 @@
       timestamp: new Date().toISOString(),
       name: vals.name, phone: vals.phone, address: vals.address, city: vals.city,
       pincode: vals.pincode, landmark: vals.landmark,
-      items: s.lines.join(" | "), total: s.total,
+      items: s.lines.join(" | "), delivery: s.delivery, total: s.grand,
       paymentMethod: payMethod === "upi" ? "UPI" : "Cash on Delivery",
       upiRef: upiRefInput.value.trim(),
       mapLink: (custLat.value && custLng.value) ? ("https://maps.google.com/?q=" + custLat.value + "," + custLng.value) : ""

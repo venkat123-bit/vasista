@@ -244,6 +244,7 @@
     "Subtotal": "ఉప మొత్తం",
     "You save": "మీరు ఆదా చేసారు",
     "Delivery": "డెలివరీ",
+    "Free": "ఉచితం",
     "Confirmed on WhatsApp": "వాట్సాప్\u200cలో నిర్ధారించబడుతుంది",
     "Add your favourites to the cart. You'll enter delivery details and send the order to us on WhatsApp from the cart.": "మీకు నచ్చినవి కార్ట్\u200cలో జోడించండి. డెలివరీ వివరాలు నమోదు చేసి, కార్ట్ నుండే వాట్సాప్\u200cలో ఆర్డర్ పంపవచ్చు.",
     "No snacks match your search.": "మీ శోధనకు సరిపడే స్నాక్స్ లేవు.",
