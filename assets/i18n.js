@@ -255,7 +255,6 @@
     "Nutri Grain Mix": "న్యూట్రి గ్రెయిన్ మిక్స్",
     "Millet Mixture (Puff)": "మిల్లెట్ మిక్చర్ (పఫ్)",
     "Multi Millet Chips": "మల్టీ మిల్లెట్ చిప్స్",
-    "Nutri Nuts": "న్యూట్రి నట్స్",
     "Oats Chips": "ఓట్స్ చిప్స్",
     "Pro Beans": "ప్రో బీన్స్",
     "Quinoa Chips": "క్వినోవా చిప్స్",
