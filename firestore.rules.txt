@@ -1,0 +1,17 @@
+// Firebase console > Firestore Database > Rules.
+// ADD the "reviews" block below INSIDE your existing "match /databases/{database}/documents { ... }"
+// block. Do not replace your whole rules file, or other collections (e.g. user profiles) may stop working.
+
+match /reviews/{reviewId} {
+  allow read: if true;
+  allow create, update: if request.auth != null
+    && request.resource.data.uid == request.auth.uid
+    && reviewId == request.auth.uid + '_' + request.resource.data.pk
+    && request.resource.data.rating is int
+    && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
+    && request.resource.data.text is string
+    && request.resource.data.text.size() >= 3 && request.resource.data.text.size() <= 500
+    && request.resource.data.name is string && request.resource.data.name.size() <= 60
+    && (request.method == 'create' || resource.data.uid == request.auth.uid);
+  allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+}
