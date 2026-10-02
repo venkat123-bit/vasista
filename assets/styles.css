@@ -2146,7 +2146,7 @@ body{
 .lightbox.multi .lightbox-inner{ width:min(92vw,620px); max-width:min(92vw,620px); }
 .lb-track{ display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
 .lb-track::-webkit-scrollbar{ display:none; }
-.lb-slide{ flex:0 0 100%; scroll-snap-align:center; }
+.lb-slide{ flex:0 0 100%; scroll-snap-align:center; display:flex; align-items:center; }
 .lb-arrow{ display:none; position:absolute; top:42%; width:38px; height:38px; border-radius:50%; border:0; background:rgba(14,61,43,.85); color:#fff; font-size:1.7rem; line-height:1; cursor:pointer; align-items:center; justify-content:center; padding:0 0 3px; }
 .lightbox.multi .lb-arrow{ display:flex; }
 .lb-prev{ left:-14px; } .lb-next{ right:-14px; }

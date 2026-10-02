@@ -15,17 +15,17 @@
     { name: "12X Crunch", grams: "500g", price: 550,  cat: "crunch", img: CRUNCH },
     { name: "12X Crunch", grams: "1kg",  price: 1000, cat: "crunch", img: CRUNCH },
     { name: "Multi Millet Chips", grams: "80g", price: 120, cat: "chips", img: MILLET, imgs: [MILLET, P + "multi-millet-chips-label.jpg"] },
-    { name: "Oats Chips",   grams: "80g", price: 120, cat: "chips", img: OATS },
-    { name: "Quinoa Chips", grams: "80g", price: 120, cat: "chips", img: QUINOA },
-    { name: "Ragi Chips",   grams: "80g", price: 120, cat: "chips", img: RAGI },
-    { name: "Mexican Bites", grams: "100g", price: 120, cat: "mixes", img: P + "crunch-mix-bowl.jpg" },
+    { name: "Oats Chips",   grams: "80g", price: 120, cat: "chips", img: OATS, imgs: [OATS, P + "oats-chips-label.jpg"] },
+    { name: "Quinoa Chips", grams: "80g", price: 120, cat: "chips", img: QUINOA, imgs: [QUINOA, P + "quinoa-chips-label.jpg"] },
+    { name: "Ragi Chips",   grams: "80g", price: 120, cat: "chips", img: RAGI, imgs: [RAGI, P + "ragi-chips-label.jpg"] },
+    { name: "Mexican Bites", grams: "100g", price: 120, cat: "mixes", img: P + "crunch-mix-bowl.jpg", imgs: [P + "crunch-mix-bowl.jpg", P + "mexican-bites-label.jpg"] },
     { name: "Quinoa Flakes Mix", grams: "100g", price: 120, cat: "mixes", img: P + "mexican-bites-bowl.jpg" },
-    { name: "Pro Beans",     grams: "100g", price: 120, cat: "nuts",  img: P + "roasted-soy-beans.jpg" },
+    { name: "Pro Beans",     grams: "100g", price: 120, cat: "nuts",  img: P + "roasted-soy-beans.jpg", imgs: [P + "roasted-soy-beans.jpg", P + "pro-beans-label.jpg"] },
     { name: "Nutri Grain Mix", grams: "200g", price: 150, cat: "mixes", img: P + "pea-millet-mixture.jpg" },
     { name: "Millet Mixture (Puff)", grams: "250g", price: 150, cat: "mixes", img: P + "millet-mixture-puff.jpg" },
-    { name: "Mexican Bites", grams: "200g", price: 250, cat: "mixes", img: P + "crunch-mix-bowl.jpg" },
+    { name: "Mexican Bites", grams: "200g", price: 250, cat: "mixes", img: P + "crunch-mix-bowl.jpg", imgs: [P + "crunch-mix-bowl.jpg", P + "mexican-bites-label.jpg"] },
     { name: "Quinoa Flakes Mix", grams: "250g", price: 250, cat: "mixes", img: P + "mexican-bites-bowl.jpg" },
-    { name: "Pro Beans",     grams: "250g", price: 250, cat: "nuts",  img: P + "roasted-soy-beans.jpg" }
+    { name: "Pro Beans",     grams: "250g", price: 250, cat: "nuts",  img: P + "roasted-soy-beans.jpg", imgs: [P + "roasted-soy-beans.jpg", P + "pro-beans-label.jpg"] }
   ];
 
   // Quantity discount: 1 item = full price, each extra item adds 3% off, capped at 30%.
