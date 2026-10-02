@@ -2155,3 +2155,19 @@ body{
 .lb-dots i.on{ background:var(--green-deep); }
 .card-multi{ position:absolute; left:10px; top:10px; background:rgba(14,61,43,.88); color:#fff8e6; font:600 .72rem 'Work Sans',sans-serif; padding:4px 9px; border-radius:999px; }
 @media (max-width:600px){ .lb-prev{ left:-6px; } .lb-next{ right:-6px; } }
+
+/* ---------- Shop page banner with the product artwork ---------- */
+.category-banner.has-art{ aspect-ratio:2400/640; min-height:0; align-items:center; background:#0c3a29; }
+.category-banner.has-art::after{ display:none; }
+.category-banner.has-art img{ object-position:right center; }
+.category-banner.has-art .category-banner-copy{ padding:0 0 0 4.6%; max-width:42%; }
+.category-banner.has-art .category-banner-copy .hero-eyebrow{ color:var(--gold-soft); opacity:1; }
+.category-banner.has-art .category-banner-copy h2{ font-size:clamp(1.8rem,4.2vw,3.4rem); color:#fff8e6; margin:6px 0 10px; line-height:1.05; }
+.category-banner.has-art .category-banner-copy p:not(.hero-eyebrow){ font-size:clamp(.78rem,1.12vw,1rem); line-height:1.5; }
+@media (max-width:640px){
+  .category-banner.has-art{ aspect-ratio:auto; min-height:170px; }
+  .category-banner.has-art img{ object-position:84% center; }
+  .category-banner.has-art::after{ display:block; background:linear-gradient(90deg,rgba(6,28,20,.92) 0%,rgba(6,28,20,.6) 55%,rgba(6,28,20,0) 100%); }
+  .category-banner.has-art .category-banner-copy{ max-width:72%; padding:0 0 0 20px; }
+  .category-banner.has-art .category-banner-copy h2{ font-size:1.9rem; }
+}
