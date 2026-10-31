@@ -3,7 +3,7 @@
 // Reviews live in the Firestore collection "reviews" (see firestore.rules.txt).
 import { auth, db, onAuthStateChanged } from "./firebase-config.js";
 import {
-  collection, query, orderBy, limit, getDocs, doc, setDoc, serverTimestamp
+  collection, query, orderBy, where, limit, getDocs, doc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
 var root = document.getElementById("reviews-root");
@@ -38,6 +38,7 @@ if (root) {
   var stars = function (n) { return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n); };
   var slug = function (s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "all"; };
 
+  var only = root.dataset.product || "";
   var productNames = [];
   if (window.VasistaCatalog) {
     window.VasistaCatalog.products.forEach(function (p) {
@@ -52,9 +53,12 @@ if (root) {
   var formEl = document.getElementById("rv-form");
 
   var loadReviews = function () {
-    return getDocs(query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(30)))
+    var q = only ? query(collection(db, "reviews"), where("pk", "==", slug(only)), limit(30))
+                 : query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(30));
+    return getDocs(q)
       .then(function (snap) {
         var items = snap.docs.map(function (d) { return d.data(); });
+        items.sort(function (a, b) { return ((b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0) - (a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0)); });
         if (!items.length) {
           summaryEl.innerHTML = '<p class="rv-empty">No reviews yet — be the first to share your experience.</p>';
           listEl.innerHTML = "";
@@ -71,7 +75,7 @@ if (root) {
           return '<div class="rv-card"><span class="rv-stars">' + stars(r.rating | 0) + '</span>' +
             '<p>' + esc(r.text || "") + '</p>' +
             '<div class="rv-meta"><strong>' + esc(r.name || "Customer") + '</strong>' +
-            (r.product && r.product !== "All products" ? " · " + esc(r.product) : "") +
+            (!only && r.product && r.product !== "All products" ? " · " + esc(r.product) : "") +
             (when ? " · " + when : "") + '</div></div>';
         }).join("");
       })
@@ -94,10 +98,10 @@ if (root) {
       '<div class="rv-pick" id="rv-pick">' +
       [1, 2, 3, 4, 5].map(function (i) { return '<button type="button" data-v="' + i + '" aria-label="' + i + ' star">★</button>'; }).join("") +
       '</div>' +
-      '<select id="rv-product" aria-label="Product">' + opts + '</select>' +
+      (only ? '' : '<select id="rv-product" aria-label="Product">' + opts + '</select>') +
       '<textarea id="rv-text" rows="4" maxlength="500" placeholder="How was the taste, freshness and delivery?"></textarea>' +
       '<button class="rv-btn" id="rv-send" type="button">Submit review</button>' +
-      '<p class="rv-note" id="rv-msg">Posting again for the same product updates your earlier review.</p></div>';
+      '<p class="rv-note" id="rv-msg">Posting again updates your earlier review.</p></div>';
 
     var pick = document.getElementById("rv-pick");
     pick.addEventListener("click", function (e) {
@@ -108,7 +112,7 @@ if (root) {
     document.getElementById("rv-send").addEventListener("click", function () {
       var msg = document.getElementById("rv-msg");
       var text = document.getElementById("rv-text").value.trim();
-      var product = document.getElementById("rv-product").value;
+      var product = only || document.getElementById("rv-product").value;
       if (!rating) { msg.textContent = "Please tap the stars to rate."; return; }
       if (text.length < 3) { msg.textContent = "Please write a few words."; return; }
       var btn = this; btn.disabled = true; msg.textContent = "Posting…";

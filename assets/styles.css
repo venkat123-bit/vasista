@@ -2171,3 +2171,8 @@ body{
   .category-banner.has-art .category-banner-copy{ max-width:72%; padding:0 0 0 20px; }
   .category-banner.has-art .category-banner-copy h2{ font-size:1.9rem; }
 }
+
+/* product cards open the product page */
+.product-card .card-name{ cursor:pointer; }
+.product-card .card-name:hover{ text-decoration:underline; }
+.product-card .card-img-wrap{ cursor:pointer; }

@@ -119,7 +119,10 @@
 
   grid.addEventListener("click", function (e) {
     var viewBtn = e.target.closest(".card-img-wrap[data-img]");
-    if (viewBtn) { openLightbox((viewBtn.dataset.imgs || viewBtn.dataset.img).split("|"), viewBtn.dataset.name); return; }
+    if (viewBtn && e.target.closest(".card-zoom-hint")) { openLightbox((viewBtn.dataset.imgs || viewBtn.dataset.img).split("|"), viewBtn.dataset.name); return; }
+    if (viewBtn) { location.href = "product.html?name=" + encodeURIComponent(viewBtn.dataset.name); return; }
+    var nameEl = e.target.closest(".card-name");
+    if (nameEl) { location.href = "product.html?name=" + encodeURIComponent(nameEl.textContent.trim()); return; }
 
     var sizeBtn = e.target.closest(".size-pill");
     if (sizeBtn) {
