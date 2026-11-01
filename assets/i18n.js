@@ -92,6 +92,7 @@
     "Mixes": "మిక్స్\u200cలు",
     "Everyday snack mixes for tea-time, tiffin boxes and travel.": "టీ టైమ్, టిఫిన్ బాక్స్\u200cలు, ప్రయాణాల కోసం రోజువారీ స్నాక్ మిక్స్\u200cలు.",
     "Nuts & Beans": "నట్స్ & బీన్స్",
+    "Sweets": "స్వీట్లు",
     "Roasted nuts and protein-rich beans, lightly seasoned.": "కాల్చిన గింజలు, ప్రోటీన్ అధికంగా ఉండే బీన్స్ — తేలికగా మసాలా వేసినవి.",
     "Explore Full Menu": "పూర్తి మెనూను చూడండి",
 
@@ -259,6 +260,7 @@
     "Shop Now": "ఇప్పుడే కొనండి",
     "Shop by Category": "విభాగాల వారీగా కొనండి",
     "Nutri Grain Mix": "న్యూట్రి గ్రెయిన్ మిక్స్",
+    "Dry Fruits Laddus": "డ్రై ఫ్రూట్స్ లడ్డూలు",
     "Millet Mixture (Puff)": "మిల్లెట్ మిక్చర్ (పఫ్)",
     "Multi Millet Chips": "మల్టీ మిల్లెట్ చిప్స్",
     "Oats Chips": "ఓట్స్ చిప్స్",

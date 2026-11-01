@@ -24,7 +24,7 @@
   var imgs = first.imgs || (first.img ? [first.img] : []);
   var info = INFO[name] || {};
   var cur = 0, qty = 1;
-  var catLabel = { crunch: "Crunch", chips: "Chips", mixes: "Mixes", nuts: "Nuts & Beans" }[first.cat] || "Snacks";
+  var catLabel = { crunch: "Crunch", chips: "Chips", mixes: "Mixes", nuts: "Nuts & Beans", sweets: "Sweets" }[first.cat] || "Snacks";
   var maxOff = C.discountPercent(100), stepOff = C.discountPercent(2);
 
   document.title = name + " — Vasista Food and Traders";
