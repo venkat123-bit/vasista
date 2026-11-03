@@ -132,7 +132,9 @@
   upiIdText.textContent = UPI_ID;
 
   function updateOrderButton(s) {
-    orderLabel.textContent = "Order " + s.count + " item" + (s.count > 1 ? "s" : "") + " \u00b7 " + rupee(s.grand);
+    orderLabel.textContent = currentPayMethod() === "razorpay"
+      ? "Pay " + rupee(s.grand) + " securely"
+      : "Order " + s.count + " item" + (s.count > 1 ? "s" : "") + " \u00b7 " + rupee(s.grand);
     ctaNote.textContent = "Fill in your delivery details above, then send your order.";
   }
 
@@ -155,6 +157,7 @@
       var isUpi = currentPayMethod() === "upi";
       upiPanel.classList.toggle("hidden", !isUpi);
       if (isUpi) updateUpiQr(currentTotal);
+      render(); // refresh the order button label for the chosen payment method
     });
   });
 
@@ -191,7 +194,7 @@
     return { valid: !!(vals.name && phoneOk && vals.address && vals.city && pinOk), vals: vals };
   }
 
-  function buildOrderText(s) {
+  function buildOrderText(s, paidRef) {
     var text = baseText;
     if (!s.lines.length) return encodeURIComponent(text);
     text += ":%0A" + s.lines.map(function (l) { return "- " + encodeURIComponent(l); }).join("%0A") +
@@ -205,12 +208,13 @@
       text += "%0AMap pin: " + encodeURIComponent("https://maps.google.com/?q=" + custLat.value + "," + custLng.value);
     }
     text += "%0APayment: " + encodeURIComponent(
+      paidRef ? "PAID online via Razorpay (Payment ID: " + paidRef + ")" :
       payMethod === "upi" ? "UPI" + (upiRef ? " (Ref: " + upiRef + ")" : " - screenshot/reference to follow") : "Cash on Delivery"
     );
     return text;
   }
 
-  function logOrderToSheet(s) {
+  function logOrderToSheet(s, paid) {
     if (!ORDER_LOG_URL || ORDER_LOG_URL.indexOf("PASTE_YOUR") === 0) return;
     var vals = readVals(), payMethod = currentPayMethod();
     var payload = {
@@ -218,8 +222,8 @@
       name: vals.name, phone: vals.phone, address: vals.address, city: vals.city,
       pincode: vals.pincode, landmark: vals.landmark,
       items: s.lines.join(" | "), delivery: s.delivery, total: s.grand,
-      paymentMethod: payMethod === "upi" ? "UPI" : "Cash on Delivery",
-      upiRef: upiRefInput.value.trim(),
+      paymentMethod: paid ? "Razorpay (PAID)" : (payMethod === "upi" ? "UPI" : "Cash on Delivery"),
+      upiRef: paid ? paid.paymentId : upiRefInput.value.trim(),
       mapLink: (custLat.value && custLng.value) ? ("https://maps.google.com/?q=" + custLat.value + "," + custLng.value) : ""
     };
     try {
@@ -229,6 +233,52 @@
         body: JSON.stringify(payload)
       }).catch(function () { /* best-effort */ });
     } catch (err) { /* ignore */ }
+  }
+
+  /* ---------- Pay online (Razorpay via Firebase Cloud Functions) ---------- */
+  var paying = false;
+  function payOnline(s) {
+    if (paying) return;
+    if (!window.VasistaPay || typeof window.Razorpay === "undefined") {
+      alert("Online payment is still loading. Please wait a moment and try again.");
+      return;
+    }
+    var vals = readVals();
+    var items = lines().map(function (r) { return { name: r.name, grams: r.grams, qty: r.qty }; });
+    var customer = {
+      name: vals.name, phone: vals.phone, address: vals.address, city: vals.city,
+      pincode: vals.pincode, landmark: vals.landmark, lat: custLat.value, lng: custLng.value
+    };
+    paying = true;
+    orderBtn.style.opacity = ".6";
+    orderLabel.textContent = "Opening secure payment\u2026";
+    window.VasistaPay.pay({ items: items, customer: customer }).then(function (res) {
+      logOrderToSheet(s, { paymentId: res.paymentId });
+      showPaidScreen(s, res.paymentId);
+    }).catch(function (err) {
+      if (err && err.message !== "cancelled") {
+        alert((err && err.message) || "Payment could not be completed. If money was deducted, please contact us on WhatsApp.");
+      }
+    }).then(function () {
+      paying = false;
+      orderBtn.style.opacity = "";
+      render();
+    });
+  }
+
+  function showPaidScreen(s, paymentId) {
+    var waLink = "https://wa.me/" + PHONE + "?text=" + buildOrderText(s, paymentId);
+    syncing = true; Cart.write([]); syncing = false;
+    emptyBox.hidden = true; filledBox.hidden = true;
+    var box = document.createElement("div");
+    box.style.cssText = "max-width:560px;margin:32px auto;padding:28px 22px;text-align:center;border-radius:16px;background:rgba(29,107,63,.08);border:1px solid rgba(29,107,63,.3)";
+    box.innerHTML =
+      '<h2 style="margin:0 0 8px">Payment successful \u2705</h2>' +
+      '<p style="margin:0 0 6px">Thank you! Your order is confirmed.</p>' +
+      '<p style="margin:0 0 18px;font-size:.9rem;opacity:.8">Payment ID: ' + esc(paymentId) + '</p>' +
+      '<a class="cta-btn" target="_blank" rel="noopener" href="' + waLink + '">Send order details on WhatsApp</a>';
+    emptyBox.parentNode.insertBefore(box, emptyBox);
+    window.scrollTo(0, 0);
   }
 
   orderBtn.addEventListener("click", function (e) {
@@ -241,6 +291,7 @@
       return;
     }
     deliveryErrorBanner.classList.remove("show");
+    if (currentPayMethod() === "razorpay") { e.preventDefault(); payOnline(s); return; }
     logOrderToSheet(s);
     e.currentTarget.href = "https://wa.me/" + PHONE + "?text=" + buildOrderText(s);
   });

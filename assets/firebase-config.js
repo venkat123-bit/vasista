@@ -25,6 +25,11 @@ import {
   getDoc
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
+import {
+  getFunctions,
+  httpsCallable
+} from "https://www.gstatic.com/firebasejs/10.13.0/firebase-functions.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyBOLptrhB5wSA23gw0QKqnlXB0QBYdEv_8",
   authDomain: "vasista-foods.firebaseapp.com",
@@ -38,6 +43,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const functions = getFunctions(app, "asia-south1"); // Cloud Functions region (see functions/index.js)
 
 export {
   createUserWithEmailAndPassword,
@@ -56,5 +62,6 @@ export {
   signInWithEmailLink,
   doc,
   setDoc,
-  getDoc
+  getDoc,
+  httpsCallable
 };
