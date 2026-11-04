@@ -267,8 +267,10 @@
     var vals = readVals();
     var items = lines().map(function (r) { return { name: r.name, grams: r.grams, qty: r.qty }; });
     var pickup = fulfilMode === "pickup";
+    // FIX: for pickup we send placeholder address values so the backend's
+    // "delivery details" validation passes. The pickup: true flag is still sent.
     var customer = pickup
-      ? { name: vals.name, phone: vals.phone, address: "", city: "", pincode: "", landmark: "", lat: "", lng: "", pickup: true }
+      ? { name: vals.name, phone: vals.phone, address: "PICKUP - customer will collect", city: "PICKUP", pincode: "000000", landmark: "", lat: "", lng: "", pickup: true }
       : { name: vals.name, phone: vals.phone, address: vals.address, city: vals.city,
           pincode: vals.pincode, landmark: vals.landmark, lat: custLat.value, lng: custLng.value, pickup: false };
     paying = true;
