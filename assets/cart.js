@@ -48,13 +48,20 @@
   /* delivery: free from FREE_DELIVERY_MIN (after discounts), otherwise a flat charge */
   var FREE_DELIVERY_MIN = 299, DELIVERY_FEE = 40;
 
+  /* coupon: every item costs COUPON_UNIT_PRICE and delivery is free.
+     The same code must also be set in functions/index.js */
+  var COUPON_CODE = "TEST10", COUPON_UNIT_PRICE = 10;
+  var appliedCoupon = null;
+
   function summary(rows) {
     var total = 0, count = 0, mrp = 0, out = [];
     rows.forEach(function (r) {
-      count += r.qty; total += r.qty * r.unit; mrp += r.qty * r.base;
-      out.push(r.name + " (" + r.grams + ") x" + r.qty + " @ " + rupee(r.unit) + (r.pct > 0 ? " (" + r.pct + "% off)" : ""));
+      var unit = appliedCoupon ? COUPON_UNIT_PRICE : r.unit;
+      count += r.qty; total += r.qty * unit; mrp += r.qty * r.base;
+      out.push(r.name + " (" + r.grams + ") x" + r.qty + " @ " + rupee(unit) +
+        (appliedCoupon ? " (coupon " + appliedCoupon + ")" : (r.pct > 0 ? " (" + r.pct + "% off)" : "")));
     });
-    var delivery = (fulfilMode === "delivery" && count > 0 && total < FREE_DELIVERY_MIN) ? DELIVERY_FEE : 0;
+    var delivery = (!appliedCoupon && fulfilMode === "delivery" && count > 0 && total < FREE_DELIVERY_MIN) ? DELIVERY_FEE : 0;
     return { total: total, delivery: delivery, grand: total + delivery, count: count, mrp: mrp, save: mrp - total, lines: out };
   }
 
@@ -74,9 +81,10 @@
       var img = r.img
         ? '<img src="' + esc(r.img) + '" alt="' + esc(r.name) + '" loading="lazy">'
         : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg>';
-      var price = r.pct > 0
-        ? '<span class="ci-old">' + rupee(r.base) + '</span><span class="ci-now">' + rupee(r.unit) + '</span><span class="ci-off">' + r.pct + '% off</span>'
-        : '<span class="ci-now">' + rupee(r.unit) + '</span>';
+      var unit = appliedCoupon ? COUPON_UNIT_PRICE : r.unit;
+      var price = (appliedCoupon || r.pct > 0)
+        ? '<span class="ci-old">' + rupee(r.base) + '</span><span class="ci-now">' + rupee(unit) + '</span><span class="ci-off">' + (appliedCoupon ? 'Coupon' : r.pct + '% off') + '</span>'
+        : '<span class="ci-now">' + rupee(unit) + '</span>';
       return '<article class="cart-item" data-i="' + i + '">' +
         '<div class="ci-img">' + img + '</div>' +
         '<div class="ci-main">' +
@@ -91,7 +99,7 @@
               '<span>' + r.qty + '</span>' +
               '<button type="button" aria-label="Increase quantity" data-act="inc" data-i="' + i + '">+</button>' +
             '</div>' +
-            '<strong class="ci-line">' + rupee(r.qty * r.unit) + '</strong>' +
+            '<strong class="ci-line">' + rupee(r.qty * unit) + '</strong>' +
           '</div>' +
         '</div></article>';
     }).join("");
@@ -267,16 +275,14 @@
     var vals = readVals();
     var items = lines().map(function (r) { return { name: r.name, grams: r.grams, qty: r.qty }; });
     var pickup = fulfilMode === "pickup";
-    // FIX: for pickup we send placeholder address values so the backend's
-    // "delivery details" validation passes. The pickup: true flag is still sent.
     var customer = pickup
-      ? { name: vals.name, phone: vals.phone, address: "PICKUP - customer will collect", city: "PICKUP", pincode: "000000", landmark: "", lat: "", lng: "", pickup: true }
+      ? { name: vals.name, phone: vals.phone, address: "", city: "", pincode: "", landmark: "", lat: "", lng: "", pickup: true }
       : { name: vals.name, phone: vals.phone, address: vals.address, city: vals.city,
           pincode: vals.pincode, landmark: vals.landmark, lat: custLat.value, lng: custLng.value, pickup: false };
     paying = true;
     orderBtn.style.opacity = ".6";
     orderLabel.textContent = "Opening secure payment\u2026";
-    window.VasistaPay.pay({ items: items, customer: customer }).then(function (res) {
+    window.VasistaPay.pay({ items: items, customer: customer, coupon: appliedCoupon || "" }).then(function (res) {
       logOrderToSheet(s, { paymentId: res.paymentId });
       showPaidScreen(s, res.paymentId);
     }).catch(function (err) {
@@ -568,6 +574,49 @@
       if (b) setMode(b.getAttribute("data-mode"));
     });
     paint();
+  })();
+
+  /* ---------- Coupon box (sits under the price summary) ---------- */
+  (function setupCoupon() {
+    var box = document.createElement("div");
+    box.id = "coupon-box";
+    box.style.cssText = "margin:14px 0 0;padding:14px 16px;border-radius:14px;border:1px solid rgba(46,139,99,.35)";
+    box.innerHTML =
+      '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+        '<input type="text" id="coupon-input" placeholder="Have a coupon code?" autocomplete="off" autocapitalize="characters" ' +
+          'style="flex:1;min-width:160px;padding:10px 14px;border-radius:10px;border:1px solid rgba(46,139,99,.5);background:transparent;color:inherit;font:inherit;text-transform:uppercase">' +
+        '<button type="button" id="coupon-btn" style="cursor:pointer;padding:10px 20px;border-radius:999px;border:0;font:inherit;font-weight:600;background:#1d6b3f;color:#fff">Apply</button>' +
+      '</div>' +
+      '<p id="coupon-msg" style="display:none;margin:8px 0 0;font-size:.85rem"></p>';
+    summaryEl.parentNode.insertBefore(box, summaryEl.nextSibling);
+
+    var input = $("coupon-input"), btn = $("coupon-btn"), msgEl = $("coupon-msg");
+
+    function msg(text, ok) {
+      msgEl.style.display = text ? "block" : "none";
+      msgEl.textContent = text;
+      msgEl.style.color = ok ? "#2e8b63" : "#e0584a";
+    }
+    function paintBtn() {
+      btn.textContent = appliedCoupon ? "Remove" : "Apply";
+      input.disabled = !!appliedCoupon;
+    }
+    function toggleCoupon() {
+      if (appliedCoupon) {
+        appliedCoupon = null; input.value = ""; msg("", true); paintBtn(); render(); return;
+      }
+      var code = input.value.trim().toUpperCase();
+      if (!code) { msg("Enter a coupon code.", false); return; }
+      if (code !== COUPON_CODE) { msg("Invalid coupon code.", false); return; }
+      appliedCoupon = code;
+      msg("Coupon applied: every item is \u20b9" + COUPON_UNIT_PRICE + " and delivery is free.", true);
+      paintBtn(); render();
+    }
+    btn.addEventListener("click", toggleCoupon);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); toggleCoupon(); }
+    });
+    paintBtn();
   })();
 
   render();
