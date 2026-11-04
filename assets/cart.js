@@ -6,6 +6,12 @@
   var PHONE = "918341383888";
   var baseText = "Hi, I'd like to order from Vasista Food and Traders";
 
+  // ---- Delivery / Pickup ----
+  // Put your shop address here if you want customers to see it when they choose Pickup.
+  // Leave it as "" to show "We will confirm the pickup location on WhatsApp".
+  var PICKUP_ADDRESS = "";
+  var fulfilMode = "delivery"; // "delivery" or "pickup"
+
   // ---- Payment (UPI) config ----
   var UPI_ID = "8712573832@ybl";
   var UPI_PAYEE_NAME = "Vaddi Venkat Nishant Reddy";
@@ -48,7 +54,7 @@
       count += r.qty; total += r.qty * r.unit; mrp += r.qty * r.base;
       out.push(r.name + " (" + r.grams + ") x" + r.qty + " @ " + rupee(r.unit) + (r.pct > 0 ? " (" + r.pct + "% off)" : ""));
     });
-    var delivery = (count > 0 && total < FREE_DELIVERY_MIN) ? DELIVERY_FEE : 0;
+    var delivery = (fulfilMode === "delivery" && count > 0 && total < FREE_DELIVERY_MIN) ? DELIVERY_FEE : 0;
     return { total: total, delivery: delivery, grand: total + delivery, count: count, mrp: mrp, save: mrp - total, lines: out };
   }
 
@@ -93,7 +99,7 @@
     summaryEl.innerHTML =
       '<div class="cs-row"><span>Subtotal</span><span>' + rupee(s.mrp) + '</span></div>' +
       (s.save > 0 ? '<div class="cs-row cs-save"><span>You save</span><span>\u2212 ' + rupee(s.save) + '</span></div>' : '') +
-      '<div class="cs-row"><span>Delivery</span><span>' + (s.delivery ? rupee(s.delivery) : '<b style="color:#1d6b3f">Free</b>') + '</span></div>' +
+      '<div class="cs-row"><span>' + (fulfilMode === "pickup" ? "Pickup" : "Delivery") + '</span><span>' + (s.delivery ? rupee(s.delivery) : '<b style="color:#1d6b3f">Free</b>') + '</span></div>' +
       (s.delivery ? '<div class="cs-row" style="font-size:.82rem;color:#7c1f2b"><span>Add ' + rupee(FREE_DELIVERY_MIN - s.total) + ' more for free delivery</span><span></span></div>' : '') +
       '<div class="cs-row cs-total"><span>Total</span><span>' + rupee(s.grand) + '</span></div>';
 
@@ -135,7 +141,9 @@
     orderLabel.textContent = currentPayMethod() === "razorpay"
       ? "Pay " + rupee(s.grand) + " securely"
       : "Order " + s.count + " item" + (s.count > 1 ? "s" : "") + " \u00b7 " + rupee(s.grand);
-    ctaNote.textContent = "Fill in your delivery details above, then send your order.";
+    ctaNote.textContent = fulfilMode === "pickup"
+      ? "Enter your name and phone number above, then send your order."
+      : "Fill in your delivery details above, then send your order.";
   }
 
   function currentPayMethod() {
@@ -188,6 +196,11 @@
     var phoneOk = /^\d{10}$/.test(vals.phone), pinOk = /^\d{6}$/.test(vals.pincode);
     setFieldInvalid("field-name", !vals.name);
     setFieldInvalid("field-phone", !phoneOk);
+    if (fulfilMode === "pickup") {
+      // Pickup only needs name + phone; clear any red marks on the hidden address fields
+      ["field-address", "field-city", "field-pincode"].forEach(function (id) { setFieldInvalid(id, false); });
+      return { valid: !!(vals.name && phoneOk), vals: vals };
+    }
     setFieldInvalid("field-address", !vals.address);
     setFieldInvalid("field-city", !vals.city);
     setFieldInvalid("field-pincode", !pinOk);
@@ -198,33 +211,41 @@
     var text = baseText;
     if (!s.lines.length) return encodeURIComponent(text);
     text += ":%0A" + s.lines.map(function (l) { return "- " + encodeURIComponent(l); }).join("%0A") +
-            "%0ADelivery: " + encodeURIComponent(s.delivery ? rupee(s.delivery) : "Free") +
+            "%0ADelivery: " + encodeURIComponent(fulfilMode === "pickup" ? "Pickup (no delivery charge)" : (s.delivery ? rupee(s.delivery) : "Free")) +
             "%0ATotal: " + encodeURIComponent(rupee(s.grand));
     var vals = readVals(), payMethod = currentPayMethod(), upiRef = upiRefInput.value.trim();
-    text += "%0A%0ADeliver to:%0A" + encodeURIComponent(vals.name + ", " + vals.phone) +
-            "%0A" + encodeURIComponent(vals.address + ", " + vals.city + " - " + vals.pincode);
-    if (vals.landmark) text += "%0ALandmark: " + encodeURIComponent(vals.landmark);
-    if (custLat.value && custLng.value) {
-      text += "%0AMap pin: " + encodeURIComponent("https://maps.google.com/?q=" + custLat.value + "," + custLng.value);
+    if (fulfilMode === "pickup") {
+      text += "%0A%0APICKUP (customer will collect):%0A" + encodeURIComponent(vals.name + ", " + vals.phone);
+    } else {
+      text += "%0A%0ADeliver to:%0A" + encodeURIComponent(vals.name + ", " + vals.phone) +
+              "%0A" + encodeURIComponent(vals.address + ", " + vals.city + " - " + vals.pincode);
+      if (vals.landmark) text += "%0ALandmark: " + encodeURIComponent(vals.landmark);
+      if (custLat.value && custLng.value) {
+        text += "%0AMap pin: " + encodeURIComponent("https://maps.google.com/?q=" + custLat.value + "," + custLng.value);
+      }
     }
     text += "%0APayment: " + encodeURIComponent(
       paidRef ? "PAID online via Razorpay (Payment ID: " + paidRef + ")" :
-      payMethod === "upi" ? "UPI" + (upiRef ? " (Ref: " + upiRef + ")" : " - screenshot/reference to follow") : "Cash on Delivery"
+      payMethod === "upi" ? "UPI" + (upiRef ? " (Ref: " + upiRef + ")" : " - screenshot/reference to follow") :
+      (fulfilMode === "pickup" ? "Pay at pickup" : "Cash on Delivery")
     );
     return text;
   }
 
   function logOrderToSheet(s, paid) {
     if (!ORDER_LOG_URL || ORDER_LOG_URL.indexOf("PASTE_YOUR") === 0) return;
-    var vals = readVals(), payMethod = currentPayMethod();
+    var vals = readVals(), payMethod = currentPayMethod(), pickup = fulfilMode === "pickup";
     var payload = {
       timestamp: new Date().toISOString(),
-      name: vals.name, phone: vals.phone, address: vals.address, city: vals.city,
-      pincode: vals.pincode, landmark: vals.landmark,
+      name: vals.name, phone: vals.phone,
+      address: pickup ? "PICKUP (customer collects)" : vals.address,
+      city: pickup ? "" : vals.city,
+      pincode: pickup ? "" : vals.pincode,
+      landmark: pickup ? "" : vals.landmark,
       items: s.lines.join(" | "), delivery: s.delivery, total: s.grand,
-      paymentMethod: paid ? "Razorpay (PAID)" : (payMethod === "upi" ? "UPI" : "Cash on Delivery"),
+      paymentMethod: paid ? "Razorpay (PAID)" : (payMethod === "upi" ? "UPI" : (pickup ? "Pay at pickup" : "Cash on Delivery")),
       upiRef: paid ? paid.paymentId : upiRefInput.value.trim(),
-      mapLink: (custLat.value && custLng.value) ? ("https://maps.google.com/?q=" + custLat.value + "," + custLng.value) : ""
+      mapLink: (!pickup && custLat.value && custLng.value) ? ("https://maps.google.com/?q=" + custLat.value + "," + custLng.value) : ""
     };
     try {
       fetch(ORDER_LOG_URL, {
@@ -245,10 +266,11 @@
     }
     var vals = readVals();
     var items = lines().map(function (r) { return { name: r.name, grams: r.grams, qty: r.qty }; });
-    var customer = {
-      name: vals.name, phone: vals.phone, address: vals.address, city: vals.city,
-      pincode: vals.pincode, landmark: vals.landmark, lat: custLat.value, lng: custLng.value
-    };
+    var pickup = fulfilMode === "pickup";
+    var customer = pickup
+      ? { name: vals.name, phone: vals.phone, address: "", city: "", pincode: "", landmark: "", lat: "", lng: "", pickup: true }
+      : { name: vals.name, phone: vals.phone, address: vals.address, city: vals.city,
+          pincode: vals.pincode, landmark: vals.landmark, lat: custLat.value, lng: custLng.value, pickup: false };
     paying = true;
     orderBtn.style.opacity = ".6";
     orderLabel.textContent = "Opening secure payment\u2026";
@@ -463,6 +485,88 @@
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && mapModal.classList.contains("open")) closeMapModal();
   });
+
+  /* ---------- Delivery / Pickup choice + hide "Pay via UPI" ---------- */
+  (function setupFulfilment() {
+    // Hide the "Pay via UPI" option and its QR panel
+    var upiRadio = document.querySelector('input[name="pay-method"][value="upi"]');
+    if (upiRadio) {
+      var upiLabel = upiRadio.closest("label") || upiRadio.parentElement;
+      if (upiLabel) upiLabel.style.display = "none";
+      if (upiRadio.checked) {
+        var fallback = document.querySelector('input[name="pay-method"][value="razorpay"]') ||
+                       document.querySelector('input[name="pay-method"][value="cod"]');
+        if (fallback) fallback.checked = true;
+      }
+    }
+    if (upiPanel) { upiPanel.classList.add("hidden"); upiPanel.style.display = "none"; }
+
+    // Delivery / Pickup buttons
+    var anchorField = $("field-name");
+    if (!anchorField || !anchorField.parentNode) return;
+    var wrap = document.createElement("div");
+    wrap.id = "fulfil-toggle";
+    wrap.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px";
+    wrap.innerHTML =
+      '<button type="button" data-mode="delivery">Delivery</button>' +
+      '<button type="button" data-mode="pickup">Pickup (I\u2019ll collect)</button>';
+    var note = document.createElement("p");
+    note.id = "fulfil-note";
+    note.style.cssText = "display:none;margin:0 0 16px;font-size:.9rem;opacity:.85";
+
+    var ref = anchorField, host = anchorField.parentNode;
+    if (host !== deliverySection && host.parentNode) { ref = host; host = host.parentNode; }
+    host.insertBefore(wrap, ref);
+    host.insertBefore(note, ref);
+
+    var codRadio = document.querySelector('input[name="pay-method"][value="cod"]');
+    var codLabel = codRadio && (codRadio.closest("label") || codRadio.parentElement);
+    function relabelCod(pickup) {
+      if (!codLabel) return;
+      var nodes = codLabel.querySelectorAll("*");
+      for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].children.length === 0) {
+          var t = nodes[i].textContent.trim();
+          if (t === "Cash on Delivery" || t === "Pay at pickup") {
+            nodes[i].textContent = pickup ? "Pay at pickup" : "Cash on Delivery";
+          }
+        }
+      }
+    }
+
+    function paint() {
+      Array.prototype.forEach.call(wrap.querySelectorAll("button"), function (b) {
+        var on = b.getAttribute("data-mode") === fulfilMode;
+        b.style.cssText = "cursor:pointer;padding:10px 18px;border-radius:999px;font:inherit;font-weight:600;border:1px solid #2e8b63;" +
+          (on ? "background:#1d6b3f;color:#fff" : "background:transparent;color:#2e8b63");
+      });
+    }
+
+    function setMode(mode) {
+      fulfilMode = mode;
+      var pickup = mode === "pickup";
+      ["field-address", "field-city", "field-pincode", "field-landmark"].forEach(function (id) {
+        var el = $(id);
+        if (el) el.style.display = pickup ? "none" : "";
+      });
+      if (mapPickBtn) mapPickBtn.style.display = pickup ? "none" : "";
+      ["field-address", "field-city", "field-pincode"].forEach(function (id) { setFieldInvalid(id, false); });
+      if (!document.querySelector(".d-field.invalid")) deliveryErrorBanner.classList.remove("show");
+      note.style.display = pickup ? "block" : "none";
+      note.textContent = pickup
+        ? (PICKUP_ADDRESS ? "Pickup from: " + PICKUP_ADDRESS : "We will confirm the pickup location with you on WhatsApp.")
+        : "";
+      relabelCod(pickup);
+      paint();
+      render();
+    }
+
+    wrap.addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-mode]");
+      if (b) setMode(b.getAttribute("data-mode"));
+    });
+    paint();
+  })();
 
   render();
 })();
