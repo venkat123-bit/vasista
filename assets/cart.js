@@ -531,6 +531,7 @@
     var codLabel = codRadio && (codRadio.closest("label") || codRadio.parentElement);
     function relabelCod(pickup) {
       if (!codLabel) return;
+      codLabel.setAttribute("data-pickup", pickup ? "1" : "0");
       var nodes = codLabel.querySelectorAll("*");
       for (var i = 0; i < nodes.length; i++) {
         if (nodes[i].children.length === 0) {
@@ -617,6 +618,81 @@
       if (e.key === "Enter") { e.preventDefault(); toggleCoupon(); }
     });
     paintBtn();
+  })();
+
+  /* ---------- Payment method cards (styling only) ---------- */
+  (function stylePaymentCards() {
+    var css = `
+.payment-block { margin-top: 36px; text-align: center; }
+.payment-block h3::after {
+  content: "Choose how you'd like to pay";
+  display: block; margin-top: 4px;
+  font-family: 'Work Sans', sans-serif; font-size: .85rem; font-weight: 500;
+  letter-spacing: .02em; opacity: .65;
+}
+.payment-block .pay-options {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 14px; max-width: 660px; margin: 20px auto 0; text-align: left;
+}
+.payment-block .pay-options .pay-option {
+  position: relative; display: grid; grid-template-columns: 48px 1fr;
+  grid-template-rows: auto auto; column-gap: 14px; row-gap: 2px; align-items: center;
+  padding: 16px 58px 16px 16px; border-radius: 18px; cursor: pointer;
+  font-size: 1rem; font-weight: 600; line-height: 1.25;
+  color: inherit !important;
+  background: linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.015)) !important;
+  border: 1.5px solid rgba(46,139,99,.3) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,.12);
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.payment-block .pay-options .pay-option:hover {
+  transform: translateY(-2px); border-color: rgba(46,139,99,.65) !important;
+}
+.payment-block .pay-options .pay-option:has(input:checked) {
+  border-color: #2e8b63 !important;
+  background: linear-gradient(145deg, rgba(46,139,99,.26), rgba(46,139,99,.08)) !important;
+  box-shadow: 0 8px 24px rgba(46,139,99,.25), 0 0 0 3px rgba(46,139,99,.14);
+}
+.payment-block .pay-options .pay-option:has(input:focus-visible) {
+  outline: 2px solid #2e8b63; outline-offset: 3px;
+}
+/* icon tile */
+.payment-block .pay-options .pay-option::before {
+  content: ""; grid-column: 1; grid-row: 1 / span 2;
+  width: 48px; height: 48px; border-radius: 14px;
+  background-color: rgba(46,139,99,.16); background-repeat: no-repeat;
+  background-position: center; background-size: 26px;
+}
+.payment-block .pay-options .pay-option:has(input:checked)::before { background-color: rgba(46,139,99,.32); }
+.payment-block .pay-options .pay-option:has(input[value="cod"])::before {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232e8b63' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='6' width='20' height='12' rx='2'/><circle cx='12' cy='12' r='2.5'/><path d='M6 10v.01M18 14v.01'/></svg>");
+}
+.payment-block .pay-options .pay-option:has(input[value="razorpay"])::before {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232e8b63' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='5' width='20' height='14' rx='2'/><path d='M2 10h20M6 15h4'/></svg>");
+}
+/* small caption under the title */
+.payment-block .pay-options .pay-option::after {
+  grid-column: 2; grid-row: 2; font-size: .78rem; font-weight: 500; opacity: .7; content: "";
+}
+.payment-block .pay-options .pay-option:has(input[value="cod"])::after { content: "Pay in cash when you receive"; }
+.payment-block .pay-options .pay-option[data-pickup="1"]::after { content: "Pay in cash when you collect"; }
+.payment-block .pay-options .pay-option:has(input[value="razorpay"])::after { content: "Instant confirmation \\00b7  Secured by Razorpay"; }
+/* custom radio circle with tick */
+.payment-block .pay-options .pay-option > input[type="radio"] {
+  -webkit-appearance: none; appearance: none; position: absolute; top: 50%; right: 18px;
+  transform: translateY(-50%); width: 24px; height: 24px; margin: 0; border-radius: 50%;
+  border: 2px solid rgba(46,139,99,.55); background: transparent; cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.payment-block .pay-options .pay-option > input[type="radio"]:checked {
+  border-color: #1d6b3f; box-shadow: 0 0 0 4px rgba(46,139,99,.22);
+  background: #1d6b3f url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12.5l4.5 4.5L19 7'/></svg>") center / 14px no-repeat;
+}
+`;
+    var tag = document.createElement("style");
+    tag.id = "pay-card-styles";
+    tag.textContent = css;
+    document.head.appendChild(tag);
   })();
 
   render();
