@@ -53,7 +53,7 @@
         var g = grouped(); if (!g.length) return "Please open the Products page to see everything with prices.";
         return "Our snacks (size ₹price):\n" + g.map(line).join("\n"); } },
     { k: ["discount", "offer", "coupon", "bulk", "cheaper"], r: function () {
-        return "Quantity discount: 1 item is full price, and every extra item takes 3% off, up to 30% off. It's applied automatically in your cart. You can also use coupons at the cart: CHIPS60 (\u20b975 chips packs for \u20b960 each) and SAVE9 (9% off when you buy 2 or more packs)."; } },
+        return "Quantity discount: 1 item is full price, and every extra item takes 3% off, up to 30% off. It's applied automatically in your cart."; } },
     { k: ["deliver", "shipping", "dispatch", "courier", "how long", "when will", "charges", "pincode"], r: function () {
         return "Orders are packed and dispatched within 1–3 working days, and delivery usually takes 1–5 working days depending on your location. Any delivery charge is confirmed before you pay. Full details: /shipping-policy"; } },
     { k: ["refund", "cancel", "return", "damaged", "wrong item", "missing", "replace"], r: function () {
