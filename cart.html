@@ -19,7 +19,6 @@
 <link rel="stylesheet" href="assets/styles.css">
 <link rel="stylesheet" href="assets/nav.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<link rel="stylesheet" href="assets/coupon.css">
 <link rel="stylesheet" href="assets/theme.css">
 <script src="assets/theme.js"></script>
 </head>
@@ -143,6 +142,10 @@
             <input type="radio" name="pay-method" value="upi">
             Pay via UPI
           </label>
+          <label class="pay-option">
+            <input type="radio" name="pay-method" value="razorpay">
+            Pay online (UPI / Cards / Net Banking)
+          </label>
         </div>
 
         <div class="upi-panel hidden" id="upi-panel">
@@ -233,7 +236,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="assets/catalog.js"></script>
 <script src="assets/cart-store.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="assets/cart.js"></script>
+<script type="module" src="assets/razorpay-pay.js"></script>
 <script src="assets/i18n.js"></script>
 <script src="assets/bottom-nav.js"></script>
 <script src="assets/chatbot.js"></script>
