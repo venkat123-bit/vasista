@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="assets/styles.css">
 <link rel="stylesheet" href="assets/nav.css">
 <link rel="stylesheet" href="assets/theme.css">
+<link rel="stylesheet" href="assets/profile.css">
 <script src="assets/theme.js"></script>
 </head>
 <body>
@@ -41,67 +42,59 @@
   <a href="/contact">Contact</a>
 </div>
 
-<section class="hero" style="padding:52px 28px 20px;">
-  <div class="hero-inner" style="grid-template-columns:1fr; text-align:center;">
-    <div class="hero-copy">
-      <p class="hero-eyebrow">YOUR ACCOUNT</p>
-      <h1>Profile &amp; Settings</h1>
-      <p class="hero-sub" style="margin-left:auto; margin-right:auto;">Update your details or sign out below.</p>
-    </div>
-  </div>
-</section>
+<main class="pf-wrap">
+  <div class="pf-top"><a href="/" aria-label="Back">‹</a><h1>Profile</h1></div>
 
-<section class="section-pad" style="max-width:480px; margin:0 auto;">
-  <div class="section-head reveal in" style="text-align:left; margin-bottom:16px;">
-    <p class="section-eyebrow">PROFILE</p>
-    <h2 class="section-title" style="font-size:1.5rem;">Your details</h2>
+  <div class="pf-card pf-id">
+    <div class="pf-avatar" id="pf-avatar">V</div>
+    <div class="pf-id-text"><b id="pf-show-name">Your name</b><span id="pf-show-contact">&nbsp;</span></div>
+    <button type="button" class="pf-edit" data-open="panel-details">Edit</button>
   </div>
 
-  <form id="profile-form" novalidate>
-    <div class="delivery-grid" style="grid-template-columns:1fr;">
-      <div class="d-field" id="field-name">
-        <label for="pf-name">Full Name*</label>
-        <input type="text" id="pf-name" autocomplete="name" placeholder="Your name">
-        <span class="d-error">Please enter your name.</span>
+  <section class="pf-card pf-panel" id="panel-details">
+    <h2>Your details</h2>
+    <form id="profile-form" novalidate>
+      <div class="delivery-grid" style="grid-template-columns:1fr;">
+        <div class="d-field" id="field-name"><label for="pf-name">Full Name*</label>
+          <input type="text" id="pf-name" autocomplete="name" placeholder="Your name"><span class="d-error">Please enter your name.</span></div>
+        <div class="d-field"><label for="pf-email">Email <span class="opt">(can't be changed)</span></label>
+          <input type="email" id="pf-email" disabled style="opacity:0.7;"></div>
+        <div class="d-field" id="field-phone"><label for="pf-phone">Phone Number*</label>
+          <input type="tel" id="pf-phone" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10-digit mobile number"><span class="d-error">Please enter a valid 10-digit number.</span></div>
       </div>
-      <div class="d-field">
-        <label for="pf-email">Email <span class="opt">(can't be changed)</span></label>
-        <input type="email" id="pf-email" disabled style="opacity:0.7;">
+      <p class="pf-msg err" id="profile-error-banner"></p><p class="pf-msg ok" id="profile-success-banner"></p>
+      <div class="cta-wrap" style="margin-top:16px;"><button type="submit" class="cta-btn" id="profile-save-btn" style="width:100%;justify-content:center;border:none;cursor:pointer;"><span id="profile-save-label">Save Changes</span></button></div>
+    </form>
+  </section>
+
+  <section class="pf-card pf-panel" id="panel-address">
+    <h2>Saved address</h2>
+    <form id="address-form" novalidate>
+      <div class="delivery-grid" style="grid-template-columns:1fr;">
+        <div class="d-field"><label for="ad-address">Address</label><textarea id="ad-address" placeholder="House/flat no., street, area"></textarea></div>
+        <div class="d-field"><label for="ad-city">City</label><input type="text" id="ad-city" placeholder="e.g. Secunderabad"></div>
+        <div class="d-field"><label for="ad-pin">Pincode</label><input type="text" id="ad-pin" inputmode="numeric" maxlength="6" placeholder="6-digit pincode"></div>
+        <div class="d-field"><label for="ad-landmark">Landmark <span class="opt">(optional)</span></label><input type="text" id="ad-landmark" placeholder="Nearby landmark"></div>
       </div>
-      <div class="d-field" id="field-phone">
-        <label for="pf-phone">Phone Number*</label>
-        <input type="tel" id="pf-phone" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10-digit mobile number">
-        <span class="d-error">Please enter a valid 10-digit number.</span>
-      </div>
-    </div>
+      <p class="pf-msg err" id="address-error"></p><p class="pf-msg ok" id="address-ok"></p>
+      <div class="cta-wrap" style="margin-top:16px;"><button type="submit" class="cta-btn" id="address-save-btn" style="width:100%;justify-content:center;border:none;cursor:pointer;">Save address</button></div>
+    </form>
+  </section>
 
-    <p class="delivery-error-banner" id="profile-error-banner" style="display:none;"></p>
-    <p class="delivery-error-banner" id="profile-success-banner" style="display:none; background:#eaf5ec; color:var(--green-deep); border-color:var(--green-deep);"></p>
-
-    <div class="cta-wrap" style="margin-top:20px;">
-      <button type="submit" class="cta-btn" id="profile-save-btn" style="width:100%; justify-content:center; border:none; cursor:pointer;">
-        <span id="profile-save-label">Save Changes</span>
-      </button>
-    </div>
-  </form>
-</section>
-
-<section class="section-pad" style="max-width:480px; margin:0 auto;">
-  <div class="section-head reveal in" style="text-align:left; margin-bottom:16px;">
-    <p class="section-eyebrow">SETTINGS</p>
-    <h2 class="section-title" style="font-size:1.5rem;">Account settings</h2>
+  <div class="pf-card pf-menu">
+    <a class="pf-row" href="/cart"><span class="pf-ico"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></span><span class="pf-row-text"><b>My cart</b><small id="pf-cart-sub">Items waiting for you</small></span><span class="pf-chev">›</span></a>
+    <a class="pf-row" href="/order"><span class="pf-ico"><svg viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v8l-8 4-8-4V8Z"/><path d="M4 8l8 4 8-4M12 12v8"/></svg></span><span class="pf-row-text"><b>Shop snacks</b><small>Browse all products</small></span><span class="pf-chev">›</span></a>
+    <button type="button" class="pf-row" data-open="panel-address"><span class="pf-ico"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5a7 7 0 0 0-14 0C5 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="pf-row-text"><b>Saved address</b><small id="pf-addr-sub">Used to fill your delivery details</small></span><span class="pf-chev">›</span></button>
+    <button type="button" class="pf-row" id="row-lang"><span class="pf-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></span><span class="pf-row-text"><b>Language</b><small id="pf-lang-sub">English / తెలుగు</small></span><span class="pf-chev">›</span></button>
+    <button type="button" class="pf-row" id="row-theme"><span class="pf-ico"><svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/></svg></span><span class="pf-row-text"><b>Appearance</b><small id="pf-theme-sub">Light / dark mode</small></span><span class="pf-chev">›</span></button>
+    <button type="button" class="pf-row" id="reset-password-link"><span class="pf-ico"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="pf-row-text"><b>Change password</b><small>We email you a reset link</small></span><span class="pf-chev">›</span></button>
+    <a class="pf-row" href="https://wa.me/918341383888" target="_blank" rel="noopener"><span class="pf-ico"><svg viewBox="0 0 24 24"><path d="M4 20l1.5-4A8 8 0 1 1 8 18.5L4 20Z"/></svg></span><span class="pf-row-text"><b>Help on WhatsApp</b><small>Or call 8341383888</small></span><span class="pf-chev">›</span></a>
   </div>
+  <p class="pf-msg err" id="menu-error"></p><p class="pf-msg ok" id="menu-ok"></p>
 
-  <p class="cta-note" style="text-align:left; margin-bottom:10px;">
-    <a href="#" id="reset-password-link" style="color:var(--green-deep); font-weight:600;">Send me a password reset email</a>
-  </p>
-
-  <div class="cta-wrap" style="margin-top:10px;">
-    <button type="button" class="cta-btn" id="logout-btn" style="width:100%; justify-content:center; border:none; cursor:pointer; background:var(--maroon, #7a2323);">
-      Log Out
-    </button>
-  </div>
-</section>
+  <button type="button" class="pf-logout" id="logout-btn">Log out</button>
+  <p class="pf-foot">Vasista Food &amp; Traders · Secunderabad</p>
+</main>
 
 <footer class="curve-bottom" id="contact">
   <p class="life-line reveal in">Good Food &nbsp;|&nbsp; Good Health &nbsp;|&nbsp; Good Life</p>
@@ -128,107 +121,112 @@
 <script src="assets/bottom-nav.js"></script>
 <script type="module" src="assets/auth-ui.js"></script>
 <script type="module">
-  import {
-    auth, db,
-    onAuthStateChanged,
-    signOut,
-    updateProfile,
-    sendPasswordResetEmail,
-    doc, getDoc, setDoc
-  } from "./assets/firebase-config.js";
+  import { auth, db, onAuthStateChanged, signOut, updateProfile, sendPasswordResetEmail, doc, getDoc, setDoc } from "./assets/firebase-config.js";
+  const $ = (id) => document.getElementById(id);
+  const nameInput = $("pf-name"), emailInput = $("pf-email"), phoneInput = $("pf-phone");
+  const form = $("profile-form"), errorBanner = $("profile-error-banner"), successBanner = $("profile-success-banner");
+  const saveBtn = $("profile-save-btn"), saveLabel = $("profile-save-label");
 
-  const nameInput = document.getElementById("pf-name");
-  const emailInput = document.getElementById("pf-email");
-  const phoneInput = document.getElementById("pf-phone");
-  const form = document.getElementById("profile-form");
-  const errorBanner = document.getElementById("profile-error-banner");
-  const successBanner = document.getElementById("profile-success-banner");
-  const saveBtn = document.getElementById("profile-save-btn");
-  const saveLabel = document.getElementById("profile-save-label");
+  function msg(el, text) { el.textContent = text || ""; el.style.display = text ? "block" : "none"; }
+  function showError(t) { msg(successBanner, ""); msg(errorBanner, t); }
+  function showSuccess(t) { msg(errorBanner, ""); msg(successBanner, t); }
+  function fieldError(id, on) { $(id).classList.toggle("invalid", on); }
 
-  function showFieldError(id, show) {
-    document.getElementById(id).classList.toggle("invalid", show);
-  }
-  function showError(msg) {
-    successBanner.style.display = "none";
-    errorBanner.textContent = msg;
-    errorBanner.style.display = msg ? "block" : "none";
-  }
-  function showSuccess(msg) {
-    errorBanner.style.display = "none";
-    successBanner.textContent = msg;
-    successBanner.style.display = msg ? "block" : "none";
+  // open / close panels
+  document.querySelectorAll("[data-open]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      const p = $(b.getAttribute("data-open")), was = p.classList.contains("open");
+      document.querySelectorAll(".pf-panel").forEach(function (x) { x.classList.remove("open"); });
+      if (!was) { p.classList.add("open"); p.scrollIntoView({ behavior: "smooth", block: "center" }); }
+    });
+  });
+
+  function paintHeader(name, phone, email) {
+    const n = (name || "").trim();
+    $("pf-show-name").textContent = n || "Your name";
+    $("pf-avatar").textContent = (n ? n.split(/\s+/).slice(0, 2).map(function (w) { return w[0]; }).join("") : "V").toUpperCase();
+    $("pf-show-contact").textContent = [phone ? "+91 " + phone : "", email || ""].filter(Boolean).join(" · ") || "\u00a0";
   }
 
-  let currentUser = null;
+  // cart / language / theme rows
+  try {
+    const items = JSON.parse(localStorage.getItem("vasista_cart") || "[]");
+    const n = items.reduce(function (s, it) { return s + (it.qty || 0); }, 0);
+    $("pf-cart-sub").textContent = n ? n + (n === 1 ? " item in your cart" : " items in your cart") : "Your cart is empty";
+  } catch (e) {}
+  function langNow() { return window.VasistaI18n ? window.VasistaI18n.lang() : "en"; }
+  function paintLang() { $("pf-lang-sub").textContent = langNow() === "te" ? "తెలుగు (tap for English)" : "English (tap for తెలుగు)"; }
+  $("row-lang").addEventListener("click", function () { if (window.VasistaI18n) { window.VasistaI18n.set(langNow() === "te" ? "en" : "te"); paintLang(); } });
+  paintLang();
+  const root = document.documentElement;
+  function isDark() { return root.getAttribute("data-theme") === "dark"; }
+  function paintTheme() { $("pf-theme-sub").textContent = isDark() ? "Dark mode (tap for light)" : "Light mode (tap for dark)"; }
+  $("row-theme").addEventListener("click", function () {
+    if (isDark()) root.removeAttribute("data-theme"); else root.setAttribute("data-theme", "dark");
+    try { localStorage.setItem("vasista-theme", isDark() ? "dark" : "light"); } catch (e) {}
+    paintTheme();
+  });
+  paintTheme();
+
+  let currentUser = null, saved = {};
 
   onAuthStateChanged(auth, async function (user) {
     if (!user) return; // auth-guard.js handles the redirect
     currentUser = user;
     emailInput.value = user.email || "";
     nameInput.value = user.displayName || "";
-
+    paintHeader(user.displayName, "", user.email);
     try {
       const snap = await getDoc(doc(db, "users", user.uid));
       if (snap.exists()) {
-        const profile = snap.data();
-        if (profile.name) nameInput.value = profile.name;
-        if (profile.phone) phoneInput.value = profile.phone;
+        saved = snap.data();
+        if (saved.name) nameInput.value = saved.name;
+        if (saved.phone) phoneInput.value = saved.phone;
+        $("ad-address").value = saved.address || ""; $("ad-city").value = saved.city || "";
+        $("ad-pin").value = saved.pincode || ""; $("ad-landmark").value = saved.landmark || "";
+        if (saved.address) $("pf-addr-sub").textContent = saved.address + (saved.city ? ", " + saved.city : "");
       }
-    } catch (err) {
-      console.warn("Could not load profile:", err);
-    }
+    } catch (err) { console.warn("Could not load profile:", err); }
+    paintHeader(nameInput.value, phoneInput.value, user.email);
   });
 
   form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    showError("");
-    showSuccess("");
-
-    const name = nameInput.value.trim();
-    const phone = phoneInput.value.trim();
-
+    e.preventDefault(); showError(""); showSuccess("");
+    const name = nameInput.value.trim(), phone = phoneInput.value.trim();
     let valid = true;
-    showFieldError("field-name", !name); if (!name) valid = false;
+    fieldError("field-name", !name); if (!name) valid = false;
     const phoneOk = /^\d{10}$/.test(phone);
-    showFieldError("field-phone", !phoneOk); if (!phoneOk) valid = false;
+    fieldError("field-phone", !phoneOk); if (!phoneOk) valid = false;
     if (!valid) return;
-
-    saveLabel.textContent = "Saving…";
-    saveBtn.disabled = true;
-
+    saveLabel.textContent = "Saving…"; saveBtn.disabled = true;
     try {
       await updateProfile(currentUser, { displayName: name });
-      await setDoc(doc(db, "users", currentUser.uid), {
-        name: name,
-        phone: phone,
-        email: currentUser.email,
-        updatedAt: new Date().toISOString()
-      }, { merge: true });
+      await setDoc(doc(db, "users", currentUser.uid), { name: name, phone: phone, email: currentUser.email, updatedAt: new Date().toISOString() }, { merge: true });
+      paintHeader(name, phone, currentUser.email);
       showSuccess("Your details have been updated.");
-    } catch (err) {
-      showError("Couldn't save your changes. Please try again.");
-    } finally {
-      saveLabel.textContent = "Save Changes";
-      saveBtn.disabled = false;
-    }
+    } catch (err) { showError("Couldn't save your changes. Please try again."); }
+    finally { saveLabel.textContent = "Save Changes"; saveBtn.disabled = false; }
   });
 
-  document.getElementById("reset-password-link").addEventListener("click", async function (e) {
-    e.preventDefault();
-    if (!currentUser || !currentUser.email) return;
+  $("address-form").addEventListener("submit", async function (e) {
+    e.preventDefault(); msg($("address-ok"), ""); msg($("address-error"), "");
+    const address = $("ad-address").value.trim(), city = $("ad-city").value.trim(), pincode = $("ad-pin").value.trim(), landmark = $("ad-landmark").value.trim();
+    if (!address || !city || !/^\d{6}$/.test(pincode)) { msg($("address-error"), "Please fill the address, city and a 6-digit pincode."); return; }
     try {
-      await sendPasswordResetEmail(auth, currentUser.email);
-      showSuccess("Password reset email sent to " + currentUser.email + ".");
-    } catch (err) {
-      showError("Couldn't send reset email. Please try again.");
-    }
+      await setDoc(doc(db, "users", currentUser.uid), { address: address, city: city, pincode: pincode, landmark: landmark, updatedAt: new Date().toISOString() }, { merge: true });
+      $("pf-addr-sub").textContent = address + ", " + city;
+      msg($("address-ok"), "Address saved. It will be filled in at checkout.");
+    } catch (err) { msg($("address-error"), "Couldn't save the address. Please try again."); }
   });
 
-  document.getElementById("logout-btn").addEventListener("click", async function () {
-    await signOut(auth);
-    window.location.href = "/";
+  $("reset-password-link").addEventListener("click", async function () {
+    msg($("menu-error"), ""); msg($("menu-ok"), "");
+    if (!currentUser || !currentUser.email) return;
+    try { await sendPasswordResetEmail(auth, currentUser.email); msg($("menu-ok"), "Password reset email sent to " + currentUser.email + "."); }
+    catch (err) { msg($("menu-error"), "Couldn't send the reset email. Please try again."); }
   });
+
+  $("logout-btn").addEventListener("click", async function () { await signOut(auth); window.location.href = "/"; });
 </script>
 </body>
 </html>
