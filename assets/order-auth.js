@@ -17,6 +17,10 @@ onAuthStateChanged(auth, async function (user) {
       const profile = snap.data();
       if (nameInput && !nameInput.value && profile.name) nameInput.value = profile.name;
       if (phoneInput && !phoneInput.value && profile.phone) phoneInput.value = profile.phone;
+      [["cust-address", "address"], ["cust-city", "city"], ["cust-pincode", "pincode"], ["cust-landmark", "landmark"]].forEach(function (p) {
+        const el = document.getElementById(p[0]);
+        if (el && !el.value && profile[p[1]]) el.value = profile[p[1]];
+      });
     }
   } catch (err) {
     // Firestore may not be enabled yet — safe to ignore.
