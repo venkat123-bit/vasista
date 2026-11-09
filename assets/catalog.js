@@ -14,10 +14,10 @@
     { name: "12X Crunch", grams: "300g", price: 299,  cat: "crunch", img: CRUNCH },
     { name: "12X Crunch", grams: "500g", price: 550,  cat: "crunch", img: CRUNCH },
     { name: "12X Crunch", grams: "1kg",  price: 1000, cat: "crunch", img: CRUNCH },
-    { name: "Multi Millet Chips", grams: "50g", price: 75, cat: "chips", img: MILLET, imgs: [MILLET, P + "multi-millet-chips-label.jpg"] },
-    { name: "Oats Chips",   grams: "50g", price: 75, cat: "chips", img: OATS, imgs: [OATS, P + "oats-chips-label.jpg"] },
-    { name: "Quinoa Chips", grams: "50g", price: 75, cat: "chips", img: QUINOA, imgs: [QUINOA, P + "quinoa-chips-label.jpg"] },
-    { name: "Ragi Chips",   grams: "50g", price: 75, cat: "chips", img: RAGI, imgs: [RAGI, P + "ragi-chips-label.jpg"] },
+    { name: "Multi Millet Chips", grams: "80g", price: 120, cat: "chips", img: MILLET, imgs: [MILLET, P + "multi-millet-chips-label.jpg"] },
+    { name: "Oats Chips",   grams: "80g", price: 120, cat: "chips", img: OATS, imgs: [OATS, P + "oats-chips-label.jpg"] },
+    { name: "Quinoa Chips", grams: "80g", price: 120, cat: "chips", img: QUINOA, imgs: [QUINOA, P + "quinoa-chips-label.jpg"] },
+    { name: "Ragi Chips",   grams: "80g", price: 120, cat: "chips", img: RAGI, imgs: [RAGI, P + "ragi-chips-label.jpg"] },
     { name: "Mexican Bites", grams: "100g", price: 120, cat: "mixes", img: P + "crunch-mix-bowl.jpg", imgs: [P + "crunch-mix-bowl.jpg", P + "mexican-bites-label.jpg"] },
     { name: "Quinoa Flakes Mix", grams: "100g", price: 120, cat: "mixes", img: P + "mexican-bites-bowl.jpg" },
     { name: "Pro Beans",     grams: "100g", price: 120, cat: "nuts",  img: P + "roasted-soy-beans.jpg", imgs: [P + "roasted-soy-beans.jpg", P + "pro-beans-label.jpg"] },
@@ -26,10 +26,7 @@
     { name: "Mexican Bites", grams: "200g", price: 250, cat: "mixes", img: P + "crunch-mix-bowl.jpg", imgs: [P + "crunch-mix-bowl.jpg", P + "mexican-bites-label.jpg"] },
     { name: "Quinoa Flakes Mix", grams: "250g", price: 250, cat: "mixes", img: P + "mexican-bites-bowl.jpg" },
     { name: "Pro Beans",     grams: "250g", price: 250, cat: "nuts",  img: P + "roasted-soy-beans.jpg", imgs: [P + "roasted-soy-beans.jpg", P + "pro-beans-label.jpg"] },
-    { name: "Dry Fruits Laddus", grams: "500g", price: 460, cat: "sweets", img: P + "dry-fruits-laddus.jpg" },
-    { name: "Dry Fruits Laddus", grams: "1kg", price: 900, cat: "sweets", img: P + "dry-fruits-laddus.jpg" },
-    { name: "Millet Laddu", grams: "250g", price: 139, cat: "sweets", img: P + "millet-laddu.jpg" },
-    { name: "Millet Laddu", grams: "500g", price: 250, cat: "sweets", img: P + "millet-laddu.jpg" }
+    { name: "Dry Fruits Laddus", grams: "1kg", price: 900, cat: "sweets", img: P + "dry-fruits-laddus.jpg" }
   ];
 
   // Quantity discount: 1 item = full price, each extra item adds 3% off, capped at 30%.

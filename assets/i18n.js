@@ -261,7 +261,6 @@
     "Shop by Category": "విభాగాల వారీగా కొనండి",
     "Nutri Grain Mix": "న్యూట్రి గ్రెయిన్ మిక్స్",
     "Dry Fruits Laddus": "డ్రై ఫ్రూట్స్ లడ్డూలు",
-    "Millet Laddu": "మిల్లెట్ లడ్డూ",
     "Millet Mixture (Puff)": "మిల్లెట్ మిక్చర్ (పఫ్)",
     "Multi Millet Chips": "మల్టీ మిల్లెట్ చిప్స్",
     "Oats Chips": "ఓట్స్ చిప్స్",
