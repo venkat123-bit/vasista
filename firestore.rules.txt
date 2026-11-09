@@ -15,3 +15,7 @@ match /reviews/{reviewId} {
     && (request.method == 'create' || resource.data.uid == request.auth.uid);
   allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
 }
+
+// "orders" collection (Razorpay): written only by Cloud Functions (Admin SDK bypasses rules).
+// No rule is needed, because anything without a rule is denied to browsers. If you want it explicit, add:
+// match /orders/{id} { allow read, write: if false; }
