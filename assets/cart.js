@@ -48,21 +48,34 @@
   /* delivery: free from FREE_DELIVERY_MIN (after discounts), otherwise a flat charge */
   var FREE_DELIVERY_MIN = 299, DELIVERY_FEE = 40;
 
-  /* coupon: every item costs COUPON_UNIT_PRICE and delivery is free.
-     The same code must also be set in functions/index.js */
-  var COUPON_CODE = "TEST10", COUPON_UNIT_PRICE = 10;
+  /* coupons (no minimum order). The same codes and rules must also be set in functions/index.js
+     percent: value% off the items total (rounded to the nearest rupee)
+     flat:    value rupees off the items total (never more than the items total) */
+  var COUPONS = {
+    "SAVE20":  { type: "percent", value: 20,  msg: "20% off your items" },
+    "FLAT100": { type: "flat",    value: 100, msg: "\u20b9100 off your order" }
+  };
   var appliedCoupon = null;
+
+  function couponDiscount(code, total) {
+    var c = COUPONS[code];
+    if (!c || total <= 0) return 0;
+    var d = c.type === "percent" ? Math.round(total * c.value / 100) : c.value;
+    return Math.min(d, total);
+  }
 
   function summary(rows) {
     var total = 0, count = 0, mrp = 0, out = [];
     rows.forEach(function (r) {
-      var unit = appliedCoupon ? COUPON_UNIT_PRICE : r.unit;
-      count += r.qty; total += r.qty * unit; mrp += r.qty * r.base;
-      out.push(r.name + " (" + r.grams + ") x" + r.qty + " @ " + rupee(unit) +
-        (appliedCoupon ? " (coupon " + appliedCoupon + ")" : (r.pct > 0 ? " (" + r.pct + "% off)" : "")));
+      count += r.qty; total += r.qty * r.unit; mrp += r.qty * r.base;
+      out.push(r.name + " (" + r.grams + ") x" + r.qty + " @ " + rupee(r.unit) +
+        (r.pct > 0 ? " (" + r.pct + "% off)" : ""));
     });
-    var delivery = (!appliedCoupon && fulfilMode === "delivery" && count > 0 && total < FREE_DELIVERY_MIN) ? DELIVERY_FEE : 0;
-    return { total: total, delivery: delivery, grand: total + delivery, count: count, mrp: mrp, save: mrp - total, lines: out };
+    var discount = appliedCoupon ? couponDiscount(appliedCoupon, total) : 0;
+    var after = total - discount;
+    var delivery = (fulfilMode === "delivery" && count > 0 && after < FREE_DELIVERY_MIN) ? DELIVERY_FEE : 0;
+    return { total: total, discount: discount, after: after, delivery: delivery, grand: after + delivery,
+             count: count, mrp: mrp, save: mrp - total, lines: out };
   }
 
   /* ---------- render ---------- */
@@ -81,9 +94,9 @@
       var img = r.img
         ? '<img src="' + esc(r.img) + '" alt="' + esc(r.name) + '" loading="lazy">'
         : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg>';
-      var unit = appliedCoupon ? COUPON_UNIT_PRICE : r.unit;
-      var price = (appliedCoupon || r.pct > 0)
-        ? '<span class="ci-old">' + rupee(r.base) + '</span><span class="ci-now">' + rupee(unit) + '</span><span class="ci-off">' + (appliedCoupon ? 'Coupon' : r.pct + '% off') + '</span>'
+      var unit = r.unit;
+      var price = r.pct > 0
+        ? '<span class="ci-old">' + rupee(r.base) + '</span><span class="ci-now">' + rupee(unit) + '</span><span class="ci-off">' + r.pct + '% off</span>'
         : '<span class="ci-now">' + rupee(unit) + '</span>';
       return '<article class="cart-item" data-i="' + i + '">' +
         '<div class="ci-img">' + img + '</div>' +
@@ -107,8 +120,9 @@
     summaryEl.innerHTML =
       '<div class="cs-row"><span>Subtotal</span><span>' + rupee(s.mrp) + '</span></div>' +
       (s.save > 0 ? '<div class="cs-row cs-save"><span>You save</span><span>\u2212 ' + rupee(s.save) + '</span></div>' : '') +
+      (s.discount > 0 ? '<div class="cs-row cs-save"><span>Coupon (' + esc(appliedCoupon) + ')</span><span>\u2212 ' + rupee(s.discount) + '</span></div>' : '') +
       '<div class="cs-row"><span>' + (fulfilMode === "pickup" ? "Pickup" : "Delivery") + '</span><span>' + (s.delivery ? rupee(s.delivery) : '<b style="color:#1d6b3f">Free</b>') + '</span></div>' +
-      (s.delivery ? '<div class="cs-row" style="font-size:.82rem;color:#7c1f2b"><span>Add ' + rupee(FREE_DELIVERY_MIN - s.total) + ' more for free delivery</span><span></span></div>' : '') +
+      (s.delivery ? '<div class="cs-row" style="font-size:.82rem;color:#7c1f2b"><span>Add ' + rupee(FREE_DELIVERY_MIN - s.after) + ' more for free delivery</span><span></span></div>' : '') +
       '<div class="cs-row cs-total"><span>Total</span><span>' + rupee(s.grand) + '</span></div>';
 
     updateOrderButton(s);
@@ -219,6 +233,7 @@
     var text = baseText;
     if (!s.lines.length) return encodeURIComponent(text);
     text += ":%0A" + s.lines.map(function (l) { return "- " + encodeURIComponent(l); }).join("%0A") +
+            (s.discount > 0 ? "%0ACoupon " + encodeURIComponent(appliedCoupon + ": -" + rupee(s.discount)) : "") +
             "%0ADelivery: " + encodeURIComponent(fulfilMode === "pickup" ? "Pickup (no delivery charge)" : (s.delivery ? rupee(s.delivery) : "Free")) +
             "%0ATotal: " + encodeURIComponent(rupee(s.grand));
     var vals = readVals(), payMethod = currentPayMethod(), upiRef = upiRefInput.value.trim();
@@ -250,7 +265,8 @@
       city: pickup ? "" : vals.city,
       pincode: pickup ? "" : vals.pincode,
       landmark: pickup ? "" : vals.landmark,
-      items: s.lines.join(" | "), delivery: s.delivery, total: s.grand,
+      items: s.lines.join(" | ") + (s.discount > 0 ? " | Coupon " + appliedCoupon + " (-" + rupee(s.discount) + ")" : ""),
+      delivery: s.delivery, total: s.grand,
       paymentMethod: paid ? "Razorpay (PAID)" : (payMethod === "upi" ? "UPI" : (pickup ? "Pay at pickup" : "Cash on Delivery")),
       upiRef: paid ? paid.paymentId : upiRefInput.value.trim(),
       mapLink: (!pickup && custLat.value && custLng.value) ? ("https://maps.google.com/?q=" + custLat.value + "," + custLng.value) : ""
@@ -321,7 +337,11 @@
       return;
     }
     deliveryErrorBanner.classList.remove("show");
-    if (currentPayMethod() === "razorpay") { e.preventDefault(); payOnline(s); return; }
+    if (currentPayMethod() === "razorpay") {
+      e.preventDefault();
+      if (s.grand < 1) { alert("This order total is \u20b90, so online payment isn't needed. Please choose Cash on Delivery / Pay at pickup."); return; }
+      payOnline(s); return;
+    }
     logOrderToSheet(s);
     e.currentTarget.href = "https://wa.me/" + PHONE + "?text=" + buildOrderText(s);
   });
@@ -607,9 +627,9 @@
       }
       var code = input.value.trim().toUpperCase();
       if (!code) { msg("Enter a coupon code.", false); return; }
-      if (code !== COUPON_CODE) { msg("Invalid coupon code.", false); return; }
+      if (!COUPONS[code]) { msg("Invalid coupon code.", false); return; }
       appliedCoupon = code;
-      msg("Coupon applied: every item is \u20b9" + COUPON_UNIT_PRICE + " and delivery is free.", true);
+      msg("Coupon applied: " + COUPONS[code].msg + ".", true);
       paintBtn(); render();
     }
     btn.addEventListener("click", toggleCoupon);
