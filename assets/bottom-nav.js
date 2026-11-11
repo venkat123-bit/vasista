@@ -34,8 +34,14 @@
     "background:#c0392b;color:#fff;font:700 .66rem/18px 'Work Sans',sans-serif;text-align:center;font-style:normal;box-shadow:0 0 0 2px #fffdf8}" +
     "body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}" +
     ".order-pill{bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}" +
+    "}" +   /* end of phone-only rules; everything below applies on every screen size */
 
-    /* ---- dark-green phone header: ☰ | logo | name | language | search | cart ---- */
+    /* ---- dark-green header (phone + desktop): ☰ | logo | name | language | search | cart ---- */
+    ".navbar .nav-links,.navbar .nav-cta,.navbar .nav-icons,.navbar .nh-search,.nh-search{display:none!important}" +
+    "@media (min-width:861px){html body.has-bn .navbar.navbar{padding:14px clamp(20px,4vw,56px) 22px;gap:10px}" +
+    "html body.has-bn .nav-brand-text{font-size:1.7rem}html body.has-bn .nav-brand img{width:54px;height:54px}" +
+    "html body.has-bn .lang-toggle{padding:9px 16px;font-size:.95rem}html body.has-bn .hdr-ic{width:46px;height:46px}html body.has-bn .hdr-ic svg{width:27px;height:27px}" +
+    "html body .bp.bp{padding-left:max(28px,calc(50% - 300px));padding-right:max(28px,calc(50% - 300px))}}" +
     "html body.has-bn .navbar.navbar{position:sticky;overflow:hidden;gap:2px;padding:10px 12px 16px;" +
     "background:radial-gradient(120% 140% at 50% 0%,#0f4a35 0%,#082a1d 60%,#061f15 100%);" +
     "-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 6px 18px rgba(6,31,21,.35);border-bottom:0}" +
@@ -88,7 +94,6 @@
     ".bp-brand span{font:700 1.35rem/1.05 'Cormorant Garamond',serif;color:#0e3d2b;letter-spacing:.03em}" +
     ".bp-brand small{display:block;font:500 .6rem 'Work Sans',sans-serif;letter-spacing:.16em;color:#7c1f2b;margin-top:2px}" +
     "body.bp-lock{overflow:hidden}" +
-    "}" +
     "@media (prefers-reduced-motion:reduce){.bp,.bp.open{transition:none}}";
 
   var icons = {
@@ -190,7 +195,6 @@
     profileBtn.addEventListener("click", function (e) { e.preventDefault(); open(); });
     closeBtn.addEventListener("click", close);
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && panel.classList.contains("open")) { close(); profileBtn.focus(); } });
-    window.addEventListener("resize", function () { if (window.innerWidth > 860) close(); });
     // the header theme button is hidden on phones, so the menu drives it
     panel.querySelector("#bp-theme").addEventListener("click", function () {
       var t = document.querySelector(".theme-btn"); if (t) t.click();
