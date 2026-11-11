@@ -35,14 +35,35 @@
     "body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}" +
     ".order-pill{bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}" +
 
-    /* header icons (cart + profile) — always visible at the top on phones */
-    ".navbar .hdr-icons{display:flex;align-items:center;gap:6px;margin-left:8px}" +
-    ".hdr-ic{position:relative;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;" +
-    "color:#0e3d2b;background:rgba(14,61,43,.07);text-decoration:none;-webkit-tap-highlight-color:transparent}" +
-    ".hdr-ic:active{background:rgba(14,61,43,.16)}" +
-    ".hdr-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}" +
-    ".hdr-ic .nav-cart-badge{top:-3px;right:-3px;background:#c0392b;font-style:normal;box-shadow:0 0 0 2px #fffdf8}" +
-    "body.has-bn .nav-toggle,body.has-bn .mobile-panel{display:none!important}" +
+    /* ---- dark-green phone header: ☰ | logo | name | language | search | cart ---- */
+    "html body.has-bn .navbar.navbar{position:sticky;overflow:hidden;gap:2px;padding:10px 12px 16px;" +
+    "background:radial-gradient(120% 140% at 50% 0%,#0f4a35 0%,#082a1d 60%,#061f15 100%);" +
+    "-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 6px 18px rgba(6,31,21,.35);border-bottom:0}" +
+    "html body.has-bn .navbar.navbar::after{content:'';position:absolute;left:0;right:0;bottom:0;height:12px;pointer-events:none;" +
+    "background:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0 2 Q50 15 100 1' fill='none' stroke='%23c9a34b' stroke-width='1.4' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E\") center/100% 100% no-repeat}" +
+
+    /* hamburger on the left */
+    "html body.has-bn .nav-toggle{display:flex!important;order:-2;align-items:center;justify-content:center;width:40px;height:40px;padding:0;margin:0 6px 0 0;" +
+    "color:#fff;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}" +
+    "html body.has-bn .nav-toggle svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}" +
+    "html body.has-bn .nav-brand{order:-1;min-width:0;padding-left:10px;border-left:1px solid rgba(227,194,116,.35)}" +
+    "html body.has-bn .nav-brand img{width:44px;height:44px;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(0,0,0,.35);background:#fff}" +
+    "html body.has-bn .nav-brand-text{color:#fff;font-size:1.3rem}" +
+    "html body.has-bn .nav-brand-text small{color:#e3c274;font-weight:600}" +
+
+    /* language pill with a dropdown arrow */
+    "html body.has-bn .lang-toggle{order:3;margin:0 4px 0 auto;padding:6px 10px;color:#fff;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(255,255,255,.04)}" +
+    "html body.has-bn .lang-toggle::after{content:'';width:6px;height:6px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg);margin:-3px 2px 0 2px}" +
+
+    /* search + cart (no profile icon here — it lives in the menu now) */
+    ".navbar .hdr-icons{display:flex;align-items:center;gap:0;margin-left:0;order:4}" +
+    ".hdr-ic{position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;" +
+    "color:#fff;background:none;text-decoration:none;-webkit-tap-highlight-color:transparent}" +
+    ".hdr-ic:active{background:rgba(255,255,255,.14)}" +
+    ".hdr-ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}" +
+    ".hdr-ic .nav-cart-badge{top:-4px;right:-5px;min-width:19px;height:19px;line-height:19px;font-size:.7rem;background:#ef4036;font-style:normal;box-shadow:none}" +
+    "html body.has-bn .theme-btn{display:none}" +
+    "body.has-bn .mobile-panel{display:none!important}" +
 
     ".bp{position:fixed;inset:0;z-index:1100;background:#fffdf8;flex-direction:column;overflow-y:auto;" +
     "padding:calc(20px + env(safe-area-inset-top,0px)) 28px calc(28px + env(safe-area-inset-bottom,0px));" +
@@ -76,6 +97,8 @@
     cart:    '<svg viewBox="0 0 24 24"><path d="M2.5 3.5h2.6l2.3 11.2h10.2l2-8H6"/><circle cx="9.3" cy="19" r="1.4"/><circle cx="16.8" cy="19" r="1.4"/></svg>',
     profile: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c.9-3.6 3.8-5.5 7.5-5.5s6.6 1.9 7.5 5.5"/></svg>',
     close:   '<svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>',
+    menu:    '<svg viewBox="0 0 24 24"><path d="M3.5 6.5h17M3.5 12h17M3.5 17.5h17"/></svg>',
+    search:  '<svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>',
     phone:   '<svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>'
   };
 
@@ -110,13 +133,31 @@
       var hdr = document.createElement("div");
       hdr.className = "hdr-icons";
       hdr.innerHTML =
-        '<a class="hdr-ic" href="/cart" aria-label="Cart">' + icons.cart + '<i class="nav-cart-badge">0</i></a>' +
-        '<a class="hdr-ic" href="/profile" data-k="profile" role="button" aria-haspopup="dialog" aria-label="Profile">' + icons.profile + "</a>";
+        '<a class="hdr-ic" href="/order#search" data-k="search" aria-label="Search products">' + icons.search + "</a>" +
+        '<a class="hdr-ic" href="/cart" aria-label="Cart">' + icons.cart + '<i class="nav-cart-badge">0</i></a>';
       var toggleBtn = navbar.querySelector(".nav-toggle");
       navbar.insertBefore(hdr, toggleBtn || null);
-      hdr.querySelector('[data-k="profile"]').addEventListener("click", function (e) {
-        e.preventDefault(); nav.querySelector('[data-k="profile"]').click();
+
+      // Search: on the Products page focus its search box, elsewhere jump to Products
+      function focusSearch() {
+        var inp = document.querySelector(".search-wrap input");
+        if (inp) { inp.scrollIntoView({ block: "center" }); inp.focus(); return true; }
+        return false;
+      }
+      hdr.querySelector('[data-k="search"]').addEventListener("click", function (e) {
+        if (focusSearch()) e.preventDefault();
       });
+      if (location.hash === "#search") setTimeout(focusSearch, 300);
+
+      // Hamburger (3 lines) now opens the full-screen menu, which holds Profile
+      if (toggleBtn) {
+        toggleBtn.innerHTML = icons.menu;
+        toggleBtn.setAttribute("aria-haspopup", "dialog");
+        toggleBtn.addEventListener("click", function (e) {
+          e.preventDefault(); e.stopImmediatePropagation();
+          nav.querySelector('[data-k="profile"]').click();
+        }, true);
+      }
     }
     if (cur) nav.querySelector('[data-k="' + cur + '"]').classList.add("on");
     if (window.VasistaCart) window.VasistaCart.updateBadge();   // cart-store keeps the count in sync
@@ -135,6 +176,7 @@
         '<li><a href="/order">Products</a></li>' +
         '<li><a href="/about">Why Vasista Food and Traders</a></li>' +
         '<li><a href="/contact">Contact</a></li>' +
+        '<li><button type="button" id="bp-theme">Dark / Light mode</button></li>' +
         '<li><a href="https://wa.me/' + CFG.whatsapp + "?text=" + encodeURIComponent(CFG.waText) + '" target="_blank" rel="noopener">Order on WhatsApp</a></li>' +
         '<li><button type="button" class="bp-out" id="bp-logout">Log Out</button></li>' +
       "</ul>" +
@@ -149,6 +191,10 @@
     closeBtn.addEventListener("click", close);
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && panel.classList.contains("open")) { close(); profileBtn.focus(); } });
     window.addEventListener("resize", function () { if (window.innerWidth > 860) close(); });
+    // the header theme button is hidden on phones, so the menu drives it
+    panel.querySelector("#bp-theme").addEventListener("click", function () {
+      var t = document.querySelector(".theme-btn"); if (t) t.click();
+    });
 
     /* ---------- name + Log Out (your existing Firebase setup) ---------- */
     import(BASE + "firebase-config.js").then(function (m) {
