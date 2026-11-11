@@ -44,14 +44,13 @@
     ".hdr-ic .nav-cart-badge{top:-3px;right:-3px;background:#c0392b;font-style:normal;box-shadow:0 0 0 2px #fffdf8}" +
     "body.has-bn .mobile-panel{display:none!important}" +
 
-    ".bp{position:fixed;z-index:1100;top:calc(60px + env(safe-area-inset-top,0px));left:12px;width:min(240px,calc(100vw - 24px));" +
+    ".bp{position:fixed;z-index:1100;top:calc(68px + env(safe-area-inset-top,0px));left:12px;width:min(240px,calc(100vw - 24px));" +
     "background:#fffdf8;border:1px solid #c9a34b;border-radius:14px;box-shadow:0 12px 32px rgba(14,61,43,.28);padding:6px 0;" +
     "opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .18s ease,transform .18s ease,visibility 0s .18s}" +
     ".bp.open{opacity:1;visibility:visible;transform:none;transition:opacity .18s ease,transform .18s ease}" +
     ".bp-list{margin:0;padding:0;list-style:none}" +
     ".bp-list a{display:block;padding:13px 20px;font:500 1rem 'Work Sans',sans-serif;color:#201d17;text-decoration:none;-webkit-tap-highlight-color:transparent}" +
     ".bp-list a:active,.bp-list a:hover{background:#0e3d2b;color:#fff8e6}" +
-    ".navbar .hdr-icons{display:none}" +
     "body.has-bn .nav-toggle{display:block!important}" +
     "body.bp-lock{overflow:hidden}" +
     "}" +
@@ -97,12 +96,32 @@
       var hdr = document.createElement("div");
       hdr.className = "hdr-icons";
       hdr.innerHTML =
+        '<button type="button" class="hdr-lang" id="hdr-lang" aria-label="Language"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span id="hdr-lang-t">\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41</span><svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>' +
+        '<button type="button" class="hdr-ic" id="hdr-search" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>' +
         '<a class="hdr-ic" href="/cart" aria-label="Cart">' + icons.cart + '<i class="nav-cart-badge">0</i></a>' +
-        '<a class="hdr-ic" href="/profile" data-k="profile" role="button" aria-haspopup="dialog" aria-label="Profile">' + icons.profile + "</a>";
+        '<a class="hdr-ic" href="/profile" data-k="profile" role="button" aria-label="Profile">' + icons.profile + "</a>";
       var toggleBtn = navbar.querySelector(".nav-toggle");
       navbar.insertBefore(hdr, toggleBtn || null);
       hdr.querySelector('[data-k="profile"]').addEventListener("click", function (e) {
         e.preventDefault(); nav.querySelector('[data-k="profile"]').click();
+      });
+    }
+    var sb = document.getElementById("hdr-search");
+    if (sb && navbar) sb.addEventListener("click", function () {
+      navbar.classList.toggle("search-open");
+      var inp = navbar.querySelector(".nh-search input");
+      if (inp && navbar.classList.contains("search-open")) inp.focus();
+    });
+    var lb = document.getElementById("hdr-lang"), lt = document.getElementById("hdr-lang-t");
+    if (lb) {
+      var isTe = (document.documentElement.lang || "").indexOf("te") === 0;
+      var paint = function () { lt.textContent = isTe ? "English" : "\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41"; };
+      paint();
+      lb.addEventListener("click", function () {
+        isTe = !isTe;
+        var I = window.VasistaI18n, code = isTe ? "te" : "en";
+        if (I) ["setLang", "setLanguage", "set", "apply"].some(function (f) { if (typeof I[f] === "function") { I[f](code); return true; } });
+        paint();
       });
     }
     if (cur) nav.querySelector('[data-k="' + cur + '"]').classList.add("on");
