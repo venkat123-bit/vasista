@@ -42,52 +42,30 @@
     ".hdr-ic:active{background:rgba(14,61,43,.16)}" +
     ".hdr-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}" +
     ".hdr-ic .nav-cart-badge{top:-3px;right:-3px;background:#c0392b;font-style:normal;box-shadow:0 0 0 2px #fffdf8}" +
-    "body.has-bn .mobile-panel{display:none!important}" +
+    "body.has-bn .nav-toggle,body.has-bn .mobile-panel{display:none!important}" +
 
-    /* ---- dark-green phone header, same on every page ---- */
-    "html body .navbar{background:linear-gradient(180deg,#0c3524,#0a2e20)!important;color:#fff!important;gap:8px;padding:6px 12px;min-height:64px;" +
-    "flex-wrap:nowrap;align-items:center;border-bottom:1px solid rgba(201,163,75,.35);border-radius:0 0 18px 18px;box-shadow:none!important}" +
-    "html body .navbar.search-open{flex-wrap:wrap}" +
-    "html body .navbar>*:not(.nav-toggle):not(.nav-brand):not(.hdr-icons):not(.nh-search){display:none!important}" +
-    "html body .navbar .nav-toggle{order:-2;display:block!important;color:#fff!important;font-size:1.9rem;line-height:1;padding:2px 6px}" +
-    "html body .navbar .nav-brand{order:-1;gap:8px;min-width:0}" +
-    "html body .navbar .nav-brand img{width:46px;height:46px;box-shadow:0 0 0 2px #fff}" +
-    "html body .navbar .nav-brand-text{color:#fff!important;font-size:1.4rem;letter-spacing:.02em;white-space:nowrap}" +
-    "html body .navbar .nav-brand-text small{color:#f4b93f!important;font-size:.52rem;letter-spacing:.12em;font-weight:600}" +
-    "html body .navbar .hdr-icons{display:flex;margin-left:auto;gap:2px}" +
-    "html body .navbar .hdr-ic{background:none!important;color:#fff!important;width:38px;height:38px}" +
-    "html body .navbar .hdr-ic svg{width:24px;height:24px}" +
-    "html body .navbar .hdr-ic[data-k=profile]{display:none}" +
-    "html body .navbar .hdr-ic .nav-cart-badge{top:-2px;right:-2px;box-shadow:none}" +
-    "html body .navbar .hdr-lang{display:flex;align-items:center;gap:5px;height:32px;padding:0 9px;border:1px solid rgba(143,209,176,.45);" +
-    "border-radius:999px;background:rgba(255,255,255,.04);color:#fff;font:500 .78rem 'Work Sans',sans-serif;cursor:pointer;margin-right:2px}" +
-    ".hdr-lang svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}" +
-    ".hdr-lang .chev{width:12px;height:12px}" +
-    "html body .navbar.search-open .nh-search{display:flex;order:99;flex:1 0 100%;width:100%;margin:4px 0 6px;background:#fff!important}" +
-    "html body .navbar.search-open .nh-search input{color:#201d17!important}" +
-    "@media (max-width:400px){html body .navbar .hdr-lang span{display:none}html body .navbar .nav-brand img{width:40px;height:40px}html body .navbar .nav-brand-text{font-size:1.2rem}}" +
-
-    /* ---- dark-green bottom bar to match ---- */
-    "html body .bn{background:#0a2e20!important;border-top:1px solid rgba(201,163,75,.35);box-shadow:0 -8px 24px rgba(0,0,0,.35);" +
-    "padding:6px 6px calc(14px + env(safe-area-inset-bottom,0px))}" +
-    "html body .bn a{color:#cfe3d8}" +
-    "html body .bn a.on{color:#f4b93f}" +
-    "html body .bn a.on .bn-ic{background:#f4b93f;color:#0a2e20}" +
-    "html body .bn .bn-badge{box-shadow:0 0 0 2px #0a2e20}" +
-    "body{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}" +
-    /* dropdown in dark style */
-    "html body .bp{background:#0f3a28;border-color:#c9a34b}" +
-    "html body .bp-list a{color:#f5f1e6}" +
-    "html body .bp-list a:active,html body .bp-list a:hover{background:#f4b93f;color:#0a2e20}" +
-
-    ".bp{position:fixed;z-index:1100;top:calc(68px + env(safe-area-inset-top,0px));left:12px;width:min(240px,calc(100vw - 24px));" +
-    "background:#fffdf8;border:1px solid #c9a34b;border-radius:14px;box-shadow:0 12px 32px rgba(14,61,43,.28);padding:6px 0;" +
-    "opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .18s ease,transform .18s ease,visibility 0s .18s}" +
-    ".bp.open{opacity:1;visibility:visible;transform:none;transition:opacity .18s ease,transform .18s ease}" +
-    ".bp-list{margin:0;padding:0;list-style:none}" +
-    ".bp-list a{display:block;padding:13px 20px;font:500 1rem 'Work Sans',sans-serif;color:#201d17;text-decoration:none;-webkit-tap-highlight-color:transparent}" +
-    ".bp-list a:active,.bp-list a:hover{background:#0e3d2b;color:#fff8e6}" +
-    "body.has-bn .nav-toggle{display:block!important}" +
+    ".bp{position:fixed;inset:0;z-index:1100;background:#fffdf8;flex-direction:column;overflow-y:auto;" +
+    "padding:calc(20px + env(safe-area-inset-top,0px)) 28px calc(28px + env(safe-area-inset-bottom,0px));" +
+    "opacity:0;visibility:hidden;transform:translateX(24px);transition:opacity .22s ease,transform .22s ease,visibility 0s .22s}" +
+    ".bp.open{display:flex;opacity:1;visibility:visible;transform:none;transition:opacity .22s ease,transform .22s ease}" +
+    ".bp-x{align-self:flex-end;width:44px;height:44px;border:none;background:none;border-radius:50%;color:#0e3d2b;cursor:pointer;display:flex;align-items:center;justify-content:center}" +
+    ".bp-x:active{background:rgba(14,61,43,.08)}" +
+    ".bp-x svg{width:26px;height:26px;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;fill:none}" +
+    ".bp-who{margin:0 0 4px;font:600 1rem 'Work Sans',sans-serif;color:#0e3d2b;word-break:break-word}" +
+    ".bp-list{margin:8px 0 0;padding:0;list-style:none}" +
+    ".bp-list a,.bp-list button{display:block;width:100%;text-align:left;padding:15px 0;border:none;background:none;cursor:pointer;" +
+    "font:500 1.3rem 'Work Sans',sans-serif;color:#201d17;text-decoration:none;-webkit-tap-highlight-color:transparent}" +
+    ".bp-list a:active,.bp-list button:active{color:#0e3d2b}" +
+    ".bp-list .bp-out{color:#7c1f2b}" +
+    ".bp-call{display:flex;align-items:center;gap:16px;margin-top:30px;padding-top:26px;border-top:1px solid #eae0c4;text-decoration:none;color:#201d17}" +
+    ".bp-call i{flex:none;width:52px;height:52px;border-radius:50%;border:1.5px solid #0e3d2b;display:flex;align-items:center;justify-content:center;color:#0e3d2b}" +
+    ".bp-call i svg{width:24px;height:24px;fill:currentColor}" +
+    ".bp-call small{display:block;font:400 .9rem 'Work Sans',sans-serif;color:#6d6653}" +
+    ".bp-call b{display:block;font:700 1.3rem 'Work Sans',sans-serif;color:#0e3d2b}" +
+    ".bp-brand{margin-top:auto;padding-top:36px;display:flex;align-items:center;gap:12px}" +
+    ".bp-brand img{width:54px;height:54px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1px #eae0c4}" +
+    ".bp-brand span{font:700 1.35rem/1.05 'Cormorant Garamond',serif;color:#0e3d2b;letter-spacing:.03em}" +
+    ".bp-brand small{display:block;font:500 .6rem 'Work Sans',sans-serif;letter-spacing:.16em;color:#7c1f2b;margin-top:2px}" +
     "body.bp-lock{overflow:hidden}" +
     "}" +
     "@media (prefers-reduced-motion:reduce){.bp,.bp.open{transition:none}}";
@@ -132,32 +110,12 @@
       var hdr = document.createElement("div");
       hdr.className = "hdr-icons";
       hdr.innerHTML =
-        '<button type="button" class="hdr-lang" id="hdr-lang" aria-label="Language"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span id="hdr-lang-t">\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41</span><svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>' +
-        '<button type="button" class="hdr-ic" id="hdr-search" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>' +
         '<a class="hdr-ic" href="/cart" aria-label="Cart">' + icons.cart + '<i class="nav-cart-badge">0</i></a>' +
-        '<a class="hdr-ic" href="/profile" data-k="profile" role="button" aria-label="Profile">' + icons.profile + "</a>";
+        '<a class="hdr-ic" href="/profile" data-k="profile" role="button" aria-haspopup="dialog" aria-label="Profile">' + icons.profile + "</a>";
       var toggleBtn = navbar.querySelector(".nav-toggle");
       navbar.insertBefore(hdr, toggleBtn || null);
       hdr.querySelector('[data-k="profile"]').addEventListener("click", function (e) {
         e.preventDefault(); nav.querySelector('[data-k="profile"]').click();
-      });
-    }
-    var sb = document.getElementById("hdr-search");
-    if (sb && navbar) sb.addEventListener("click", function () {
-      navbar.classList.toggle("search-open");
-      var inp = navbar.querySelector(".nh-search input");
-      if (inp && navbar.classList.contains("search-open")) inp.focus();
-    });
-    var lb = document.getElementById("hdr-lang"), lt = document.getElementById("hdr-lang-t");
-    if (lb) {
-      var isTe = (document.documentElement.lang || "").indexOf("te") === 0;
-      var paint = function () { lt.textContent = isTe ? "English" : "\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41"; };
-      paint();
-      lb.addEventListener("click", function () {
-        isTe = !isTe;
-        var I = window.VasistaI18n, code = isTe ? "te" : "en";
-        if (I) ["setLang", "setLanguage", "set", "apply"].some(function (f) { if (typeof I[f] === "function") { I[f](code); return true; } });
-        paint();
       });
     }
     if (cur) nav.querySelector('[data-k="' + cur + '"]').classList.add("on");
@@ -166,46 +124,53 @@
     /* ---------- profile menu ---------- */
     var panel = document.createElement("div");
     panel.className = "bp";
-    panel.setAttribute("role", "menu");
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-modal", "true");
     panel.setAttribute("aria-label", "Menu");
     panel.innerHTML =
+      '<button type="button" class="bp-x" aria-label="Close menu">' + icons.close + "</button>" +
+      '<p class="bp-who" id="bp-who" hidden></p>' +
       '<ul class="bp-list">' +
-        '<li><a href="/">Home</a></li>' +
+        '<li><a href="/profile">Profile &amp; Settings</a></li>' +
         '<li><a href="/order">Products</a></li>' +
-        '<li><a href="/about">Why Vasista</a></li>' +
-        '<li><a href="/cart">Cart</a></li>' +
-        '<li><a href="/profile" id="bp-profile">Profile</a></li>' +
-      "</ul>";
+        '<li><a href="/about">Why Vasista Food and Traders</a></li>' +
+        '<li><a href="/contact">Contact</a></li>' +
+        '<li><a href="https://wa.me/' + CFG.whatsapp + "?text=" + encodeURIComponent(CFG.waText) + '" target="_blank" rel="noopener">Order on WhatsApp</a></li>' +
+        '<li><button type="button" class="bp-out" id="bp-logout">Log Out</button></li>' +
+      "</ul>" +
+      '<a class="bp-call" href="tel:' + CFG.phoneTel + '"><i>' + icons.phone + "</i><div><small>We are here to help you.</small><b>Call us at " + CFG.phoneShow + "</b></div></a>" +
+      '<div class="bp-brand"><img src="logo.jpeg" alt=""><span>Vasista<small>FOOD &amp; TRADERS</small></span></div>';
     document.body.appendChild(panel);
 
-    var profileLink = panel.querySelector("#bp-profile");
-    var toggle = document.querySelector(".nav-toggle");
-    function open()  { panel.classList.add("open"); if (toggle) toggle.setAttribute("aria-expanded", "true"); }
-    function close() { panel.classList.remove("open"); if (toggle) toggle.setAttribute("aria-expanded", "false"); }
-
-    // hamburger toggles the dropdown (stop common.js / other handlers from opening the old panel)
-    if (toggle) toggle.addEventListener("click", function (e) {
-      e.preventDefault(); e.stopPropagation();
-      panel.classList.contains("open") ? close() : open();
-    }, true);
-    // bottom-bar Profile button goes straight to the profile page now
-    // close on outside tap, link tap, Escape, or resize to desktop
-    document.addEventListener("click", function (e) {
-      if (!panel.classList.contains("open")) return;
-      if (panel.contains(e.target) && e.target.tagName !== "A") return;
-      if (toggle && toggle.contains(e.target)) return;
-      close();
-    });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    var profileBtn = nav.querySelector('[data-k="profile"]'), closeBtn = panel.querySelector(".bp-x");
+    function open()  { panel.classList.add("open"); document.body.classList.add("bp-lock"); closeBtn.focus(); }
+    function close() { panel.classList.remove("open"); document.body.classList.remove("bp-lock"); }
+    profileBtn.addEventListener("click", function (e) { e.preventDefault(); open(); });
+    closeBtn.addEventListener("click", close);
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && panel.classList.contains("open")) { close(); profileBtn.focus(); } });
     window.addEventListener("resize", function () { if (window.innerWidth > 860) close(); });
 
-    /* ---------- Profile link -> Login if logged out (existing Firebase setup) ---------- */
+    /* ---------- name + Log Out (your existing Firebase setup) ---------- */
     import(BASE + "firebase-config.js").then(function (m) {
       m.onAuthStateChanged(m.auth, function (user) {
-        profileLink.href = user ? "/profile" : "/login";
-        profileLink.textContent = user ? "Profile" : "Log in / Sign up";
+        var who = panel.querySelector("#bp-who");
+        who.textContent = user ? (user.displayName || user.email || user.phoneNumber || "") : "";
+        who.hidden = !who.textContent;
+        var pl = panel.querySelector('a[href="/profile"], a[href="/login"]');
+        var outLi = panel.querySelector("#bp-logout").parentNode;
+        var tr = function (x) { return window.VasistaI18n ? window.VasistaI18n.t(x) : x; };
+        if (pl) {
+          pl.href = user ? "/profile" : "/login";
+          pl.textContent = user ? tr("Profile & Settings") : tr("Log in / Sign up");
+        }
+        outLi.style.display = user ? "" : "none";
       });
-    }).catch(function () {});
+      panel.querySelector("#bp-logout").addEventListener("click", function () {
+        m.signOut(m.auth).then(function () { location.href = "/"; });
+      });
+    }).catch(function () {
+      panel.querySelector("#bp-logout").addEventListener("click", function () { location.href = "/profile"; });
+    });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
