@@ -7,6 +7,23 @@
   var BASE = SRC ? SRC.replace(/[^\/]*$/, "") : "assets/";
   var SHOW_MS = 4600;                       // how long it plays before fading out
 
+  /* Retire the old "VASISTA / Choose Natural. Live Better. / TAP TO CONTINUE" intro (#site-intro),
+     whether it is written in the page or added by another script, so only this one plays. */
+  var oldCss = document.createElement("style");
+  oldCss.textContent = "#site-intro{display:none!important}";
+  document.head.appendChild(oldCss);
+  function killOld() {
+    var o = document.getElementById("site-intro");
+    if (o) o.remove();
+    if (document.body) document.body.classList.remove("intro-active");
+  }
+  killOld();
+  try {
+    var mo = new MutationObserver(killOld);
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(function () { mo.disconnect(); }, 6000);
+  } catch (e) {}
+
   var force = /[?&]intro=1\b/.test(location.search);
   try { if (!force && sessionStorage.getItem("vasista-intro-seen")) return; } catch (e) {}
   if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches && !force) return;
