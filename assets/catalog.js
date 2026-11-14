@@ -2,18 +2,18 @@
 // and the Cart page (cart.js), so prices and images are defined in one place.
 (function () {
   var P = "assets/products/";
-  var CRUNCH = P + "12x-crunch.png";
+  var CRUNCH = P + "dasa-dinusulu.jpg";
   var MILLET = P + "multi-millet-chips.png";
   var OATS   = P + "oats-chips.png";
   var RAGI   = P + "ragi-chips.png";
   var QUINOA = P + "quinoa-chips.png";
 
   var products = [
-    { name: "12X Crunch", grams: "150g", price: 180,  cat: "crunch", img: CRUNCH },
-    { name: "12X Crunch", grams: "200g", price: 210,  cat: "crunch", img: CRUNCH },
-    { name: "12X Crunch", grams: "300g", price: 299,  cat: "crunch", img: CRUNCH },
-    { name: "12X Crunch", grams: "500g", price: 550,  cat: "crunch", img: CRUNCH },
-    { name: "12X Crunch", grams: "1kg",  price: 1000, cat: "crunch", img: CRUNCH },
+    { name: "Dasa Dinusulu", grams: "150g", price: 180,  cat: "crunch", img: CRUNCH },
+    { name: "Dasa Dinusulu", grams: "200g", price: 210,  cat: "crunch", img: CRUNCH },
+    { name: "Dasa Dinusulu", grams: "300g", price: 299,  cat: "crunch", img: CRUNCH },
+    { name: "Dasa Dinusulu", grams: "500g", price: 550,  cat: "crunch", img: CRUNCH },
+    { name: "Dasa Dinusulu", grams: "1kg",  price: 1000, cat: "crunch", img: CRUNCH },
     { name: "Multi Millet Chips", grams: "80g", price: 120, cat: "chips", img: MILLET, imgs: [MILLET, P + "multi-millet-chips-label.jpg"] },
     { name: "Multi Millet Chips", grams: "50g", price: 75, cat: "chips", img: MILLET, imgs: [MILLET, P + "multi-millet-chips-label.jpg"] },
     { name: "Oats Chips",   grams: "80g", price: 120, cat: "chips", img: OATS, imgs: [OATS, P + "oats-chips-label.jpg"] },
