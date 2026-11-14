@@ -1,0 +1,33 @@
+/* =====================================================================
+   SHARED PHONE HEADER — the dark-green header from the Products page.
+   Link on every page AFTER styles.css / nav.css / theme.css:
+     <link rel="stylesheet" href="assets/header.css">
+   (bottom-nav.js injects its own CSS later, so the icon rules use the extra
+    .navbar in the selector to win.)
+   ===================================================================== */
+@media (max-width:860px){
+  .navbar{
+    background:#0e3d2b !important; border-radius:0 0 26px 26px;
+    padding:10px 12px; gap:4px; flex-wrap:nowrap;
+    -webkit-backdrop-filter:none; backdrop-filter:none;
+    box-shadow:0 10px 24px rgba(8,36,25,.28);
+  }
+  html[data-theme="dark"] .navbar{ background:#0b2a1e !important; }
+  .nav-brand{ flex:1 1 auto; min-width:0; gap:7px; }
+  .nav-brand img{ width:38px; height:38px; box-shadow:0 0 0 2px rgba(255,248,230,.9); }
+  .navbar .nav-brand-text{ color:#fff; font-size:1.3rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  .navbar .nav-brand-text small{ color:#e3c274; }
+  .nh-search{ display:none !important; }
+  .lang-toggle{ flex:none; background:#fff8e6; color:#0e3d2b; border-color:transparent; border-radius:999px; margin:0 2px 0 auto; }
+  .navbar .hdr-ic{ color:#fff; background:transparent; width:38px; height:38px; flex:none; border:0; padding:0; cursor:pointer; }
+  .navbar .hdr-ic:active{ background:rgba(255,255,255,.16); }
+  .navbar .hdr-ic:focus{ outline:none; }
+  .navbar .hdr-ic:focus-visible{ outline:2px solid #e3c274; outline-offset:1px; }
+  .navbar .hdr-ic svg{ width:24px; height:24px; }
+  .navbar .hdr-ic .nav-cart-badge{ box-shadow:0 0 0 2px #0e3d2b; }
+  .navbar .theme-btn{ flex:none; }
+}
+@media (max-width:430px){
+  .navbar .hdr-ic[data-k="profile"]{ display:none; }
+  .navbar .nav-brand-text small{ display:none; }
+}
