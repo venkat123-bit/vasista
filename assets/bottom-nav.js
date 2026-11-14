@@ -16,7 +16,7 @@
   };
 
   var css =
-    ".bn,.bp,.hdr-icons{display:none}" +
+    ".bn,.bp,.hdr-icons,.hdr-menu{display:none}" +
     "@media (max-width:860px){" +
     ".bn{position:fixed;left:0;right:0;bottom:0;z-index:90;display:flex;background:rgba(255,253,248,.98);" +
     "-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid #e3d8b8;" +
@@ -36,7 +36,8 @@
     ".order-pill{bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}" +
 
     /* header icons (cart + profile) — always visible at the top on phones */
-    ".navbar .hdr-icons{display:flex;align-items:center;gap:6px;margin-left:8px}" +
+    ".navbar .hdr-icons{display:flex;align-items:center;gap:2px;margin-left:4px}" +
+    ".navbar .hdr-menu{display:flex;margin-right:2px}" +
     ".hdr-ic{position:relative;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;" +
     "color:#0e3d2b;background:rgba(14,61,43,.07);text-decoration:none;-webkit-tap-highlight-color:transparent}" +
     ".hdr-ic:active{background:rgba(14,61,43,.16)}" +
@@ -76,6 +77,8 @@
     cart:    '<svg viewBox="0 0 24 24"><path d="M2.5 3.5h2.6l2.3 11.2h10.2l2-8H6"/><circle cx="9.3" cy="19" r="1.4"/><circle cx="16.8" cy="19" r="1.4"/></svg>',
     profile: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c.9-3.6 3.8-5.5 7.5-5.5s6.6 1.9 7.5 5.5"/></svg>',
     close:   '<svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>',
+    menu:    '<svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+    search:  '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>',
     phone:   '<svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1z"/></svg>'
   };
 
@@ -110,6 +113,7 @@
       var hdr = document.createElement("div");
       hdr.className = "hdr-icons";
       hdr.innerHTML =
+        '<a class="hdr-ic hdr-search" href="/order" aria-label="Search products">' + icons.search + "</a>" +
         '<a class="hdr-ic" href="/cart" aria-label="Cart">' + icons.cart + '<i class="nav-cart-badge">0</i></a>' +
         '<a class="hdr-ic" href="/profile" data-k="profile" role="button" aria-haspopup="dialog" aria-label="Profile">' + icons.profile + "</a>";
       var toggleBtn = navbar.querySelector(".nav-toggle");
@@ -117,6 +121,23 @@
       hdr.querySelector('[data-k="profile"]').addEventListener("click", function (e) {
         e.preventDefault(); nav.querySelector('[data-k="profile"]').click();
       });
+      // search icon: jump to the search box on the Products page, otherwise go there
+      hdr.querySelector(".hdr-search").addEventListener("click", function (e) {
+        var box = document.getElementById("product-search");
+        if (!box) return;                       // other pages: normal link to /order
+        e.preventDefault();
+        box.scrollIntoView({ behavior: "smooth", block: "center" });
+        box.focus({ preventScroll: true });
+      });
+      // hamburger on the left opens the same full-screen menu
+      var menuBtn = document.createElement("button");
+      menuBtn.type = "button";
+      menuBtn.className = "hdr-ic hdr-menu";
+      menuBtn.setAttribute("aria-label", "Open menu");
+      menuBtn.setAttribute("aria-haspopup", "dialog");
+      menuBtn.innerHTML = icons.menu;
+      menuBtn.addEventListener("click", function () { nav.querySelector('[data-k="profile"]').click(); });
+      navbar.insertBefore(menuBtn, navbar.firstChild);
     }
     if (cur) nav.querySelector('[data-k="' + cur + '"]').classList.add("on");
     if (window.VasistaCart) window.VasistaCart.updateBadge();   // cart-store keeps the count in sync
