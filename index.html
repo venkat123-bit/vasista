@@ -19,52 +19,12 @@
 <link rel="stylesheet" href="assets/styles.css">
 <link rel="stylesheet" href="assets/home-hero.css">
 <link rel="stylesheet" href="assets/theme.css">
-<script src="assets/intro-logo.js"></script>
+<link rel="stylesheet" href="assets/header.css">
+<script src="assets/theme.js"></script>
 </head>
-<body class="intro-active">
+<body>
+<script src="assets/intro-logo.js"></script>
 
-<div id="site-intro">
-  <img class="intro-logo" src="logo.jpeg" alt="">
-  <div class="intro-name" id="intro-name"></div>
-  <div class="intro-rule"></div>
-  <p class="intro-tagline">Choose Natural. Live Better.</p>
-  <p class="intro-hint">TAP TO CONTINUE</p>
-</div>
-
-<script>
-(function(){
-  var overlay = document.getElementById("site-intro");
-  var nameEl = document.getElementById("intro-name");
-  var word = "VASISTA";
-  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if(reduceMotion){
-    overlay.classList.add("hidden");
-    document.body.classList.remove("intro-active");
-    return;
-  }
-
-  word.split("").forEach(function(ch, i){
-    var span = document.createElement("span");
-    span.className = "letter";
-    span.style.animationDelay = (0.55 + i * 0.055) + "s";
-    span.textContent = ch;
-    nameEl.appendChild(span);
-  });
-
-  var exited = false;
-  function exitIntro(){
-    if(exited) return;
-    exited = true;
-    overlay.classList.add("exit");
-    document.body.classList.remove("intro-active");
-    setTimeout(function(){ overlay.classList.add("hidden"); }, 950);
-  }
-
-  overlay.addEventListener("click", exitIntro);
-  setTimeout(exitIntro, 2600);
-})();
-</script>
 
 <nav class="navbar" id="navbar">
   <a class="nav-brand" href="/">
